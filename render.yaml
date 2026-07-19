@@ -3,7 +3,7 @@ services:
     name: sales-playbook-saas
     runtime: node
     region: singapore
-    branch: master
+    branch: main
     buildCommand: npm install && npm run build
     startCommand: node server.js
     envVars:
