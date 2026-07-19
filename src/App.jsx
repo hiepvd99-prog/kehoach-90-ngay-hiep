@@ -11,7 +11,7 @@ import {
   ShieldAlert, PenTool, LineChart, HelpCircle, ShieldQuestion,
   UserMinus, Box, Globe, Key, MessageSquare, Gem, Info, XCircle, Menu, Gift, Award, Bell, BellRing,
   RotateCw, ChevronDown, ChevronUp, ArrowRight, ExternalLink,
-  Radio, Search
+  Search
 } from 'lucide-react';
 import { defaultData } from './data/defaultData.js';
 import MarketingDashboard from './components/MarketingDashboard.jsx';
@@ -213,14 +213,45 @@ const TAB_META = {
   chotSale:  { label: 'Chốt Sale', color: '#f43f5e', bg: '#fff1f2' },
 };
 
+const SMART_Q_CACHE_KEY = 'vdh_smart_questions';
+
+const FALLBACK_QUESTIONS = [
+  { q:"Làm sao gọi điện khách không cúp máy ngay?",    tab:"quyTrinh"  },
+  { q:"Khách nói 'để suy nghĩ' thì xử lý thế nào?",   tab:"chotSale"  },
+  { q:"Cách phân loại data lạnh, ấm, nóng chuẩn nhất?",tab:"khachHang" },
+  { q:"12 bước giới thiệu dự án đúng trình tự?",       tab:"hanhTrinh" },
+  { q:"Soạn bài đăng Facebook thu hút từ sự kiện?",    tab:"quyTrinh"  },
+];
+
+const saveCache = (date, questions) => {
+  try {
+    localStorage.setItem(SMART_Q_CACHE_KEY, JSON.stringify({ date, questions }));
+  } catch (_) { /* localStorage đầy hoặc bị chặn -> bỏ qua, không ảnh hưởng hiển thị */ }
+};
+
 const SmartSuggestions = ({ setActiveTab, token }) => {
   const [questions, setQuestions]   = useState([]);
   const [loading, setLoading]       = useState(true);
   const [collapsed, setCollapsed]   = useState(false);
   const [hovered, setHovered]       = useState(null);
 
-  const fetchQuestions = async () => {
+  // Cache câu hỏi theo ngày: chỉ gọi Gemini 1 lần/ngày thay vì mỗi lần tải trang.
+  // Bấm nút "Làm mới" vẫn gọi lại ngay (force = true) vì đó là thao tác chủ động.
+  const fetchQuestions = async (force = false) => {
     if (!token) return;
+    const todayKey = new Date().toISOString().slice(0, 10);
+
+    if (!force) {
+      try {
+        const cached = JSON.parse(localStorage.getItem(SMART_Q_CACHE_KEY) || 'null');
+        if (cached && cached.date === todayKey && Array.isArray(cached.questions) && cached.questions.length) {
+          setQuestions(cached.questions);
+          setLoading(false);
+          return;
+        }
+      } catch (_) { /* cache hỏng thì bỏ qua, gọi lại như bình thường */ }
+    }
+
     setLoading(true); setQuestions([]);
     const today = new Date().toLocaleDateString('vi-VN', { weekday:'long', day:'numeric', month:'numeric', year:'numeric' });
     const prompt = `Bạn là trợ lý huấn luyện sales bất động sản. Hôm nay là ${today}.
@@ -242,18 +273,18 @@ Chỉ trả về JSON thuần (không markdown, không giải thích):
         const json = await res.json();
         const raw = json.text || '[]';
         const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
-        setQuestions(parsed.filter(x => x.q && TAB_META[x.tab]).slice(0,5));
+        const list = parsed.filter(x => x.q && TAB_META[x.tab]).slice(0,5);
+        if (!list.length) throw new Error();
+        setQuestions(list);
+        saveCache(todayKey, list);
       } else {
         throw new Error();
       }
     } catch(_) {
-      setQuestions([
-        { q:"Làm sao gọi điện khách không cúp máy ngay?",    tab:"quyTrinh"  },
-        { q:"Khách nói 'để suy nghĩ' thì xử lý thế nào?",   tab:"chotSale"  },
-        { q:"Cách phân loại data lạnh, ấm, nóng chuẩn nhất?",tab:"khachHang" },
-        { q:"12 bước giới thiệu dự án đúng trình tự?",       tab:"hanhTrinh" },
-        { q:"Soạn bài đăng Facebook thu hút từ sự kiện?",    tab:"quyTrinh"  },
-      ]);
+      // AI lỗi hoặc hết quota -> dùng câu hỏi mặc định và vẫn ghi cache cho hôm nay,
+      // để không gọi lại mỗi lần tải trang. Cần thử lại ngay thì bấm "Làm mới".
+      setQuestions(FALLBACK_QUESTIONS);
+      saveCache(todayKey, FALLBACK_QUESTIONS);
     }
     setLoading(false);
   };
@@ -320,7 +351,7 @@ Chỉ trả về JSON thuần (không markdown, không giải thích):
           </div>
         </div>
         <div style={{display:'flex',alignItems:'center',gap:6}}>
-          <button onClick={fetchQuestions} disabled={loading} title="Làm mới câu hỏi" style={{
+          <button onClick={() => fetchQuestions(true)} disabled={loading} title="Làm mới câu hỏi" style={{
             display:'flex',alignItems:'center',gap:5,
             background:'rgba(99,102,241,.2)',border:'1px solid rgba(99,102,241,.3)',
             borderRadius:7,padding:'5px 10px',cursor:'pointer',
@@ -920,148 +951,6 @@ function App() {
   const [salesMood, setSalesMood] = useState('');
   const [motivationDose, setMotivationDose] = useState('');
   const [isCoachingMood, setIsCoachingMood] = useState(false);
-
-  const [targetKeywords, setTargetKeywords] = useState(['cần mua', 'tìm chung cư']);
-  const [newKeywordInput, setNewKeywordInput] = useState('');
-  const [selectedGroups, setSelectedGroups] = useState([1, 2, 3]);
-  const [searchGroupQuery, setSearchGroupQuery] = useState('');
-  const [searchTime, setSearchTime] = useState('Đầu ngày - Hiện tại');
-  const [sessionsRun, setSessionsRun] = useState(0);
-  const [targetsDetected, setTargetsDetected] = useState(0);
-  const [activeSessions, setActiveSessions] = useState(0);
-  const [isHunting, setIsHunting] = useState(false);
-  const [huntingLog, setHuntingLog] = useState([
-    '>> AI ENGINE: SCANNING PACKETS...',
-    '>> TARGETS DETECTED: 0',
-    '>> STATUS: IDLE'
-  ]);
-  const [zaloSignals, setZaloSignals] = useState([]);
-
-  const defaultZaloGroups = [
-    { id: 1, name: 'Zalo: Cộng Đồng BĐS Phía Đông' },
-    { id: 2, name: 'Zalo: Ký Gửi Nhà Đất Quận 2 & 9' },
-    { id: 3, name: 'Zalo: Hội Môi Giới Vinhomes Grand Park' },
-    { id: 4, name: 'Zalo: Khách Hàng Nhu Cầu Thực Sài Gòn' },
-    { id: 5, name: 'Zalo: Đầu Tư Đất Nền Ven Biển' }
-  ];
-
-  const handleAddKeyword = () => {
-    if (newKeywordInput.trim() && !targetKeywords.includes(newKeywordInput.trim())) {
-      setTargetKeywords([...targetKeywords, newKeywordInput.trim()]);
-      setNewKeywordInput('');
-    }
-  };
-
-  const handleRemoveKeyword = (kw) => {
-    setTargetKeywords(targetKeywords.filter(k => k !== kw));
-  };
-
-  const handleToggleGroup = (groupId) => {
-    if (selectedGroups.includes(groupId)) {
-      setSelectedGroups(selectedGroups.filter(id => id !== groupId));
-    } else {
-      setSelectedGroups([...selectedGroups, groupId]);
-    }
-  };
-
-  const handleToggleSelectAllGroups = () => {
-    if (selectedGroups.length === defaultZaloGroups.length) {
-      setSelectedGroups([]);
-    } else {
-      setSelectedGroups(defaultZaloGroups.map(g => g.id));
-    }
-  };
-
-  useEffect(() => {
-    let interval;
-    let logIndex = 0;
-    if (isHunting) {
-      setSessionsRun(prev => prev + 1);
-      setActiveSessions(1);
-      setHuntingLog([
-        '>> AI ENGINE: INITIALIZING RADAR...',
-        '>> CONNECTING TO ZALO PROTOCOL...',
-        '>> STATUS: ACTIVE'
-      ]);
-
-      const logSteps = [
-        '>> SCANNING INCOMING PACKETS FROM SELECTED GROUPS...',
-        '>> EXTRACTING NLP CONTENT...',
-        '>> MONITORING ACTIVE CONVERSATIONS...',
-        '>> COMPARING TARGET KEYWORDS...',
-        '>> WAITING FOR SIGNALS...'
-      ];
-
-      interval = setInterval(async () => {
-        if (logIndex < logSteps.length) {
-          const nextLog = logSteps[logIndex];
-          if (nextLog) {
-            setHuntingLog(prev => [...prev.slice(-8), nextLog]);
-          }
-          logIndex++;
-        } else {
-          setHuntingLog(prev => [...prev.slice(-8), '>> NLP ANALYZER: ANALYZING CHAT MSG...']);
-          
-          try {
-            const queryWord = targetKeywords.length > 0 ? targetKeywords[Math.floor(Math.random() * targetKeywords.length)] : "cần mua";
-            const prompt = `Bạn là một công cụ quét dữ liệu Zalo (Web Scraper & AI Lead Extractor).
-Dựa trên từ khóa mục tiêu: "${queryWord}", hãy tạo ra duy nhất 1 khách hàng tiềm năng thực tế đăng tin trong nhóm Zalo tìm mua/bán BĐS.
-Yêu cầu trả về định dạng JSON thuần túy (không markdown, không giải thích gì thêm), chứa các trường:
-- name: Tên khách hàng (ví dụ: Anh Hùng, Chị Lan,...)
-- phone: Số điện thoại (dạng 09xx.xxx.xxx hoặc che 2-3 số ở giữa ví dụ 0912.38x.xx9)
-- source: Tên nhóm Zalo ví dụ "Nhóm Ký gửi BĐS Quận 2", "Hội Cư Dân Vinhomes..."
-- demand: Mô tả chi tiết tin nhắn khách hàng gửi (phù hợp với từ khóa "${queryWord}")
-- time: "Vừa xong"
-- matchScore: Điểm độ tương hợp (từ 85 đến 99)
-Ví dụ:
-{"name":"Anh Tuấn","phone":"0987.65x.x21","source":"Zalo: Cộng Đồng BĐS Phía Đông","demand":"Cần tìm đất nền sổ đỏ thổ cư khu vực Quận 9, tài chính dưới 3 tỷ, mua công chứng ngay.","time":"Vừa xong","matchScore":95}`;
-
-            const res = await fetch('/api/gemini/generate', {
-              method: 'POST',
-              headers: { 
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-              },
-              body: JSON.stringify({ prompt })
-            });
-
-            if (res.ok) {
-              const json = await res.json();
-              const text = json.text;
-              const cleanText = text.replace(/\\`\\`\\`json/g, '').replace(/\\`\\`\\`/g, '').replace(/```json/g, '').replace(/```/g, '').trim();
-              const lead = JSON.parse(cleanText);
-              
-              setZaloSignals(prev => [lead, ...prev]);
-              setTargetsDetected(prev => prev + 1);
-              setHuntingLog(prev => [...prev.slice(-8), `>> TARGET DETECTED: ${lead.name} (${lead.source})`]);
-            }
-          } catch (err) {
-            const names = ["Anh Hùng", "Chị Mai", "Anh Nam", "Chị Thảo", "Anh Quân"];
-            const groups = ["Zalo: Cộng Đồng BĐS Phía Đông", "Zalo: Ký Gửi Nhà Đất Quận 2 & 9", "Zalo: Hội Môi Giới Vinhomes Grand Park"];
-            const demands = [
-              "Cần mua chung cư 2 phòng ngủ Vinhomes Grand Park, tầng trung, view thoáng, tài chính sẵn 2.5 tỷ.",
-              "Khách nét cần tìm đất nền Quận 9 có sổ đỏ riêng, đường ô tô tránh nhau, mua công chứng gấp trong tuần.",
-              "Chính chủ cần bán gấp nhà mặt phố Nguyễn Duy Trinh, ngang 5m, thích hợp làm văn phòng, giá sập hầm thương lượng."
-            ];
-            const lead = {
-              name: names[Math.floor(Math.random() * names.length)],
-              phone: "09" + Math.floor(10 + Math.random() * 89) + "." + Math.floor(100 + Math.random() * 899) + ".xxx",
-              source: groups[Math.floor(Math.random() * groups.length)],
-              demand: demands[Math.floor(Math.random() * demands.length)],
-              time: "Vừa xong",
-              matchScore: 85 + Math.floor(Math.random() * 15)
-            };
-            setZaloSignals(prev => [lead, ...prev]);
-            setTargetsDetected(prev => prev + 1);
-            setHuntingLog(prev => [...prev.slice(-8), `>> TARGET DETECTED: ${lead.name} (${lead.source})`]);
-          }
-        }
-      }, 4000);
-    } else {
-      setActiveSessions(0);
-    }
-    return () => clearInterval(interval);
-  }, [isHunting, targetKeywords, token]);
 
   const [socialTopic, setSocialTopic] = useState('');
   const [socialPostResult, setSocialPostResult] = useState('');
@@ -4421,359 +4310,6 @@ Ví dụ:
       </section>
     </div>
   );
-
-  const renderRadaDiSan = () => {
-    // Filter Zalo groups based on search input
-    const filteredGroups = defaultZaloGroups.filter(g => 
-      g.name.toLowerCase().includes(searchGroupQuery.toLowerCase())
-    );
-
-    return (
-      <div className="space-y-6 animate-fadeIn text-slate-700 pb-12">
-        <style>{`
-          @keyframes radar-sweep {
-            from { transform: translate(-100%, -100%) rotate(0deg); }
-            to { transform: translate(-100%, -100%) rotate(360deg); }
-          }
-        `}</style>
-
-        {/* Header title block */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-violet-50 text-violet-600 rounded-xl">
-              <Radio className="animate-pulse" style={{width:24,height:24}}/>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-gray-800">Rada đi săn nhóm Zalo</h3>
-              <p className="text-xs text-gray-500 mt-0.5">Dò quét thời gian thực các tin nhắn có nhu cầu mua bán BĐS trong nhóm chat</p>
-            </div>
-          </div>
-          <div className="flex-shrink-0">
-            <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-full border border-emerald-200">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-ping"></span>
-              Hệ thống đang bảo vệ
-            </span>
-          </div>
-        </div>
-
-        {/* Top statistic cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white p-5 rounded-xl border border-gray-200/80 shadow-sm flex items-center justify-between">
-            <div>
-              <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">Phiên đã chạy</p>
-              <h4 className="text-3xl font-black text-slate-800 mt-1">{sessionsRun}</h4>
-              <p className="text-2xs text-slate-400 mt-1">🔄 Tổng lịch sử</p>
-            </div>
-            <div className="p-3.5 bg-slate-50 text-slate-500 rounded-lg">
-              <RotateCw style={{width:20,height:20}}/>
-            </div>
-          </div>
-
-          <div className="bg-white p-5 rounded-xl border border-gray-200/80 shadow-sm flex items-center justify-between">
-            <div>
-              <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">Mục tiêu phát hiện</p>
-              <h4 className="text-3xl font-black text-slate-800 mt-1">{targetsDetected}</h4>
-              <p className="text-2xs text-slate-400 mt-1">🎯 Tổng tất cả các phiên</p>
-            </div>
-            <div className="p-3.5 bg-rose-50 text-rose-500 rounded-lg">
-              <Target style={{width:20,height:20}}/>
-            </div>
-          </div>
-
-          <div className="bg-white p-5 rounded-xl border border-gray-200/80 shadow-sm flex items-center justify-between">
-            <div>
-              <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">Đang hoạt động</p>
-              <h4 className="text-3xl font-black text-slate-800 mt-1">{activeSessions}</h4>
-              <p className="text-2xs text-slate-400 mt-1">🟢 Phiên đang quét</p>
-            </div>
-            <div className="p-3.5 bg-emerald-50 text-emerald-500 rounded-lg">
-              <Bot style={{width:20,height:20}}/>
-            </div>
-          </div>
-        </div>
-
-        {/* 3-Column main layout grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-          
-          {/* Left configurations panel (Col span 4) */}
-          <div className="lg:col-span-4 bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex flex-col justify-between space-y-6">
-            
-            {/* Section 1: Chọn tài khoản Zalo */}
-            <div className="space-y-2">
-              <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider">1. Chọn tài khoản Zalo</h5>
-              <div className="flex items-center justify-between p-3 border border-indigo-100 rounded-lg bg-indigo-50/20">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-sm">
-                    S
-                  </div>
-                  <span className="text-sm font-semibold text-slate-800">Sale</span>
-                </div>
-                <div className="w-5 h-5 rounded-full bg-violet-600 text-white flex items-center justify-center">
-                  <CheckCircle style={{width:14,height:14}}/>
-                </div>
-              </div>
-            </div>
-
-            {/* Section 2: Chọn nhóm quét */}
-            <div className="space-y-2">
-              <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                2. Chọn nhóm quét ({selectedGroups.length} đã chọn)
-              </h5>
-              <input
-                type="text"
-                value={searchGroupQuery}
-                onChange={e => setSearchGroupQuery(e.target.value)}
-                placeholder="Tìm kiếm tên nhóm..."
-                className="w-full p-2 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-violet-500"
-              />
-              <div className="max-h-36 overflow-y-auto border border-gray-100 rounded p-2 bg-slate-50/50 space-y-1.5">
-                <div className="flex items-center gap-2 py-1 px-1 text-xs border-b border-gray-200/50 font-bold text-slate-600">
-                  <input
-                    type="checkbox"
-                    checked={selectedGroups.length === defaultZaloGroups.length}
-                    onChange={handleToggleSelectAllGroups}
-                    className="cursor-pointer accent-violet-600"
-                  />
-                  <span>Chọn tất cả</span>
-                </div>
-                {filteredGroups.map(g => (
-                  <div key={g.id} className="flex items-center gap-2 text-xs py-0.5 px-1 hover:bg-slate-100/60 rounded">
-                    <input
-                      type="checkbox"
-                      checked={selectedGroups.includes(g.id)}
-                      onChange={() => handleToggleGroup(g.id)}
-                      className="cursor-pointer accent-violet-600"
-                    />
-                    <span className="text-slate-700 truncate">{g.name}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Section 3: Từ khóa mục tiêu */}
-            <div className="space-y-2">
-              <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider">3. Từ khóa mục tiêu</h5>
-              <div className="flex flex-wrap gap-1 mb-2">
-                {targetKeywords.map(kw => (
-                  <span key={kw} className="inline-flex items-center gap-1 bg-violet-50 text-violet-700 border border-violet-100 text-xs px-2 py-0.5 rounded-full font-medium">
-                    {kw}
-                    <button onClick={() => handleRemoveKeyword(kw)} className="text-violet-500 hover:text-violet-800 font-bold">×</button>
-                  </span>
-                ))}
-              </div>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={newKeywordInput}
-                  onChange={e => setNewKeywordInput(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && handleAddKeyword()}
-                  placeholder="Nhập từ khóa..."
-                  className="flex-1 p-2 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-violet-500"
-                />
-                <button
-                  onClick={handleAddKeyword}
-                  className="px-3 bg-violet-600 hover:bg-violet-700 text-white rounded font-bold text-sm"
-                >
-                  +
-                </button>
-              </div>
-              <p className="text-3xs text-slate-400 italic mt-1">Ấn Enter hoặc click nút + để thêm từ khóa mới</p>
-            </div>
-
-            {/* Section 4: Thời gian tìm kiếm */}
-            <div className="space-y-2">
-              <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider">4. Thời gian tìm kiếm</h5>
-              <select
-                value={searchTime}
-                onChange={e => setSearchTime(e.target.value)}
-                className="w-full p-2.5 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-violet-500 font-medium text-slate-700"
-              >
-                <option value="Đầu ngày - Hiện tại">Đầu ngày - Hiện tại</option>
-                <option value="24 giờ qua">24 giờ qua</option>
-                <option value="3 ngày qua">3 ngày qua</option>
-              </select>
-            </div>
-
-            {/* Start Button */}
-            <button
-              onClick={() => setIsHunting(!isHunting)}
-              className={`w-full py-3.5 rounded-xl font-bold text-sm tracking-wider uppercase transition-all shadow-md mt-4 flex items-center justify-center gap-2
-                ${isHunting 
-                  ? 'bg-rose-600 hover:bg-rose-700 text-white shadow-rose-600/10' 
-                  : 'bg-violet-600 hover:bg-violet-700 text-white shadow-violet-600/10'}`}
-            >
-              <Radio className={isHunting ? 'animate-spin' : ''} style={{width:16,height:16}}/>
-              {isHunting ? 'DỪNG ĐI SĂN' : 'BẮT ĐẦU ĐI SĂN'}
-            </button>
-
-          </div>
-
-          {/* Center radar animation panel (Col span 5) */}
-          <div className="lg:col-span-5 bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex flex-col justify-between items-stretch">
-            <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Màn hình Radar</h5>
-            
-            {/* Visual Radar Box */}
-            <div className="relative w-full h-80 bg-slate-950 border border-slate-900 rounded-xl overflow-hidden shadow-inner flex flex-col justify-between p-4 font-mono select-none">
-              
-              {/* Radar Grid Circles */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className={`rounded-full border border-violet-500/10 transition-all duration-300 ${isHunting ? 'w-16 h-16 border-violet-500/20' : 'w-12 h-12'}`}></div>
-                <div className={`rounded-full border border-violet-500/10 transition-all duration-300 ${isHunting ? 'w-36 h-36 border-violet-500/20' : 'w-24 h-24'}`}></div>
-                <div className={`rounded-full border border-violet-500/10 transition-all duration-300 ${isHunting ? 'w-56 h-56 border-violet-500/20' : 'w-36 h-36'}`}></div>
-                <div className={`rounded-full border border-violet-500/10 transition-all duration-300 ${isHunting ? 'w-76 h-76 border-violet-500/20' : 'w-48 h-48'}`}></div>
-                {/* Crosshairs */}
-                <div className="absolute w-full h-px bg-violet-500/10"></div>
-                <div className="absolute h-full w-px bg-violet-500/10"></div>
-              </div>
-              
-              {/* Sweep line (Pulsing sweep rotation) */}
-              {isHunting && (
-                <div 
-                  className="absolute top-1/2 left-1/2 w-48 h-48 bg-gradient-to-tr from-violet-500/25 to-transparent origin-bottom-left pointer-events-none"
-                  style={{
-                    transform: 'translate(-100%, -100%) rotate(0deg)',
-                    transformOrigin: '100% 100%',
-                    animation: 'radar-sweep 4s linear infinite',
-                    borderRadius: '100% 0 0 0'
-                  }}
-                ></div>
-              )}
-
-              {/* Status Indicator */}
-              <div className="flex items-center justify-between text-3xs border-b border-indigo-950/80 pb-1.5 z-10">
-                <span className="text-indigo-400">ENGINE: RADAR_V1.0</span>
-                <span className={isHunting ? 'text-emerald-400 animate-pulse' : 'text-slate-500'}>
-                  {isHunting ? '● RUNNING' : '○ IDLE'}
-                </span>
-              </div>
-
-              {/* Terminal Logs (Bottom portion) */}
-              <div className="mt-auto space-y-1 text-2xs z-10 max-h-36 overflow-hidden">
-                {huntingLog.map((log, index) => {
-                  if (!log || typeof log !== 'string') return null;
-                  let logColor = 'text-indigo-400';
-                  if (log.includes('ACTIVE') || log.includes('DETECTED:')) {
-                    logColor = 'text-emerald-400';
-                  } else if (log.includes('TARGET DETECTED')) {
-                    logColor = 'text-amber-400 font-bold';
-                  }
-                  return (
-                    <div key={index} className={`${logColor} truncate`}>
-                      {log}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            
-            <p className="text-3xs text-slate-400 italic text-center mt-3">
-              Mô hình AI tự động đọc hiểu cú pháp, ngữ cảnh chat và phân loại nhu cầu thực
-            </p>
-          </div>
-
-          {/* Right live signals feed (Col span 3) */}
-          <div className="lg:col-span-3 bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex flex-col justify-between items-stretch">
-            
-            {/* Header */}
-            <div className="flex items-center justify-between border-b pb-2 mb-3 flex-shrink-0">
-              <h5 className="text-xs font-bold text-slate-800">Tín hiệu từ Zalo</h5>
-              <span className={`text-3xs px-2 py-0.5 rounded font-bold border
-                ${isHunting 
-                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
-                  : 'bg-slate-50 text-slate-500 border-slate-200'}`}>
-                {isHunting ? 'Đang quét...' : 'Chờ lệnh...'}
-              </span>
-            </div>
-
-            {/* Zalo Signals Display Area */}
-            <div className="flex-1 overflow-y-auto max-h-[340px] pr-1 space-y-3 min-h-[300px]">
-              
-              {/* Empty state */}
-              {zaloSignals.length === 0 && (
-                <div className="h-full flex flex-col items-center justify-center text-center p-4">
-                  <Radio className="text-slate-300 animate-pulse mb-3" style={{width:32,height:32}}/>
-                  <p className="text-xs text-slate-400 font-medium">
-                    Nhấn "Bắt đầu đi săn" để quét tín hiệu từ các nhóm
-                  </p>
-                </div>
-              )}
-
-              {/* Signals list */}
-              {zaloSignals.map((signal, index) => (
-                <div 
-                  key={index} 
-                  className="bg-slate-50 border border-slate-200 hover:border-violet-300/80 p-3 rounded-lg text-xs space-y-1.5 transition-all animate-fadeIn"
-                >
-                  <div className="flex items-center justify-between border-b border-slate-200/55 pb-1">
-                    <span className="font-bold text-slate-800">{signal.name}</span>
-                    <span className="text-3xs text-violet-600 font-semibold bg-violet-50 px-1.5 py-0.5 rounded border border-violet-100">
-                      Match: {signal.matchScore}%
-                    </span>
-                  </div>
-                  
-                  <div className="text-slate-400 text-3xs flex items-center gap-1.5">
-                    <span className="truncate max-w-[120px]">{signal.source}</span>
-                    <span>•</span>
-                    <span>{signal.time}</span>
-                  </div>
-
-                  <p className="text-slate-600 leading-normal text-2xs italic font-medium">
-                    "{signal.demand}"
-                  </p>
-
-                  {signal.phone && signal.phone !== 'Không có' && (
-                    <p className="text-slate-700 text-2xs font-semibold">
-                      📞 SĐT: <span className="text-violet-600">{signal.phone}</span>
-                    </p>
-                  )}
-
-                  <div className="flex gap-1.5 pt-1.5 border-t border-slate-200/50 justify-between items-center">
-                    <button
-                      onClick={() => {
-                        setZaloMeetingNotes(`Khách hàng ${signal.name} (${signal.phone}) đăng trong "${signal.source}" với nhu cầu: "${signal.demand}".`);
-                        setActiveTab('thucChien');
-                        setTimeout(() => {
-                          const textarea = document.querySelector('textarea[placeholder*="Dán kịch bản"]');
-                          if (textarea) textarea.scrollIntoView({ behavior: 'smooth' });
-                        }, 200);
-                      }}
-                      className="text-3xs bg-violet-50 hover:bg-violet-100 text-violet-700 border border-violet-200/80 px-2 py-1.5 rounded font-bold flex items-center gap-1"
-                    >
-                      <MessageSquare style={{width:10,height:10}}/> Soạn Zalo
-                    </button>
-                    <button
-                      onClick={() => {
-                        alert(`Đã lưu thông tin khách hàng ${signal.name} vào CRM!`);
-                      }}
-                      className="text-3xs bg-violet-600 hover:bg-violet-700 text-white px-2 py-1.5 rounded font-bold"
-                    >
-                      Lưu CRM
-                    </button>
-                  </div>
-                </div>
-              ))}
-
-            </div>
-
-            {/* Clear history button */}
-            <button
-              onClick={() => {
-                setZaloSignals([]);
-                setTargetsDetected(0);
-              }}
-              disabled={zaloSignals.length === 0}
-              className="w-full text-center py-2 border-t border-slate-100 text-3xs text-slate-400 hover:text-slate-600 transition-colors mt-3 flex items-center justify-center gap-1 flex-shrink-0 disabled:opacity-50 disabled:pointer-events-none"
-            >
-              🗑️ Xóa lịch sử quét
-            </button>
-
-          </div>
-
-        </div>
-
-      </div>
-    );
-  };
 
   if (isCheckingAuth) {
     return (

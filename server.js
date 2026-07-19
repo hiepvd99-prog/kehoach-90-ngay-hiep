@@ -794,6 +794,81 @@ app.post('/api/gemini/chat', authenticateToken, async (req, res) => {
   }
 });
 
+// ===== Đồng bộ dữ liệu trang Marketing 90 ngày =====
+// marketing.html gọi 3 endpoint này. Trước đây chúng chưa tồn tại nên client luôn
+// rơi về chế độ offline: mọi số liệu KPI chỉ nằm trong localStorage của 1 trình duyệt.
+const SHEETS_FILE = path.join(DATA_DIR, 'sheets.json');
+const NOTES_FILE = path.join(DATA_DIR, 'notes.json');
+
+function readJsonFile(file, fallback) {
+  try {
+    if (!fs.existsSync(file)) return fallback;
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
+  } catch (err) {
+    console.error('Không đọc được ' + file + ':', err.message);
+    return fallback;
+  }
+}
+
+function writeJsonFile(file, value) {
+  try {
+    if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+    fs.writeFileSync(file, JSON.stringify(value, null, 2), 'utf8');
+    return true;
+  } catch (err) {
+    console.error('Không ghi được ' + file + ':', err.message);
+    return false;
+  }
+}
+
+app.get('/api/data', (req, res) => {
+  res.json({
+    users: readJsonFile(SHEETS_FILE, { default: {} }),
+    notes: readJsonFile(NOTES_FILE, [])
+  });
+});
+
+app.post('/api/sync', (req, res) => {
+  const { username, kpi, bh, posts, posts_list, postlog } = req.body || {};
+  const key = (username || 'default').toString().slice(0, 60);
+  const sheets = readJsonFile(SHEETS_FILE, { default: {} });
+  const prev = sheets[key] || {};
+
+  // Chỉ ghi đè trường nào client thực sự gửi lên, tránh xoá mất phần khác.
+  sheets[key] = {
+    kpi:        kpi        !== undefined ? kpi        : prev.kpi,
+    bh:         bh         !== undefined ? bh         : prev.bh,
+    posts:      posts      !== undefined ? posts      : prev.posts,
+    posts_list: posts_list !== undefined ? posts_list : prev.posts_list,
+    postlog:    postlog    !== undefined ? postlog    : prev.postlog,
+    updatedAt: new Date().toISOString()
+  };
+
+  if (!writeJsonFile(SHEETS_FILE, sheets)) {
+    return res.status(500).json({ error: 'Không lưu được dữ liệu' });
+  }
+  res.json({ ok: true, username: key });
+});
+
+app.post('/api/notes', (req, res) => {
+  const { user, text } = req.body || {};
+  if (!text || !text.toString().trim()) {
+    return res.status(400).json({ error: 'Nội dung ghi chú trống' });
+  }
+  const notes = readJsonFile(NOTES_FILE, []);
+  notes.push({
+    user: (user || 'Ẩn danh').toString().slice(0, 60),
+    text: text.toString().slice(0, 2000),
+    at: new Date().toISOString()
+  });
+  // Giữ 200 ghi chú gần nhất
+  const trimmed = notes.slice(-200);
+  if (!writeJsonFile(NOTES_FILE, trimmed)) {
+    return res.status(500).json({ error: 'Không lưu được ghi chú' });
+  }
+  res.json({ ok: true, notes: trimmed });
+});
+
 // Serve built frontend static files in Production
 app.use(express.static(path.join(__dirname, 'dist')));
 
