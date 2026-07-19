@@ -1410,16 +1410,7 @@ Ví dụ:
     ...(currentUser && currentUser.role === 'admin' ? [{ id: 'admin', label: 'Quản trị User', icon: ClipboardList }] : [])
   ];
 
-  const marketingTabs = [
-    { id: 'tongQuan', label: '00 · Tổng quan', icon: Layout },
-    { id: 'dinhVi', label: '01 · Định vị', icon: Target },
-    { id: 'keHoach90n', label: '02 · Kế hoạch 90N', icon: LineChart },
-    { id: 'pillars', label: '03 · 5 Pillars', icon: Box },
-    { id: 'lichDangBai', label: '04 · Lịch đăng bài', icon: CalendarClock },
-    { id: 'storyBank', label: '05 · Story Bank', icon: Wand2 },
-    { id: 'visual', label: '06 · Visual concept', icon: Radio },
-    { id: 'kpiTracker', label: '07 · KPI Tracker', icon: TrendingUp }
-  ];
+  const marketingTabs = []
 
   const tabs = mainSection === 'sales' ? salesTabs : marketingTabs;
 
@@ -5012,6 +5003,7 @@ Ví dụ:
 
         <nav className="flex-1 overflow-y-auto py-3" style={{display:'flex',flexDirection:'column'}}>
           {/* Tab buttons — iOS glass pill + cursor spotlight */}
+          {mainSection === 'sales' && (
           <div style={{position:'relative', padding:'0 0'}}>
             {/* Sliding glass pill */}
             <div className="nav-pill" style={{
@@ -5044,6 +5036,13 @@ Ví dụ:
               );
             })}
           </div>
+          )}
+          {mainSection === 'marketing' && (
+            <div style={{padding: '16px 20px', textAlign: 'center'}}>
+              <p style={{color: 'rgba(148,163,184,0.7)', fontSize: 12, fontWeight: 500}}>📢 Đang xem phân hệ Marketing</p>
+              <p style={{color: 'rgba(148,163,184,0.5)', fontSize: 11, marginTop: 4}}>Bấm KINH DOANH để quay lại</p>
+            </div>
+          )}
 
           {/* Spacer */}
           <div style={{flex:1,minHeight:16}}/>
@@ -5387,20 +5386,26 @@ Ví dụ:
         </header>
 
         {/* Thanh tin tức BĐS */}
-        <NewsTicker token={token} />
+        {/* Thanh tin tức BĐS — chỉ hiện khi ở Sales */}
+        {mainSection === 'sales' && <NewsTicker token={token} />}
 
         {/* Main content */}
+        {mainSection === 'marketing' ? (
+          <iframe
+            src="/marketing-page"
+            style={{
+              flex: 1,
+              width: '100%',
+              border: 'none',
+              height: '100%',
+              minHeight: 0,
+            }}
+            title="Marketing 90 Ngày"
+          />
+        ) : (
         <main className="flex-1 overflow-y-auto p-4 md:p-8 main-bg pb-20 md:pb-8">
           <div className="max-w-5xl mx-auto">
             {mainSection === 'sales' && <SmartSuggestions setActiveTab={setActiveTab} token={token} />}
-            {activeTab === 'tongQuan' && <MarketingDashboard tab="tongQuan" currentUser={currentUser} token={token} />}
-            {activeTab === 'dinhVi' && <MarketingDashboard tab="dinhVi" currentUser={currentUser} token={token} />}
-            {activeTab === 'keHoach90n' && <MarketingDashboard tab="keHoach90n" currentUser={currentUser} token={token} />}
-            {activeTab === 'pillars' && <MarketingDashboard tab="pillars" currentUser={currentUser} token={token} />}
-            {activeTab === 'lichDangBai' && <MarketingDashboard tab="lichDangBai" currentUser={currentUser} token={token} />}
-            {activeTab === 'storyBank' && <MarketingDashboard tab="storyBank" currentUser={currentUser} token={token} />}
-            {activeTab === 'visual' && <MarketingDashboard tab="visual" currentUser={currentUser} token={token} />}
-            {activeTab === 'kpiTracker' && <MarketingDashboard tab="kpiTracker" currentUser={currentUser} token={token} />}
             {activeTab === 'soTayCaNhan' && renderSoTayCaNhan()}
             {activeTab === 'hanhTrinh' && renderHanhTrinh()}
             {activeTab === 'quyTrinh' && renderQuyTrinh()}
@@ -5413,6 +5418,7 @@ Ví dụ:
             {activeTab === 'admin' && renderAdmin()}
           </div>
         </main>
+        )}
       </div>
 
       {/* Bottom navigation bar — chỉ hiện trên mobile */}

@@ -797,6 +797,12 @@ app.post('/api/gemini/chat', authenticateToken, async (req, res) => {
 // Serve built frontend static files in Production
 app.use(express.static(path.join(__dirname, 'dist')));
 
+// Serve original Marketing 90-day plan page
+app.use('/marketing-assets', express.static(path.join(__dirname, 'public')));
+app.get('/marketing-page', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'marketing.html'));
+});
+
 // Serve index.html for any client-side routes (Single Page App routing)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
