@@ -783,7 +783,13 @@ table.kpi tr.tot td{background:var(--ink3);font-family:var(--mono);color:var(--g
               <option value="P6">P6 · News & Impact</option>
             </select>
           </label>
-          <label>Lọc theo giai đoạn
+                    <label>Xem & chỉnh sửa lịch của:
+            <select id="selectSheetUser" class="crm-select" style="margin-top:4px;height:38px;padding:6px;width:180px;font-weight:bold;color:var(--gold)">
+              <option value="default">Lịch chung (Mặc định)</option>
+              <option value="__new__">➕ Tạo lịch mới...</option>
+            </select>
+          </label>
+<label>Lọc theo giai đoạn
             <select id="fPhase">
               <option value="all">Cả 90 ngày</option>
               <option value="1">GĐ1 · Awareness (T1–4)</option>
@@ -978,19 +984,19 @@ const TONE=[
 
 const PHASES=[
  ["Awareness","D1–D30","GĐ1","Định vị rõ · tạo nhận biết · first impression","var(--p1)"],
- ["Authority","D31–D60","GĐ2","Khẳng định kiến thức vùng đất · lên 1.000 followers","var(--p4)"],
+ ["Authority","D31–D60","GĐ2","Khẳng định kiến thức vùng đất · lên 3.000 followers","var(--p4)"],
  ["Conversion","D61–D90","GĐ3","Social proof · chốt deal đầu · xin referral","var(--p2)"]
 ];
 
 const KPIOV=[
- ["Followers FB","+1.500","+200 · +500 · +800"],
- ["Bài đăng","72","30 · 30 · 12"],
- ["Video","28","8 · 12 · 8"],
- ["Lead nhận","30–55","0–5 · 10–20 · 20–30"],
- ["Deal chốt","1–3","0 · 0–1 · 1–2"],
- ["Inbox/tuần cuối kỳ","30+","tăng dần theo phase"],
- ["Mention/share organic","8–17","0–2 · 3–5 · 5–10"],
- ["Comment ý nghĩa/bài","30+","5–10 · 15–25 · 30+"]
+  ["Followers FB","+5.000","+1.000 · +2.000 · +2.000"],
+  ["Bài đăng","72","30 · 30 · 12"],
+  ["Video","28","8 · 12 · 8"],
+  ["Lead nhận","50–100","5 · 35 · 60"],
+  ["Deal chốt","3","0 · 1 · 2"],
+  ["Inbox/tuần cuối kỳ","50+","tăng dần theo phase"],
+  ["Mention/share organic","30+","0–5 · 10–15 · 30+"],
+  ["Comment ý nghĩa/bài","30+","5–10 · 15–25 · 30+"]
 ];
 
 const WEEKS=[
@@ -1253,18 +1259,26 @@ let isServerMode=false;
 let currentUsername="";
 
 function save(k,v){
-  try{localStorage.setItem(KEY+k,JSON.stringify(v))}catch(e){mem[k]=v}
+  let realKey = k;
+  if ((k==="kpi" || k==="bh" || k==="posts" || k==="posts_list") && selectedSheetUser !== "default") {
+    realKey = k + "_user_" + selectedSheetUser;
+  }
+  try{localStorage.setItem(KEY+realKey,JSON.stringify(v))}catch(e){mem[realKey]=v}
   flash();
-  if(isServerMode && (k==="kpi" || k==="bh" || k==="posts")){
-    syncToServer();
+  if(isServerMode && (k==="kpi" || k==="bh" || k==="posts" || k==="posts_list")){
+    savePostsState();
   }
 }
 function load(k,def){
+  let realKey = k;
+  if ((k==="kpi" || k==="bh" || k==="posts" || k==="posts_list") && selectedSheetUser !== "default") {
+    realKey = k + "_user_" + selectedSheetUser;
+  }
   try{
-    const r=localStorage.getItem(KEY+k);
-    return r!==null?JSON.parse(r):(mem[k]!==undefined?mem[k]:def);
+    const r=localStorage.getItem(KEY+realKey);
+    return r!==null?JSON.parse(r):(mem[realKey]!==undefined?mem[realKey]:def);
   }catch(e){
-    return mem[k]!==undefined?mem[k]:def;
+    return mem[realKey]!==undefined?mem[realKey]:def;
   }
 }
 let flashT;
@@ -1409,6 +1423,8 @@ function renderPillarsFull(){
  });
 }
 
+let selectedSheetUser = "default";
+let DEFAULT_POSTS_STATIC = [];
 /* =================== RENDER: SCHEDULE =================== */
 let schedState={start:null,fp:"all",fph:"all",status:"all"};
 let currentViewMode="cards";
@@ -1431,7 +1447,12 @@ function updateProgressUI(total) {
 }
 
 function savePostsState() {
-  save("posts_list", POSTS);
+  const suffix = selectedSheetUser === "default" ? "" : "_user_" + selectedSheetUser;
+  // Write directly to local storage to avoid recursion
+  try {
+    localStorage.setItem(KEY + "posts_list" + suffix, JSON.stringify(POSTS));
+  } catch(e) {}
+  
   if (isServerMode) {
     const kpi = load("kpi", {});
     const bh = load("bh", {});
@@ -1439,11 +1460,10 @@ function savePostsState() {
     fetch('/api/sync', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ kpi, bh, posts, posts_list: POSTS })
+      body: JSON.stringify({ username: selectedSheetUser, kpi, bh, posts, posts_list: POSTS })
     }).catch(e => console.error("Sync error:", e));
   }
 }
-
 function addPost() {
   const nextNum = POSTS.length + 1;
   const newPost = {
@@ -1468,10 +1488,20 @@ function addPost() {
 }
 
 function renderSchedule(){
-  // Load custom posts from localstorage if any
+  // Capture static DEFAULT_POSTS_STATIC on first call if empty
+  if (DEFAULT_POSTS_STATIC.length === 0) {
+    DEFAULT_POSTS_STATIC = JSON.parse(JSON.stringify(POSTS));
+  }
+
+  // Load selected sheet user setting
+  selectedSheetUser = load("selected_sheet_user", "default");
+  
+  const suffix = selectedSheetUser === "default" ? "" : "_user_" + selectedSheetUser;
   const localPosts = load("posts_list", null);
   if (localPosts && localPosts.length > 0) {
     POSTS = localPosts;
+  } else {
+    POSTS = JSON.parse(JSON.stringify(DEFAULT_POSTS_STATIC));
   }
 
   const done=load("posts",{});
@@ -1483,6 +1513,69 @@ function renderSchedule(){
   document.getElementById("fPillar").onchange=e=>{schedState.fp=e.target.value;drawPosts()};
   document.getElementById("fPhase").onchange=e=>{schedState.fph=e.target.value;drawPosts()};
   
+  // Sheet user dropdown selector handler
+  const selUser = document.getElementById("selectSheetUser");
+  if (selUser) {
+    selUser.value = selectedSheetUser;
+    selUser.onchange = function() {
+      const val = this.value;
+      if (val === "__new__") {
+        const name = prompt("Nhập tên người dùng mới để tạo lịch riêng:");
+        if (name && name.trim()) {
+          const cleanName = name.trim();
+          let exists = false;
+          for (let i = 0; i < selUser.options.length; i++) {
+            if (selUser.options[i].value === cleanName) {
+              exists = true;
+              break;
+            }
+          }
+          if (!exists) {
+            const opt = document.createElement("option");
+            opt.value = cleanName;
+            opt.textContent = "Lịch của " + cleanName;
+            selUser.insertBefore(opt, selUser.lastElementChild);
+          }
+          selectedSheetUser = cleanName;
+          selUser.value = cleanName;
+          save("selected_sheet_user", cleanName);
+          
+          const suffix = "_user_" + cleanName;
+          if (!load("posts_list", null)) {
+            const clonedPosts = JSON.parse(JSON.stringify(DEFAULT_POSTS_STATIC));
+            // Write directly to local storage to seed
+            localStorage.setItem(KEY + "posts_list" + suffix, JSON.stringify(clonedPosts));
+            localStorage.setItem(KEY + "posts" + suffix, JSON.stringify({}));
+            localStorage.setItem(KEY + "kpi" + suffix, JSON.stringify({}));
+            localStorage.setItem(KEY + "bh" + suffix, JSON.stringify({}));
+          }
+          
+          // Switch and load
+          POSTS = load("posts_list", []);
+          drawPosts();
+          renderKpi();
+          renderBrandHealth();
+          savePostsState();
+        } else {
+          selUser.value = selectedSheetUser;
+        }
+      } else {
+        selectedSheetUser = val;
+        save("selected_sheet_user", val);
+        const suffix = val === "default" ? "" : "_user_" + val;
+        const uPosts = load("posts_list", null);
+        if (uPosts) {
+          POSTS = uPosts;
+        } else {
+          POSTS = JSON.parse(JSON.stringify(DEFAULT_POSTS_STATIC));
+        }
+        drawPosts();
+        renderKpi();
+        renderBrandHealth();
+      }
+    };
+  }
+
   // quick status filters
   const qf = document.getElementById("quickFilters");
   qf.innerHTML = "";
@@ -1536,7 +1629,6 @@ function renderSchedule(){
   updateViewToggleUI();
   drawPosts();
 }
-
 function drawPosts(){
   const done=load("posts",{});
   const total=Object.values(done).filter(Boolean).length;
@@ -1965,19 +2057,49 @@ function initServerSync(){
     .then(data=>{
       isServerMode=true;
       console.log("Server sync initialized successfully!");
-      if(data.kpi && Object.keys(data.kpi).length>0){
-        localStorage.setItem(KEY+"kpi",JSON.stringify(data.kpi));
+      
+      // Update users dropdown list and load data
+      const selUser = document.getElementById("selectSheetUser");
+      if (selUser && data.users) {
+        // Clear options except default and __new__
+        selUser.innerHTML = `
+          <option value="default">Lịch chung (Mặc định)</option>
+          <option value="__new__">➕ Tạo lịch mới...</option>
+        `;
+        
+        Object.keys(data.users).forEach(u => {
+          if (u !== "default" && u !== "__new__") {
+            const opt = document.createElement("option");
+            opt.value = u;
+            opt.textContent = "Lịch của " + u;
+            selUser.insertBefore(opt, selUser.lastElementChild);
+          }
+        });
+        
+        // Restore value
+        selectedSheetUser = load("selected_sheet_user", "default");
+        selUser.value = selectedSheetUser;
+        
+        // Cache server users data to localstorage
+        Object.keys(data.users).forEach(u => {
+          const suffix = u === "default" ? "" : "_user_" + u;
+          const uData = data.users[u];
+          if (uData) {
+            if (uData.posts_list) localStorage.setItem(KEY + "posts_list" + suffix, JSON.stringify(uData.posts_list));
+            if (uData.posts) localStorage.setItem(KEY + "posts" + suffix, JSON.stringify(uData.posts));
+            if (uData.kpi) localStorage.setItem(KEY + "kpi" + suffix, JSON.stringify(uData.kpi));
+            if (uData.bh) localStorage.setItem(KEY + "bh" + suffix, JSON.stringify(uData.bh));
+          }
+        });
       }
-      if(data.bh && Object.keys(data.bh).length>0){
-        localStorage.setItem(KEY+"bh",JSON.stringify(data.bh));
+      
+      // Load current user data
+      const suffix = selectedSheetUser === "default" ? "" : "_user_" + selectedSheetUser;
+      const localPosts = load("posts_list", null);
+      if (localPosts && localPosts.length > 0) {
+        POSTS = localPosts;
       }
-      if(data.posts && Object.keys(data.posts).length>0){
-        localStorage.setItem(KEY+"posts",JSON.stringify(data.posts));
-      }
-      if(data.posts_list && data.posts_list.length>0){
-        POSTS = data.posts_list;
-        localStorage.setItem(KEY+"posts_list",JSON.stringify(data.posts_list));
-      }
+      
       // Re-render
       renderKpi();
       renderBrandHealth();
@@ -1997,21 +2119,50 @@ function pollServerData(){
   fetch('/api/data')
     .then(res=>res.json())
     .then(data=>{
-      if(data.posts){
-        localStorage.setItem(KEY+"posts",JSON.stringify(data.posts));
+      const selUser = document.getElementById("selectSheetUser");
+      if (selUser && data.users) {
+        // Keep track of currently selected
+        const currentVal = selUser.value;
+        
+        // Find existing usernames in select options
+        const existingUsers = [];
+        for(let i=0; i<selUser.options.length; i++) {
+          existingUsers.push(selUser.options[i].value);
+        }
+        
+        Object.keys(data.users).forEach(u => {
+          if (u !== "default" && u !== "__new__" && !existingUsers.includes(u)) {
+            const opt = document.createElement("option");
+            opt.value = u;
+            opt.textContent = "Lịch của " + u;
+            selUser.insertBefore(opt, selUser.lastElementChild);
+          }
+        });
+        
+        selUser.value = currentVal;
+        
+        // Dynamically save other users changes silently
+        Object.keys(data.users).forEach(u => {
+          const suffix = u === "default" ? "" : "_user_" + u;
+          const uData = data.users[u];
+          if (uData) {
+            if (uData.posts_list) localStorage.setItem(KEY + "posts_list" + suffix, JSON.stringify(uData.posts_list));
+            if (uData.posts) localStorage.setItem(KEY + "posts" + suffix, JSON.stringify(uData.posts));
+            if (uData.kpi) localStorage.setItem(KEY + "kpi" + suffix, JSON.stringify(uData.kpi));
+            if (uData.bh) localStorage.setItem(KEY + "bh" + suffix, JSON.stringify(uData.bh));
+          }
+        });
       }
-      if(data.posts_list && data.posts_list.length>0){
-        POSTS = data.posts_list;
-        localStorage.setItem(KEY+"posts_list",JSON.stringify(data.posts_list));
+      
+      // Load current user data
+      const suffix = selectedSheetUser === "default" ? "" : "_user_" + selectedSheetUser;
+      const localPosts = load("posts_list", null);
+      if (localPosts && localPosts.length > 0) {
+        POSTS = localPosts;
       }
-      if(data.kpi){
-        localStorage.setItem(KEY+"kpi",JSON.stringify(data.kpi));
-        renderKpi();
-      }
-      if(data.bh){
-        localStorage.setItem(KEY+"bh",JSON.stringify(data.bh));
-        renderBrandHealth();
-      }
+      
+      renderKpi();
+      renderBrandHealth();
       drawPosts();
       if(data.notes) drawNotes(data.notes);
     })
