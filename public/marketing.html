@@ -518,56 +518,6 @@ table.kpi tr.tot td{background:var(--ink3);font-family:var(--mono);color:var(--g
           </div>
         </div>
 
-        <!-- ===== GALLERY ẢNH DỰ ÁN =====
-             LƯU Ý: đây là ẢNH STOCK (Unsplash) để trang trí. Muốn dùng ảnh thật của dự án,
-             tải ảnh về thư mục public/ rồi thay thuộc tính src bên dưới thành đường dẫn ảnh thật,
-             ví dụ: src="/marketing-assets/imperia-ocean-city.jpg" -->
-        <style>
-          .pgal{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
-          @media(max-width:760px){.pgal{grid-template-columns:repeat(2,1fr)}}
-          @media(max-width:460px){.pgal{grid-template-columns:1fr}}
-          .pgal-item{position:relative;border-radius:16px;overflow:hidden;height:196px;border:1px solid var(--line);box-shadow:0 8px 30px rgba(0,0,0,.38);background:var(--ink2)}
-          .pgal-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
-          .pgal-item:hover img{transform:scale(1.06)}
-          .pgal-item::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,26,33,0) 28%,rgba(12,26,33,.86) 100%);pointer-events:none}
-          .pgal-topline{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);z-index:2}
-          .pgal-cap{position:absolute;left:0;right:0;bottom:0;padding:13px 15px;z-index:2}
-          .pgal-cap .k{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:3px}
-          .pgal-cap .t{font-family:var(--serif);font-size:15.5px;color:var(--cream);line-height:1.2}
-        </style>
-        <div class="pgal">
-          <div class="pgal-item">
-            <div class="pgal-topline"></div>
-            <img loading="lazy" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=640&q=80&auto=format&fit=crop" alt="Imperia Ocean City">
-            <div class="pgal-cap"><span class="k">MIK Group · Gia Lâm</span><span class="t">Imperia Ocean City</span></div>
-          </div>
-          <div class="pgal-item">
-            <div class="pgal-topline"></div>
-            <img loading="lazy" src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=640&q=80&auto=format&fit=crop" alt="Masteri Waterfront">
-            <div class="pgal-cap"><span class="k">Masterise Homes · Gia Lâm</span><span class="t">Masteri Waterfront</span></div>
-          </div>
-          <div class="pgal-item">
-            <div class="pgal-topline"></div>
-            <img loading="lazy" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=640&q=80&auto=format&fit=crop" alt="Sunshine Crystal River">
-            <div class="pgal-cap"><span class="k">Sunshine Group · Ciputra</span><span class="t">Sunshine Crystal River</span></div>
-          </div>
-          <div class="pgal-item">
-            <div class="pgal-topline"></div>
-            <img loading="lazy" src="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=640&q=80&auto=format&fit=crop" alt="Lumière Evergreen">
-            <div class="pgal-cap"><span class="k">Masterise Homes · Tây Mỗ</span><span class="t">Lumière Evergreen</span></div>
-          </div>
-          <div class="pgal-item">
-            <div class="pgal-topline"></div>
-            <img loading="lazy" src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=640&q=80&auto=format&fit=crop" alt="The Sola Park">
-            <div class="pgal-cap"><span class="k">MIK Group · Smart City</span><span class="t">The Sola Park</span></div>
-          </div>
-          <div class="pgal-item">
-            <div class="pgal-topline"></div>
-            <img loading="lazy" src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=640&q=80&auto=format&fit=crop" alt="The Global City">
-            <div class="pgal-cap"><span class="k">Masterise Homes · TP.HCM</span><span class="t">The Global City</span></div>
-          </div>
-        </div>
-
         <div class="grid g2" style="margin-bottom:22px">
           <div class="card">
             <span class="eyebrow">Vì sao định vị này</span>
