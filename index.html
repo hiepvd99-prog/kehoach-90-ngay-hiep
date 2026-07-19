@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kế Hoạch 90 Ngày · Thương Hiệu Cá Nhân BĐS Phía Đông Hà Nội — Hiệp</title>
+<meta name="description" content="Kế hoạch hành động 90 ngày xây dựng thương hiệu cá nhân Bất động sản phía Đông Hà Nội - MIK & Masterise.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0C1A21; --ink2:#112430; --ink3:#17303D; --ink4:#1E3A48;
+  --line:#2A4653; --line2:#37596a;
+  --gold:#CBA35A; --gold-d:#a9853f; --jade:#4FA89C; --clay:#C07A45;
+  --cream:#ECE4D4; --off:#cdd7d9; --muted:#8FA3AB; --muted2:#6d838c;
+  --p1:#C07A45; --p2:#4FA89C; --p3:#D8B15A; --p4:#5E93C4; --p5:#C77E86;
+  --ok:#4FA89C; --warn:#D8B15A;
+  --serif:"Fraunces","Be Vietnam Pro",Georgia,serif;
+  --sans:"Be Vietnam Pro",system-ui,-apple-system,sans-serif;
+  --mono:"Space Mono","SFMono-Regular",monospace;
+  --maxw:1080px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);background:var(--ink);color:var(--cream);
+  line-height:1.62;font-weight:400;font-size:15.5px;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background-image:radial-gradient(1200px 600px at 80% -10%, rgba(79,168,156,.09), transparent 60%),radial-gradient(1000px 500px at -10% 20%, rgba(203,163,90,.07), transparent 55%);
+}
+::selection{background:var(--gold);color:var(--ink)}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:600;line-height:1.15;letter-spacing:-.01em}
+.mono{font-family:var(--mono)}
+a{color:var(--jade);text-decoration:none}
+
+/* ---------- LAYOUT ---------- */
+.wrap{display:flex;min-height:100vh}
+.side{
+  width:248px;flex:0 0 248px;position:sticky;top:0;height:100vh;
+  background:linear-gradient(180deg,var(--ink2),var(--ink));
+  border-right:1px solid var(--line);padding:26px 18px;overflow-y:auto;
+}
+.brandmark{display:flex;flex-direction:column;gap:2px;margin-bottom:26px;padding:0 6px}
+.brandmark .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase}
+.brandmark .nm{font-family:var(--serif);font-size:22px;color:var(--cream);line-height:1.05;margin-top:6px}
+.brandmark .sub{font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.35}
+.nav{display:flex;flex-direction:column;gap:3px}
+.nav button{
+  display:flex;align-items:center;gap:11px;width:100%;text-align:left;
+  background:transparent;border:1px solid transparent;border-radius:10px;
+  color:var(--off);font-family:var(--sans);font-size:14px;font-weight:500;
+  padding:10px 12px;cursor:pointer;transition:.18s;letter-spacing:.005em;
+}
+.nav button .ix{font-family:var(--mono);font-size:11px;color:var(--muted2);width:16px;flex:0 0 16px}
+.nav button:hover{background:var(--ink3);color:var(--cream)}
+.nav button.on{background:linear-gradient(90deg,rgba(203,163,90,.16),rgba(203,163,90,.02));border-color:var(--gold-d);color:var(--cream)}
+.nav button.on .ix{color:var(--gold)}
+.sidefoot{margin-top:24px;padding:14px 12px;border-top:1px solid var(--line);font-size:11px;color:var(--muted2);line-height:1.5}
+
+.main{flex:1 1 auto;min-width:0;max-width:calc(100vw - 248px)}
+.inner{max-width:var(--maxw);margin:0 auto;padding:40px 40px 90px}
+section.pane{display:none;animation:fade .4s ease}
+section.pane.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ---------- MOBILE NAV ---------- */
+.topbar{display:none}
+@media(max-width:860px){
+  .wrap{flex-direction:column}
+  .side{display:none}
+  .main{max-width:100vw}
+  .inner{padding:20px 16px 80px}
+  .topbar{
+    display:block;position:sticky;top:0;z-index:40;background:rgba(12,26,33,.94);
+    backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:12px 14px 0;
+  }
+  .topbar .tb-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .topbar .tb-nm{font-family:var(--serif);font-size:17px}
+  .topbar .tb-nm span{color:var(--gold)}
+  .topbar .tb-tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;color:var(--muted);text-transform:uppercase}
+  .mnav{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;scrollbar-width:none}
+  .mnav::-webkit-scrollbar{display:none}
+  .mnav button{
+    flex:0 0 auto;white-space:nowrap;background:var(--ink3);border:1px solid var(--line);
+    border-radius:20px;color:var(--off);font-family:var(--sans);font-size:12.5px;font-weight:600;
+    padding:7px 14px;cursor:pointer
+  }
+  .mnav button.on{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+}
+
+/* ---------- SHARED BLOCKS ---------- */
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.pane-h{margin-bottom:22px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.pane-h h2{font-size:clamp(26px,4.4vw,40px);margin:10px 0 8px;color:var(--cream)}
+.pane-h p{color:var(--muted);max-width:60ch;font-size:15px}
+.card{background:linear-gradient(160deg,var(--ink2),var(--ink));border:1px solid var(--line);border-radius:16px;padding:22px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;padding:3px 9px;border-radius:20px;border:1px solid var(--line2);color:var(--off);background:var(--ink3)}
+.tag-p{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.05em;padding:3px 8px;border-radius:6px;color:#0C1A21}
+.p-P1{background:var(--p1)}.p-P2{background:var(--p2)}.p-P3{background:var(--p3)}.p-P4{background:var(--p4)}.p-P5{background:var(--p5)}
+.lead{color:var(--off)}
+.dim{color:var(--muted)}
+.hl{color:var(--gold)}
+.hl-j{color:var(--jade)}
+.big-num{font-family:var(--serif);font-size:44px;line-height:1;color:var(--gold)}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;padding:44px 38px;margin-bottom:26px;
+  background:linear-gradient(150deg,#12313c 0%,#0d1f28 55%,#0c1a21 100%);}
+.hero .eyebrow{margin-bottom:14px;display:block}
+.hero h1{font-size:clamp(30px,5.4vw,52px);line-height:1.06;color:var(--cream);max-width:16ch}
+.hero h1 em{font-style:italic;color:var(--gold);font-weight:500}
+.hero .statement{margin-top:20px;max-width:58ch;font-size:16.5px;color:var(--off);line-height:1.66}
+.hero .metaline{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(600px 300px at 88% 12%,rgba(203,163,90,.16),transparent 60%);pointer-events:none}
+
+/* ---------- POSITIONING PILLARS ---------- */
+.pillar-row{display:flex;gap:16px;align-items:flex-start;padding:18px 0;border-bottom:1px solid var(--line)}
+.pillar-row:last-child{border-bottom:0}
+.pillar-row .pn{font-family:var(--serif);font-size:30px;color:var(--gold);width:52px;flex:0 0 52px;line-height:1}
+.pillar-row .pbody h4{font-size:18px;color:var(--cream);margin-bottom:4px}
+.pillar-row .pbody .em{font-size:12.5px;color:var(--jade);font-family:var(--mono);letter-spacing:.04em}
+.pw{margin-left:auto;flex:0 0 64px;text-align:right}
+.pw .pct{font-family:var(--serif);font-size:24px;color:var(--gold)}
+.bar{height:5px;border-radius:4px;background:var(--ink3);overflow:hidden;margin-top:6px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--jade))}
+
+/* persona */
+.persona{border-left:3px solid var(--gold);padding:4px 0 4px 16px;margin-bottom:6px}
+.persona h4{font-size:15.5px;color:var(--cream)}
+.persona .role{font-size:12px;color:var(--jade);font-family:var(--mono);margin-bottom:6px}
+.kv{display:flex;gap:8px;font-size:13px;margin:3px 0}
+.kv b{color:var(--muted);font-weight:500;flex:0 0 92px;font-size:12px}
+
+/* tone table */
+.tone{display:grid;grid-template-columns:110px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.tone>div{padding:12px 14px;border-bottom:1px solid var(--line);font-size:13.5px}
+.tone>div:nth-child(odd){background:var(--ink2);color:var(--muted);font-weight:600;font-size:12px}
+.tone .no{color:#c77e86}.tone .yes{color:var(--jade)}
+
+/* ---------- 90 DAY RIVER ---------- */
+.river-wrap{margin:8px 0 30px;padding:26px 20px 20px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(160deg,var(--ink2),var(--ink));position:relative;overflow-x:auto}
+.river-svg{width:100%;min-width:640px;height:150px;display:block}
+.phase-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
+@media(max-width:760px){.phase-cards{grid-template-columns:1fr}}
+.phase-card{border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--ink2);cursor:pointer;transition:.2s}
+.phase-card:hover{border-color:var(--gold-d);transform:translateY(-2px)}
+.phase-card .pt{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--gold);text-transform:uppercase}
+.phase-card h4{font-size:19px;margin:8px 0 4px}
+.phase-card .days{font-family:var(--mono);font-size:12px;color:var(--jade)}
+.phase-card .goal{font-size:13px;color:var(--muted);margin-top:8px}
+
+.week-detail{margin-top:20px}
+.week-row{display:grid;grid-template-columns:70px 1fr;gap:16px;padding:16px 0;border-top:1px solid var(--line)}
+.week-row .wk{font-family:var(--mono);color:var(--gold);font-size:13px;font-weight:700}
+.week-row .wk small{display:block;color:var(--muted2);font-weight:400;font-size:10.5px;margin-top:2px}
+.week-row h4{font-size:16px;color:var(--cream);margin-bottom:5px}
+.week-row .focus{font-size:13px;color:var(--muted);margin-bottom:8px}
+.week-row ul{list-style:none;font-size:13.5px;color:var(--off)}
+.week-row ul li{padding-left:16px;position:relative;margin:3px 0}
+.week-row ul li:before{content:"›";position:absolute;left:0;color:var(--gold)}
+.kpimini{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+
+/* KPI overview grid */
+.kpi-ov{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:4px 0 24px}
+@media(max-width:760px){.kpi-ov{grid-template-columns:repeat(2,1fr)}}
+.kpi-ov .box{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--ink2)}
+.kpi-ov .box .lab{font-size:11.5px;color:var(--muted);font-family:var(--mono);letter-spacing:.04em}
+.kpi-ov .box .val{font-family:var(--serif);font-size:30px;color:var(--gold);margin-top:6px;line-height:1}
+
+/* ---------- PILLARS PANE ---------- */
+.pill-block{border:1px solid var(--line);border-left-width:4px;border-radius:14px;padding:20px 22px;margin-bottom:16px;background:linear-gradient(120deg,var(--ink2),var(--ink))}
+.pill-block .head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.pill-block .head .icn{font-size:22px}
+.pill-block .head h3{font-size:21px;color:var(--cream)}
+.pill-block .head .freq{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.pill-block .core{font-style:italic;font-family:var(--serif);font-size:16px;color:var(--off);border-left:2px solid currentColor;padding-left:14px;margin:10px 0 14px}
+.pill-block .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:680px){.pill-block .two{grid-template-columns:1fr}}
+.pill-block h5{font-size:11px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.pill-block ul{list-style:none;font-size:13.5px}
+.pill-block ul li{padding-left:15px;position:relative;margin:4px 0;color:var(--off)}
+.pill-block ul li:before{content:"·";position:absolute;left:3px;color:currentColor;font-weight:700}
+.pill-block .hookq{margin-top:12px;font-size:13.5px;color:var(--muted);background:var(--ink3);border-radius:10px;padding:10px 12px}
+.pill-block .hookq b{color:var(--gold);font-weight:600}
+
+/* ---------- SCHEDULE ---------- */
+.sched-ctrl{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--ink2)}
+.sched-ctrl label{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:4px;font-family:var(--mono);letter-spacing:.03em}
+.sched-ctrl input[type=date],.sched-ctrl select{
+  background:var(--ink);border:1px solid var(--line2);border-radius:9px;color:var(--cream);
+  font-family:var(--sans);font-size:14px;padding:8px 11px;min-width:150px
+}
+.progress-wrap{margin-left:auto;text-align:right;min-width:180px}
+.progress-wrap .ptxt{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.progress-wrap .pnum{font-family:var(--serif);font-size:22px;color:var(--jade)}
+.pbar{height:8px;border-radius:6px;background:var(--ink3);overflow:hidden;margin-top:5px}
+.pbar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--jade),var(--gold));transition:width .4s}
+
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.filters button{background:var(--ink3);border:1px solid var(--line);border-radius:18px;color:var(--off);font-family:var(--sans);font-size:12px;font-weight:600;padding:6px 12px;cursor:pointer;transition:.15s}
+.filters button:hover{border-color:var(--gold-d)}
+.filters button.on{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+
+.post{display:grid;grid-template-columns:64px 1fr 34px;gap:12px;align-items:start;padding:13px 14px;border:1px solid var(--line);border-radius:12px;margin-bottom:9px;background:var(--ink2);transition:.15s;border-left-width:3px}
+.post:hover{border-color:var(--line2);background:var(--ink3)}
+.post.done{opacity:.5}
+.post.done .p-t{text-decoration:line-through}
+.post .p-day{font-family:var(--mono);font-size:11px;color:var(--gold);line-height:1.3}
+.post .p-day .dow{color:var(--muted);font-size:10px}
+.post .p-day .dt{color:var(--jade);font-size:10px;display:block;margin-top:2px}
+.post .p-main .p-topline{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px}
+.post .p-t{font-size:14.5px;color:var(--cream);font-weight:600;font-family:var(--serif)}
+.post .p-h{font-size:12.5px;color:var(--muted);line-height:1.5}
+.post .p-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.post .p-meta span{font-family:var(--mono);font-size:10px;color:var(--muted2);border:1px solid var(--line);border-radius:5px;padding:2px 7px}
+.post .p-meta span.fmt{color:var(--jade);border-color:var(--line2)}
+.post .p-meta span.prj{color:var(--gold)}
+.chk{width:24px;height:24px;border-radius:7px;border:1.5px solid var(--line2);background:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;margin-top:2px}
+.chk:hover{border-color:var(--jade)}
+.chk.on{background:var(--jade);border-color:var(--jade)}
+.chk.on:after{content:"✓";color:var(--ink);font-size:14px;font-weight:800}
+
+/* ---------- STORY BANK ---------- */
+.story{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:9px;background:var(--ink2);border-left-width:3px}
+.story .st-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:5px}
+.story h4{font-size:14.5px;color:var(--cream);font-family:var(--serif)}
+.story .st-type{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.03em}
+.story .st-hook{font-size:12.5px;color:var(--muted);line-height:1.5}
+.story .st-foot{display:flex;gap:8px;margin-top:6px;align-items:center}
+.story .st-fmt{font-family:var(--mono);font-size:10px;color:var(--jade);border:1px solid var(--line2);border-radius:5px;padding:2px 7px}
+.stars{color:var(--gold);font-size:11px;letter-spacing:1px}
+
+/* ---------- VISUAL ---------- */
+.swatch{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.swatch:last-child{border-bottom:0}
+.swatch .sw{width:46px;height:46px;border-radius:10px;flex:0 0 46px;border:1px solid rgba(255,255,255,.12)}
+.swatch .sw-i h4{font-size:14px;color:var(--cream)}
+.swatch .sw-i .hex{font-family:var(--mono);font-size:11px;color:var(--gold)}
+.swatch .sw-i .use{font-size:12px;color:var(--muted)}
+.vconcept{border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px;background:var(--ink2)}
+.vconcept .vc-top{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.vconcept h4{font-size:15px;color:var(--cream);font-family:var(--serif)}
+.vconcept .desc{font-size:13px;color:var(--off);margin-bottom:8px}
+.vconcept .prompt{font-family:var(--mono);font-size:11.5px;color:var(--jade);background:var(--ink);border:1px solid var(--line);border-radius:9px;padding:10px 12px;line-height:1.55;position:relative}
+.vconcept .prompt .copy{position:absolute;top:8px;right:8px;background:var(--ink3);border:1px solid var(--line2);color:var(--off);font-family:var(--sans);font-size:10px;padding:3px 8px;border-radius:6px;cursor:pointer}
+.vconcept .prompt .copy:hover{background:var(--gold);color:var(--ink)}
+.vconcept .kit{font-size:11.5px;color:var(--muted);margin-top:8px}
+
+/* ---------- KPI TRACKER ---------- */
+.kpi-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+table.kpi{width:100%;min-width:720px;border-collapse:collapse;font-size:13px}
+table.kpi th,table.kpi td{padding:9px 10px;text-align:center;border-bottom:1px solid var(--line);border-right:1px solid var(--line)}
+table.kpi th{background:var(--ink3);color:var(--muted);font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;position:sticky;top:0}
+table.kpi td:first-child,table.kpi th:first-child{text-align:left;position:sticky;left:0;background:var(--ink2);z-index:2;font-weight:600;color:var(--cream);min-width:130px}
+table.kpi th:first-child{background:var(--ink3);z-index:3}
+table.kpi tr:last-child td{border-bottom:0}
+table.kpi input{width:56px;background:var(--ink);border:1px solid var(--line);border-radius:7px;color:var(--cream);font-family:var(--mono);font-size:13px;padding:6px 4px;text-align:center}
+table.kpi input:focus{outline:none;border-color:var(--jade)}
+table.kpi tr.tot td{background:var(--ink3);font-family:var(--mono);color:var(--gold);font-weight:700}
+.ph1 td:first-child{border-left:3px solid var(--p1)}
+.ph2 td:first-child{border-left:3px solid var(--p4)}
+.ph3 td:first-child{border-left:3px solid var(--p2)}
+.brandhealth{margin-top:22px}
+.bh-row{display:grid;grid-template-columns:1fr 90px 1fr;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.bh-row .bh-name{font-size:14px;color:var(--cream)}
+.bh-row .bh-name small{display:block;color:var(--muted);font-size:11px}
+.bh-row .bh-val input{width:70px;background:var(--ink);border:1px solid var(--line);border-radius:7px;color:var(--jade);font-family:var(--mono);font-size:14px;padding:6px;text-align:center}
+.bh-row .bh-tgt{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.bh-bar{height:7px;border-radius:5px;background:var(--ink3);overflow:hidden;margin-top:6px}
+.bh-bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--jade),var(--gold));transition:width .4s}
+
+/* rules & routine */
+.rule{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.rule:last-child{border-bottom:0}
+.rule .rn{font-family:var(--serif);font-size:20px;color:var(--clay)}
+.rule h4{font-size:15px;color:var(--cream);margin-bottom:3px}
+.rule p{font-size:13px;color:var(--muted)}
+.routine{display:grid;grid-template-columns:120px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.routine>div{padding:11px 14px;border-bottom:1px solid var(--line);font-size:13px}
+.routine>div:nth-child(odd){background:var(--ink2);font-family:var(--mono);font-size:12px;color:var(--gold)}
+.routine>div:nth-child(even){color:var(--off)}
+
+.note{font-size:12px;color:var(--muted2);margin-top:10px}
+.saveflash{position:fixed;bottom:20px;right:20px;background:var(--jade);color:var(--ink);font-weight:700;font-size:13px;padding:10px 16px;border-radius:10px;opacity:0;transform:translateY(10px);transition:.3s;z-index:99;pointer-events:none}
+.saveflash.show{opacity:1;transform:none}
+.btn{background:var(--ink3);border:1px solid var(--line2);color:var(--cream);font-family:var(--sans);font-weight:600;font-size:13px;padding:8px 15px;border-radius:10px;cursor:pointer;transition:.15s}
+.btn:hover{border-color:var(--gold);color:var(--gold)}
+.btn-g{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.btn-g:hover{background:var(--gold-d);color:var(--ink)}
+
+@media print{
+  .side,.topbar,.filters,.sched-ctrl,.chk,.saveflash,.copy{display:none!important}
+  body{background:#fff;color:#111}
+  section.pane{display:block!important}
+  .card,.pill-block,.post,.story{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="saveflash" id="flash">Đã lưu</div>
+
+<div class="wrap">
+  <!-- SIDEBAR -->
+  <aside class="side">
+    <div class="brandmark">
+      <span class="eyebrow">Kế hoạch 90 ngày</span>
+      <span class="nm">Hiệp<span style="color:var(--gold)">.</span></span>
+      <span class="sub">Người kể chuyện vùng đất phía Đông Hà Nội — MIK × Masterise</span>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="sidefoot">
+      Dữ liệu bạn nhập (tick bài đã đăng · KPI) được lưu ngay trên trình duyệt này.
+      <br><br>Cập nhật thị trường: T7/2026.
+    </div>
+  </aside>
+
+  <!-- MOBILE TOPBAR -->
+  <div class="topbar">
+    <div class="tb-head">
+      <div class="tb-nm">Hiệp<span>.</span> · 90 Ngày</div>
+      <div class="tb-tag">MIK × Masterise</div>
+    </div>
+    <div class="mnav" id="mnav"></div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="inner">
+
+      <!-- ============ 0. TỔNG QUAN ============ -->
+      <section class="pane on" id="pane-overview">
+        <div class="hero">
+          <div class="hero-glow"></div>
+          <span class="eyebrow">Định vị · Heritage Storyteller × Modern Lifestyle</span>
+          <h1>Tôi không bán căn hộ.<br>Tôi kể chuyện <em>một vùng đất</em> đang chuyển mình.</h1>
+          <p class="statement">Nơi cửa ngõ phía Đông Hà Nội, bên dòng sông Hồng, một thành phố biển–hồ đang mọc lên. Ở đó có <b class="hl">Imperia Ocean City của MIK</b> và <b class="hl">các toà Masteri · Lumière của Masterise</b> — hai thương hiệu, một vùng đất. Khi bạn hiểu vì sao nơi này đáng sống, bạn sẽ tự biết mình có thuộc về nó hay không.</p>
+          <div class="metaline">
+            <span class="chip">90 ngày · 3 giai đoạn</span>
+            <span class="chip">72 bài · 28 video</span>
+            <span class="chip">5 content pillars</span>
+            <span class="chip">Mục tiêu: 1.500 followers · 1–3 deal</span>
+          </div>
+        </div>
+
+        <div class="grid g2" style="margin-bottom:22px">
+          <div class="card">
+            <span class="eyebrow">Vì sao định vị này</span>
+            <h3 style="font-size:19px;margin:8px 0 10px">Bán 2 thương hiệu = lợi thế trung thực</h3>
+            <p class="lead" style="font-size:14px">Cả MIK (Imperia Ocean City · The Parkland) và Masterise (Masteri Waterfront, Lakeside, Grand Coast, Era Landmark, Lumière) đều nằm <b class="hl">trong cùng đại đô thị Ocean City</b>. Bạn không phải agent của một dự án chỉ biết khen dự án đó — bạn là người dẫn đường dám so sánh thật giữa hai thương hiệu. Đó là thứ khách tin.</p>
+          </div>
+          <div class="card">
+            <span class="eyebrow">Nguyên tắc lõi</span>
+            <h3 style="font-size:19px;margin:8px 0 10px">Kể chuyện trước, sản phẩm sau</h3>
+            <p class="lead" style="font-size:14px">Người ta theo dõi vì <b class="hl-j">câu chuyện vùng đất</b>, không vì brochure. Tháng 1 chỉ lồng dự án rất nhẹ, tháng 2 vừa phải, tháng 3 mới đẩy chuyển đổi. Mỗi bài: 70% chuyện, 30% sản phẩm. Số liệu phải thật — có nguồn.</p>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:22px">
+          <span class="eyebrow">7 luật chơi — không vi phạm</span>
+          <div style="margin-top:14px" id="rules"></div>
+        </div>
+
+        <div class="card">
+          <span class="eyebrow">Daily routine · 90 phút/ngày</span>
+          <h3 style="font-size:18px;margin:8px 0 14px">Nhịp duy trì kênh</h3>
+          <div class="routine" id="routine"></div>
+          <p class="note">Cuối tuần dành 2–3 tiếng quay/chụp để stock sẵn 3–5 bài. Chủ Nhật tối cập nhật KPI Tracker.</p>
+        </div>
+      </section>
+
+      <!-- ============ 1. ĐỊNH VỊ ============ -->
+      <section class="pane" id="pane-position">
+        <div class="pane-h">
+          <span class="eyebrow">01 · Định vị thương hiệu</span>
+          <h2>Bốn trụ cột · Ba chân dung khách</h2>
+          <p>Đọc lại đầu mỗi tuần để nhớ mình là ai, và mọi bài đăng nên mang tông của trụ cột nào.</p>
+        </div>
+
+        <div class="card" style="margin-bottom:20px">
+          <span class="eyebrow">Brand statement</span>
+          <p style="font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.5;color:var(--off);margin-top:10px">"Tôi không bán bất động sản. Tôi kể câu chuyện về một vùng đất — nơi cửa ngõ phía Đông Hà Nội, bên sông Hồng, đang biến thành thành phố biển–hồ Ocean City. Khi bạn hiểu được linh hồn của một vùng đất, bạn sẽ tự biết mình có thuộc về nơi đó hay không."</p>
+        </div>
+
+        <div class="grid g2">
+          <div class="card">
+            <span class="eyebrow">4 trụ cột định vị</span>
+            <div style="margin-top:12px" id="pillars4"></div>
+          </div>
+          <div class="card">
+            <span class="eyebrow">3 chân dung khách</span>
+            <div style="margin-top:12px" id="personas"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:20px">
+          <span class="eyebrow">Tone of voice · chất giọng</span>
+          <h3 style="font-size:18px;margin:8px 0 14px">Có gì · Không gì</h3>
+          <div class="tone" id="tone"></div>
+        </div>
+      </section>
+
+      <!-- ============ 2. KẾ HOẠCH 90N ============ -->
+      <section class="pane" id="pane-plan">
+        <div class="pane-h">
+          <span class="eyebrow">02 · Lộ trình 90 ngày</span>
+          <h2>Dòng chảy ba giai đoạn</h2>
+          <p>Awareness → Authority → Conversion. Như một dòng sông: đầu nguồn gieo nhận biết, giữa dòng xây uy tín, cuối dòng đổ ra biển — chuyển đổi.</p>
+        </div>
+
+        <div class="river-wrap">
+          <svg class="river-svg" viewBox="0 0 900 150" preserveAspectRatio="none" id="riverSvg"></svg>
+        </div>
+
+        <div class="phase-cards" id="phaseCards"></div>
+
+        <div class="card" style="margin-top:22px">
+          <span class="eyebrow">KPI tổng quan 90 ngày</span>
+          <div class="kpi-ov" id="kpiOv"></div>
+          <div class="note">Con số là mục tiêu định hướng, không phải cam kết. Brand mạnh → deal tự đến chất hơn.</div>
+        </div>
+
+        <div class="week-detail" id="weekDetail"></div>
+      </section>
+
+      <!-- ============ 3. PILLARS ============ -->
+      <section class="pane" id="pane-pillars">
+        <div class="pane-h">
+          <span class="eyebrow">03 · 5 Content Pillars</span>
+          <h2>Storyteller mode</h2>
+          <p>Reference mỗi lần viết bài: bài này thuộc pillar nào, và nó nên trông như thế nào — không nên như thế nào.</p>
+        </div>
+        <div id="pillarsFull"></div>
+      </section>
+
+      <!-- ============ 4. LỊCH ĐĂNG ============ -->
+      <section class="pane" id="pane-schedule">
+        <div class="pane-h">
+          <span class="eyebrow">04 · Lịch đăng bài</span>
+          <h2>72 bài đã lên lịch sẵn</h2>
+          <p>Chọn ngày bắt đầu → lịch tự tính ngày cho từng bài (T2–T7, Chủ Nhật nghỉ). Tick ô khi đã đăng để theo dõi tiến độ.</p>
+        </div>
+
+        <div class="sched-ctrl">
+          <label>Ngày bắt đầu (Tuần 1)
+            <input type="date" id="startDate">
+          </label>
+          <label>Lọc theo pillar
+            <select id="fPillar">
+              <option value="all">Tất cả pillar</option>
+              <option value="P1">P1 · Heritage</option>
+              <option value="P2">P2 · Lifestyle</option>
+              <option value="P3">P3 · Advisor</option>
+              <option value="P4">P4 · Insights</option>
+              <option value="P5">P5 · Personal</option>
+            </select>
+          </label>
+          <label>Lọc theo giai đoạn
+            <select id="fPhase">
+              <option value="all">Cả 90 ngày</option>
+              <option value="1">GĐ1 · Awareness (T1–4)</option>
+              <option value="2">GĐ2 · Authority (T5–8)</option>
+              <option value="3">GĐ3 · Conversion (T9–12)</option>
+            </select>
+          </label>
+          <div class="progress-wrap">
+            <div class="ptxt">Đã đăng</div>
+            <div><span class="pnum" id="progNum">0</span><span class="dim" style="font-size:14px">/72</span></div>
+            <div class="pbar"><i id="progBar"></i></div>
+          </div>
+        </div>
+
+        <div class="filters" id="quickFilters"></div>
+        <div id="postList"></div>
+      </section>
+
+      <!-- ============ 5. STORY BANK ============ -->
+      <section class="pane" id="pane-story">
+        <div class="pane-h">
+          <span class="eyebrow">05 · Story Bank</span>
+          <h2>Kho ý tưởng dự phòng</h2>
+          <p>Khi cần thay hoặc bổ sung bài — bốc một ý tưởng từ đây. Lọc theo pillar để tìm nhanh.</p>
+        </div>
+        <div class="filters" id="storyFilters"></div>
+        <div id="storyList"></div>
+      </section>
+
+      <!-- ============ 6. VISUAL ============ -->
+      <section class="pane" id="pane-visual">
+        <div class="pane-h">
+          <span class="eyebrow">06 · Visual concept</span>
+          <h2>Di sản × Hiện đại · Cinematic</h2>
+          <p>Tông ấm, điện ảnh, tôn trọng vùng đất — không render bóng bẩy kiểu brochure. Tham khảo trước mỗi buổi sản xuất.</p>
+        </div>
+        <div class="card" style="margin-bottom:20px">
+          <span class="eyebrow">Bảng màu thương hiệu</span>
+          <div style="margin-top:10px" id="swatches"></div>
+        </div>
+        <span class="eyebrow" style="display:block;margin-bottom:12px">Concept chụp / quay theo pillar</span>
+        <div id="visualConcepts"></div>
+      </section>
+
+      <!-- ============ 7. KPI TRACKER ============ -->
+      <section class="pane" id="pane-kpi">
+        <div class="pane-h">
+          <span class="eyebrow">07 · KPI Tracker</span>
+          <h2>Theo dõi hiệu quả</h2>
+          <p>Cập nhật mỗi Chủ Nhật (10 phút). Số liệu tự cộng tổng và tính % đạt mục tiêu. Lưu ngay trên trình duyệt này.</p>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+          <button class="btn" id="resetKpi">Xoá số liệu KPI</button>
+          <button class="btn btn-g" onclick="window.print()">In / Xuất PDF</button>
+        </div>
+
+        <div class="kpi-table-wrap">
+          <table class="kpi" id="kpiTable"></table>
+        </div>
+
+        <div class="card brandhealth">
+          <span class="eyebrow">Brand health · chỉ số dài hạn</span>
+          <div style="margin-top:14px" id="brandHealth"></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* =================== DATA =================== */
+const NAV=[
+ ["overview","Tổng quan","◆"],
+ ["position","Định vị","❋"],
+ ["plan","Kế hoạch 90N","➜"],
+ ["pillars","5 Pillars","☰"],
+ ["schedule","Lịch đăng bài","▤"],
+ ["story","Story Bank","✦"],
+ ["visual","Visual","◑"],
+ ["kpi","KPI Tracker","▦"]
+];
+
+const RULES=[
+ ["Kể chuyện trước, sản phẩm sau","Brand storyteller phải kể được mới bán được. Mỗi bài: 70% chuyện, 30% sản phẩm."],
+ ["Số liệu phải thật — không chế","Brand 'người đọc thị trường' chết nếu sai data. Source mọi số liệu, để link/screenshot."],
+ ["Ban đầu không spam dự án","Người ta theo dõi vì chuyện, không vì brochure. T1 lồng nhẹ · T2 vừa phải · T3 mới đẩy."],
+ ["1 bài = 1 idea","Người đọc mobile nuốt không nổi. Có 2 idea thì tách 2 bài."],
+ ["Visual phải có chất","Không dùng render CDT làm bạn trông như sales. Quay thực địa · phỏng vấn · điện ảnh."],
+ ["Tôn trọng người địa phương","Brand heritage chết nếu cộng đồng không ưa. Xin phép trước khi quay, trả ơn tử tế."],
+ ["Từ chối khách không phù hợp","Personal brand mạnh = bộ lọc khách. Có sẵn 3 lý do từ chối, không thấy có lỗi."]
+];
+
+const ROUTINE=[
+ ["6:30–7:00","Đọc 3 nguồn tin (CafeF · VnEconomy · 1 báo địa phương). Note 1–2 hook vào Story Bank."],
+ ["7:00–7:30","Reply comment/inbox ngày hôm trước. Build quan hệ, nuôi lead."],
+ ["12:00–12:30","Đăng bài đã chuẩn bị sẵn. Engage 15 người đầu tiên để seed tương tác."],
+ ["Tối (1–2 buổi/tuần)","Chuẩn bị bài cho 3–5 ngày tới. Quay/chụp 1 buổi cuối tuần."],
+ ["CN tối","Cập nhật KPI Tracker · review tuần · plan tuần sau."]
+];
+
+const PILLARS4=[
+ ["1","Heritage","Người kể chuyện vùng đất","Sông Hồng · Phố Hiến · cửa ngõ Đông HN · Văn Giang · Gia Lâm","Hoài niệm · Tự hào · Bản sắc",30],
+ ["2","Lifestyle","Người dẫn lối sống biển–hồ","Ocean City · biển hồ nước mặn · wellness · resort-living · cộng đồng","Khát vọng · Cảm hứng · Đẳng cấp",30],
+ ["3","Advisor","Cố vấn 2 thương hiệu trung thực","So sánh thật MIK ↔ Masterise · từ chối khách · match đúng dự án","Tin cậy · An tâm · Tôn trọng",25],
+ ["4","Insights","Người đọc thị trường phía Đông","Cầu Trần Hưng Đạo · Tứ Liên · Ngọc Hồi · Vành đai 4 · yield · giá/m²","Sáng suốt · Cập nhật · Đi trước",15]
+];
+
+const PERSONAS=[
+ ["Kẻ mơ mộng — Millennial yêu vùng đất","28–35 tuổi · TN 30–60tr",
+  [["Pain","Muốn nhà có chất, không chỉ hộp bê tông. Tìm bản sắc trong nơi ở."],
+   ["Góc tiếp cận","Story-first: kể chuyện vùng đất trước, giới thiệu dự án sau."],
+   ["Match","Imperia The Parkland (MIK) · Masteri Waterfront (Masterise)"]]],
+ ["Nhà đầu tư dòng tiền","35–50 tuổi · TN 50–150tr",
+  [["Pain","Sợ mua sai. Cần data, ROI thực. Đang so sánh nhiều kênh."],
+   ["Góc tiếp cận","Authority-first: phân tích thị trường, số liệu, yield thật."],
+   ["Match","Masteri Grand Coast · Era Landmark (cho thuê) · Imperia Ocean City"]]],
+ ["Gia đình nâng cấp","32–45 tuổi · TN 40–100tr · có con",
+  [["Pain","Muốn môi trường tốt cho con. Khát khao lifestyle khác."],
+   ["Góc tiếp cận","Lifestyle-first: không gian, cộng đồng, trường học, tiện ích."],
+   ["Match","Ocean City (Vinschool · biển hồ) · Masteri Lakeside"]]]
+];
+
+const TONE=[
+ ["Ngôn từ","yes","Hình ảnh · giàu cảm xúc · có chiều sâu lịch sử","no","Sales-y · hô hào · số liệu khô khan",
+  `❌ "Mua ngay căn hộ giá rẻ!"  ✅ "Sông Hồng từng là tuyến giao thương lớn nhất Bắc Bộ — và bây giờ nó chảy qua cửa nhà bạn."`],
+ ["Gọi người đọc","yes","Bạn · mình · anh/chị","no","Quý khách · các bạn",
+  `❌ "Quý khách quan tâm xin liên hệ"  ✅ "Nếu bạn cũng mê những phố cổ ven sông — đây là chỗ chúng ta phải nói chuyện."`],
+ ["Xưng bản thân","yes","Mình · tôi · Hiệp","no","Em · bên em",
+  `❌ "Bên em có dự án…"  ✅ "Mình đi thực địa cả Imperia lẫn Masteri trong 1 ngày — đây là cái mình thấy."`],
+ ["Nhịp câu","yes","Câu ngắn · xuống dòng nhiều · để thở","no","Câu dài lê thê · đặc kín chữ",
+  `Mỗi đoạn 2–3 câu. Có khoảng nghỉ. Để mắt người đọc dừng lại.`]
+];
+
+const PHASES=[
+ ["Awareness","D1–D30","GĐ1","Định vị rõ · tạo nhận biết · first impression","var(--p1)"],
+ ["Authority","D31–D60","GĐ2","Khẳng định kiến thức vùng đất · lên 1.000 followers","var(--p4)"],
+ ["Conversion","D61–D90","GĐ3","Social proof · chốt deal đầu · xin referral","var(--p2)"]
+];
+
+const KPIOV=[
+ ["Followers FB","+1.500","+200 · +500 · +800"],
+ ["Bài đăng","72","30 · 30 · 12"],
+ ["Video","28","8 · 12 · 8"],
+ ["Lead nhận","30–55","0–5 · 10–20 · 20–30"],
+ ["Deal chốt","1–3","0 · 0–1 · 1–2"],
+ ["Inbox/tuần cuối kỳ","30+","tăng dần theo phase"],
+ ["Mention/share organic","8–17","0–2 · 3–5 · 5–10"],
+ ["Comment ý nghĩa/bài","30+","5–10 · 15–25 · 30+"]
+];
+
+const WEEKS=[
+ [1,"D1–D7","Khởi nguồn câu chuyện","P1 Heritage 60% · P3 Advisor 40%",
+  ["Video #1: 'Vì sao tôi kể chuyện vùng đất phía Đông'","Bài giới thiệu cá nhân + hành trình","Nhắn 30 người quen seed kênh"],"Setup brand kit · cover · bio · logo","2 video · 0 lead"],
+ [2,"D8–D14","Khắc dấu vùng đất bên sông Hồng","P1 50% · P2 30% · P4 20%",
+  ["Series: 'Phố Hiến & sông Hồng — cửa ngõ Đông xưa'","Tour cửa ngõ phía Đông (video)","Reels: Một ngày ở Ocean City"],"Tập trung sông Hồng · Phố Hiến · Gia Lâm","3 video · 1–2 lead"],
+ [3,"D15–D21","Lối sống biển–hồ","P1 30% · P2 40% · P3 30%",
+  ["Day-in-life: sáng cafe ven hồ, chiều xem dự án","Review smart home (Masteri demo)","Hot take: 'Vì sao tôi không thích chung cư nội đô'"],"Bắt đầu lồng dự án nhẹ","3 video · 2–3 lead"],
+ [4,"D22–D30","First leads & test","P1 25% · P2 25% · P3 25% · P4 25%",
+  ["Live FB #1: 'Hỏi gì cũng trả lời về phía Đông'","Carousel: 'Đi thực địa Imperia & Masteri trong 1 ngày'","Tổng kết tháng 1"],"A/B test 3 headline mỗi tuần","2 video · 3–5 lead"],
+ [5,"D31–D37","Sâu về vùng đất","P1 40% · P3 30% · P4 30%",
+  ["Series: 'Cửa ngõ Đông qua 4 thế hệ' (interview)","Phân tích quy hoạch phía Đông","Case study #1: khách mua Imperia vì câu chuyện Phố Hiến"],"Trở thành expert vùng đất","3 video · 4–6 lead"],
+ [6,"D38–D44","So sánh qua lăng kính storyteller","P1 30% · P3 35% · P4 35%",
+  ["Compare: 'Imperia kể chuyện phố cổ mới · Masteri kể chuyện biển hồ'","Tour thực địa Masteri Grand Coast","Bản tin tuần phía Đông"],"Khác biệt rõ với agent khác","3 video · 5–8 lead"],
+ [7,"D45–D51","Lifestyle deep-dive","P2 50% · P3 30% · P4 20%",
+  ["Series: 'Sống ở Ocean City — 2 năm sau khi rời nội đô'","Vlog ngày thường ở khu đô thị biển hồ","Hot take: 'Vì sao tôi tin phía Đông hơn phía Tây'"],"Lifestyle = lý do mua sâu nhất","3 video · 6–10 lead"],
+ [8,"D52–D60","Authority milestone","P3 40% · P4 30% · P1 30%",
+  ["Live FB #2: 'Tôi từ chối những khách nào & vì sao'","Behind the scenes: tư vấn 2 tiếng","Tổng kết tháng 2 + plan tháng 3"],"ROI deck gửi 5–10 warm lead","3 video · 8–12 lead"],
+ [9,"D61–D67","Social proof + chuyển đổi","P3 40% · P4 40% · P1 20%",
+  ["Case study #2: khách mua Masteri vì wellness cho bố mẹ","5 objection phổ biến & cách xử lý","Q&A từ inbox (carousel)"],"80% thời gian gọi/gặp hot lead","2 video · 10–15 lead"],
+ [10,"D68–D74","Personal proof","P3 50% · P4 30% · P2 20%",
+  ["'Sai lầm đắt giá năm đầu bán BĐS'","Vlog dẫn khách thực địa Ocean City","Phân tích: tháng nào đẹp để chốt deal"],"Dẫn xem thực địa 3–5 hot lead","2 video · 12–18 lead"],
+ [11,"D75–D81","Deal & referral spark","P3 40% · P4 35% · P5 25%",
+  ["Case study deal đã chốt (ẩn danh)","Series: 'Khách của tôi đang sống thế nào ở Ocean City'","Live #3: 'Hành trình 90 ngày làm kênh'"],"Activate referral từ khách đã chốt","2 video · 15–20 lead"],
+ [12,"D82–D90","Tổng kết & plan Q4","P3 30% · P4 30% · P1 20% · P2 20%",
+  ["Video tổng kết 90 ngày: số liệu thật","Update 5 bài evergreen tốt nhất","Plan content Q4"],"Brainstorm Q4 với 3 KPI mới","2 video · 20–25 lead"]
+];
+
+const PILLARS_FULL=[
+ {id:"P1",icn:"📜",nm:"HERITAGE — Câu chuyện vùng đất",col:"var(--p1)",freq:"~30% · 2 bài/tuần",
+  core:`"Mỗi khúc sông Hồng, mỗi viên đá Phố Hiến đều có một câu chuyện — và câu chuyện ấy đang được viết tiếp trong một thành phố biển hồ."`,
+  is:["Tư liệu lịch sử cửa ngõ Đông · Phố Hiến · Hưng Yên","Tour thực địa sông Hồng, phố cổ, làng nghề","Interview người dân bản địa","Kết nối quá khứ → hiện tại → tương lai (Ocean City)"],
+  isnot:["Không sa đà thành 'bài giảng lịch sử'","Không lạc đề khỏi BĐS phía Đông"],
+  hook:`Bạn có biết Phố Hiến từng là thương cảng sầm uất bậc nhất Bắc Bộ, chỉ sau Hội An? Và bây giờ — cách đó không xa, câu chuyện đó đang được viết tiếp bên sông Hồng…`},
+ {id:"P2",icn:"🌿",nm:"LIFESTYLE — Sống ở thành phố biển hồ",col:"var(--p2)",freq:"~30% · 2 bài/tuần",
+  core:`"Tôi không sống ở Hà Nội — tôi sống ở nơi Hà Nội đang trở thành. Sáng bơi biển hồ, chiều về nội đô trong 20 phút."`,
+  is:["Day-in-life ở Ocean City / khu đô thị biển hồ","Review không gian, smart home, wellness, biển hồ nước mặn","Cảm xúc 'rời nội đô mà không thật sự rời'","Cộng đồng cư dân, sự kiện, lễ hội"],
+  isnot:["Không phải vlog du lịch chung chung","Không quảng cáo trực diện tiện ích CDT"],
+  hook:`Sáng nay tôi bơi ở biển hồ nước mặn, trưa cafe ven công viên, chiều xem dự án, tối về nội đô 20 phút. Đây là lifestyle mà 3 năm trước tôi không biết là có thật.`},
+ {id:"P3",icn:"🎯",nm:"ADVISOR — Match đúng người đúng nhà",col:"var(--p3)",freq:"~25% · 2 bài/tuần",
+  core:`"Tôi bán cả Imperia của MIK lẫn Masteri của Masterise trong cùng một đại đô thị — nên tôi mới dám nói thật với bạn về cả hai."`,
+  is:["Compare khách quan MIK ↔ Masterise","Behind the scenes tư vấn","Từ chối khách / hot take","Framework chọn dự án theo budget + lifestyle"],
+  isnot:["Không khoe doanh số","Không hô hào FOMO 'mua ngay kẻo lỡ'"],
+  hook:`Tuần này tôi từ chối 2 khách — không phải tôi không cần tiền. Vì căn họ muốn không hợp với cuộc sống họ thực sự đang sống.`},
+ {id:"P4",icn:"📊",nm:"INSIGHTS — Đọc vùng đất bằng số liệu",col:"var(--p4)",freq:"~15% · 1–2 bài/tuần",
+  core:`"Cảm xúc giúp bạn chọn nhà. Số liệu giúp bạn không chọn sai."`,
+  is:["Phân tích quy hoạch & hạ tầng phía Đông","Bản tin tuần","So sánh giá/m² các phân khu","Tác động cầu Trần Hưng Đạo · Tứ Liên · Ngọc Hồi · Vành đai 4"],
+  isnot:["Không dùng số liệu sales-driven kiểu 'CK 12%'","Không chế số liệu"],
+  hook:`Tôi vừa đọc xong 10 báo cáo về hạ tầng vượt sông Hồng. Có 1 điểm mà 90% người mua phía Đông đang bỏ qua…`},
+ {id:"P5",icn:"👤",nm:"PERSONAL — Hành trình của Hiệp",col:"var(--p5)",freq:"~5% · 1 bài/tuần",
+  core:`"Tôi từng là một người mua sai — đó là lý do bây giờ tôi giúp người khác mua đúng."`,
+  is:["Câu chuyện cá nhân (không cường điệu)","Bài học từ deal cũ","Milestone kênh (1.000 followers, deal đầu)","Quan điểm sống, triết lý nghề"],
+  isnot:["Không kể chuyện cá nhân không liên quan","Không 'flex' kết quả"],
+  hook:`3 năm trước, tôi mua hụt một căn ở phía Đông vì sợ. Bây giờ căn đó tăng hơn 2 lần. Đây là bài học đắt nhất đời tôi.`}
+];
+
+/* =================== 72 POSTS =================== */
+const POSTS=[
+ {n:1,p:"P5",t:"Tôi là Hiệp — người kể chuyện vùng đất phía Đông Hà Nội",h:"3 năm trước tôi là dân nội đô thuần. Bây giờ tôi sống ở nơi Hà Nội đang trở thành…",f:"Post dài + 5 ảnh",d:"—",g:"20:00"},
+ {n:2,p:"P1",t:"Phố Hiến — thương cảng vàng son chỉ sau Hội An mà ít người Hà Nội biết",h:"Tôi từng nghĩ Hưng Yên = quê. Cho đến ngày tôi đọc về Phố Hiến…",f:"Carousel 6 slide",d:"—",g:"19:00"},
+ {n:3,p:"P2",t:"Một ngày của tôi: sáng biển hồ, chiều nội đô",h:"Lifestyle mà 3 năm trước tôi không biết là có thật — và bây giờ tôi không muốn đổi.",f:"Reels 60s",d:"—",g:"08:00"},
+ {n:4,p:"P3",t:"Vì sao tôi bán cả Imperia của MIK lẫn Masteri của Masterise?",h:"Vì agent của 1 dự án chỉ có thể khen dự án đó. Tôi thì khác.",f:"Post text + ảnh",d:"Cả 2",g:"11:00"},
+ {n:5,p:"P4",t:"Phía Đông Hà Nội 2026 — bức tranh tổng quan",h:"Tôi đọc 15 báo cáo trong 2 tuần qua. Đây là 5 điều bạn cần biết.",f:"Carousel 6 slide",d:"—",g:"15:00"},
+ {n:6,p:"P1",t:"Sông Hồng — tuyến giao thương lớn nhất Bắc Bộ đang hồi sinh",h:"Nó từng nuôi cả Phố Hiến, Thăng Long. Và bây giờ nó chảy qua cửa nhà bạn.",f:"Reels 90s",d:"—",g:"20:00"},
+
+ {n:7,p:"P1",t:"Tour cửa ngõ phía Đông ngày Chủ Nhật — đi cùng tôi",h:"Tôi mang máy quay, không kịch bản, không CDT. Chỉ có dòng sông.",f:"Reels 90s",d:"—",g:"08:00"},
+ {n:8,p:"P1",t:"4 thế hệ cửa ngõ Đông kể về quê hương — phim ngắn",h:"Bác Hùng 78 tuổi: 'Cháu trẻ — mà cháu là người đầu tiên hỏi bác chuyện này'.",f:"Video phỏng vấn 3p",d:"—",g:"19:00"},
+ {n:9,p:"P2",t:"Tôi mới chuyển ra phía Đông 3 tháng — 5 điều bất ngờ",h:"Số 3 sẽ làm bạn nghĩ lại định nghĩa 'tiện nghi'.",f:"Carousel 7 slide",d:"—",g:"11:00"},
+ {n:10,p:"P3",t:"Imperia (MIK) & Masteri (Masterise) — 2 thương hiệu, 1 vùng đất",h:"Cùng nằm trong Ocean City. Đây là khác biệt cốt lõi giữa hai.",f:"Carousel 8 slide",d:"Cả 2",g:"15:00"},
+ {n:11,p:"P4",t:"Cầu Trần Hưng Đạo & Vành đai 4 — vì sao phía Đông đang đổi vận",h:"Hạ tầng đi trước, giá đi sau. Đây là công thức tôi dùng để chọn vùng.",f:"Post phân tích",d:"—",g:"08:00"},
+ {n:12,p:"P1",t:"Phố cổ Hưng Yên hôm nay & Ocean City ngày mai — 2 khung hình cạnh nhau",h:"Bạn nhận ra gì khi 400 năm hội ngộ trong 1 bức ảnh?",f:"Reels 30s",d:"—",g:"20:00"},
+
+ {n:13,p:"P2",t:"Day-in-life: sáng cafe phố cổ, chiều xem nhà, tối nội đô",h:"Trong 1 ngày tôi đi qua 400 năm. Cảm giác bạn không có khi ở 1 thành phố thuần.",f:"Reels 90s",d:"—",g:"08:00"},
+ {n:14,p:"P2",t:"Smart home cứu được mấy phút mỗi ngày? Tôi tính thử",h:"Tôi không tin marketing. Tôi đếm phút. Đây là con số thật.",f:"Carousel 6 slide",d:"Masteri",g:"11:00"},
+ {n:15,p:"P3",t:"Hot take: Tôi KHÔNG thích chung cư nội đô (và đây là lý do)",h:"Quan điểm này sẽ làm vài bạn không đồng ý. Nhưng tôi nói thật.",f:"Post dài",d:"—",g:"19:00"},
+ {n:16,p:"P1",t:"The Parkland đang viết tiếp câu chuyện 'phố cổ mới' như thế nào?",h:"Tôi đi thực địa và đây là 3 chi tiết làm tôi đứng lại.",f:"Reels 60s",d:"Imperia · MIK",g:"15:00"},
+ {n:17,p:"P4",t:"Lãi suất & chính sách hỗ trợ 0–6% — tác động THẬT đến quyết định mua",h:"Không nói chung chung. Tôi tính cho bạn 1 case cụ thể.",f:"Carousel 6 slide",d:"Cả 2",g:"08:00"},
+ {n:18,p:"P5",t:"Sau 3 tuần làm kênh — điều bất ngờ nhất với tôi",h:"Tôi nghĩ sẽ khó hơn nhiều. Một điều đã thay đổi tôi.",f:"Post ngắn",d:"—",g:"20:00"},
+
+ {n:19,p:"P3",t:"Live FB #1: 'Hỏi gì cũng trả lời về BĐS phía Đông' (45 phút)",h:"Không chuẩn bị câu hỏi. Imperia, Masteri, hạ tầng — hỏi gì trả lời nấy.",f:"Facebook Live",d:"Cả 2",g:"20:00"},
+ {n:20,p:"P4",t:"Bản tin tuần phía Đông — 5 tin & 1 cơ hội ít người để ý",h:"Mỗi tuần tôi đọc 15 báo cáo. Đây là phần thưởng cho 2h đọc của bạn.",f:"Carousel 6 slide",d:"Cả 2",g:"08:00"},
+ {n:21,p:"P1",t:"Kiến trúc Imperia — Đông & Tây đối thoại bên sông Hồng",h:"Đường nét cổ điển cạnh khối kính hiện đại — gượng hay đẹp?",f:"Reels 60s",d:"Imperia · MIK",g:"19:00"},
+ {n:22,p:"P2",t:"Tôi đi mua nhà cho gia đình mình — 5 thứ tôi đặt lên đầu",h:"Trước tiện ích, trước giá. Đây là bộ lọc cá nhân của tôi.",f:"Carousel 7 slide",d:"—",g:"11:00"},
+ {n:23,p:"P3",t:"Tôi đi thực địa Imperia & Masteri trong 1 ngày — nhận xét thật",h:"Sáng Imperia. Trưa Masteri Grand Coast. Tối tôi ngồi viết bài này.",f:"Reels 90s",d:"Cả 2",g:"15:00"},
+ {n:24,p:"P5",t:"Tổng kết tháng 1 — số liệu thật, không marketing",h:"Followers, lead, deal, content nào hit. Tất cả công khai.",f:"Post milestone",d:"—",g:"20:00"},
+
+ {n:25,p:"P1",t:"Phim ngắn: 'Cửa ngõ Đông qua 4 thế hệ' (5 phút)",h:"Tôi xin phép 4 bác trong làng. Họ đồng ý kể. Đây là kết quả.",f:"Video 5p",d:"—",g:"19:00"},
+ {n:26,p:"P4",t:"Quy hoạch phía Đông 2026–2030 — tôi đọc và giải thích bằng tiếng Việt",h:"1 file PDF 80 trang → 1 bài 8 slide. Đây là chắt lọc.",f:"Carousel 8 slide",d:"—",g:"11:00"},
+ {n:27,p:"P3",t:"Case study #1: Khách mua Imperia vì 1 câu chuyện, không phải vì giá",h:"Anh K nói: 'Tôi mua không phải vì giá. Tôi mua vì bài của em về Phố Hiến.'",f:"Post dài + ảnh",d:"Imperia · MIK",g:"20:00"},
+ {n:28,p:"P2",t:"Sống ven sông Hồng khác gì sống ven hồ nội đô? Tôi đã thử cả 2",h:"Đây là 4 cảm nhận không có trong brochure nào.",f:"Reels 60s",d:"—",g:"08:00"},
+ {n:29,p:"P1",t:"Sông Hồng — không chỉ là dòng sông. Đây là một mạch tài lộc.",h:"Phong thủy không mê tín nếu bạn hiểu nó là logic về dòng chảy & sinh khí.",f:"Post dài",d:"—",g:"15:00"},
+ {n:30,p:"P4",t:"Bản tin tuần — Masteri Era Landmark sắp ra phân khu mới",h:"Tôi đã đi thực địa. Đây là góc nhìn không có trong brochure.",f:"Post update",d:"Masteri",g:"19:00"},
+
+ {n:31,p:"P3",t:"MIK & Masterise — 2 câu chuyện, 2 kiểu khách. Bạn thuộc kiểu nào?",h:"Đây là framework tôi dùng để match đúng người với đúng nhà.",f:"Carousel 8 slide",d:"Cả 2",g:"11:00"},
+ {n:32,p:"P2",t:"Tour Masteri Grand Coast — resort-living thật vs marketing",h:"Mật độ xây dựng 15,8%. Tôi đi bộ đo thử. Đây là kết quả.",f:"Reels 90s",d:"Masteri Grand Coast",g:"08:00"},
+ {n:33,p:"P1",t:"Imperia Ocean City — 'phố cổ mới' 35.000 căn giữa lòng phía Đông",h:"Câu hỏi: vì sao MIK chọn xây một 'phố cổ' ngay giữa đô thị hiện đại?",f:"Post phân tích",d:"Imperia · MIK",g:"19:00"},
+ {n:34,p:"P4",t:"Bản tin tuần — 3 tin tác động trực tiếp đến phía Đông",h:"Hạ tầng · lãi suất · 1 chính sách mới mà bạn cần biết.",f:"Carousel 6 slide",d:"—",g:"15:00"},
+ {n:35,p:"P3",t:"Behind the scenes: 2 tiếng tư vấn 1 khách — quy trình thật",h:"Tôi xin phép quay (giấu mặt). Đây là cách tôi làm việc.",f:"Reels 90s",d:"Cả 2",g:"20:00"},
+ {n:36,p:"P5",t:"Câu hỏi đắt nhất tôi từng hỏi khách: 'Anh mua cho hiện tại hay 10 năm sau?'",h:"Câu trả lời thay đổi toàn bộ chiến lược tư vấn.",f:"Post ngắn + sâu",d:"—",g:"08:00"},
+
+ {n:37,p:"P2",t:"Interview: 3 gia đình đã rời nội đô ra Ocean City — sau 2 năm họ thế nào?",h:"3 câu chuyện. 3 quyết định. 0 hối hận.",f:"Video 4p",d:"—",g:"19:00"},
+ {n:38,p:"P2",t:"Biển hồ nước mặn giữa lòng phía Đông — tôi bơi thử buổi sáng",h:"Tôi không quay quảng cáo. Tôi quay vì tôi thật sự thích.",f:"Reels 60s",d:"Ocean City",g:"08:00"},
+ {n:39,p:"P3",t:"Hot take: Tôi tin phía Đông hơn phía Tây — 3 lý do",h:"Môi giới phía Tây sẽ không đồng ý. Tôi vẫn nói.",f:"Post dài",d:"—",g:"11:00"},
+ {n:40,p:"P2",t:"Một ngày ở Ocean City vs một ngày ở Cầu Giấy — so sánh thật",h:"Tôi cố tình chọn 2 ngày giống nhau. Khác biệt làm bạn ngạc nhiên.",f:"Reels 90s",d:"—",g:"15:00"},
+ {n:41,p:"P4",t:"Mật độ xây dựng 16% nghĩa là gì? Tôi vẽ giúp bạn",h:"1 con số khô khan → 1 không gian sống cụ thể. Đây là cách hình dung.",f:"Carousel 6 slide",d:"Masteri Grand Coast",g:"20:00"},
+ {n:42,p:"P5",t:"Bài học đắt giá năm đầu bán BĐS — tôi đã sai ở đâu?",h:"1 giao dịch dạy tôi nhiều hơn 10 khoá học. Đây là câu chuyện.",f:"Story cá nhân",d:"—",g:"19:00"},
+
+ {n:43,p:"P3",t:"Live FB #2: 'Những khách tôi từ chối và vì sao' (45 phút)",h:"Tôi không cần mọi deal. Đây là bộ lọc của tôi.",f:"Facebook Live",d:"Cả 2",g:"20:00"},
+ {n:44,p:"P1",t:"Grand World & phố đêm — khi Ocean City kể chuyện thương cảng xưa",h:"Công nghệ + di sản không phải lúc nào cũng gượng. Đây là 1 ví dụ làm tôi xúc động.",f:"Reels 60s",d:"Ocean City",g:"08:00"},
+ {n:45,p:"P4",t:"Chỉ số yield phía Đông Q2/2026 — số liệu mới nhất",h:"Yield trung bình · top 3 phân khu · 1 dự án bị đánh giá thấp.",f:"Carousel 7 slide",d:"Cả 2",g:"11:00"},
+ {n:46,p:"P3",t:"Framework chọn dự án trong 5 phút — dùng được ngay",h:"Bạn nhập 3 thông số, ra 1 đáp án. Đây là cách tôi tư vấn nhanh.",f:"Carousel 6 slide",d:"Cả 2",g:"15:00"},
+ {n:47,p:"P2",t:"Trường liên cấp & Vinschool trong Ocean City — tôi đến xem hộ bạn",h:"Tôi đi 3 trường ở phía Đông trong 1 ngày. So sánh thật.",f:"Reels 90s",d:"Ocean City",g:"19:00"},
+ {n:48,p:"P5",t:"Tổng kết tháng 2 — followers, lead, deal, content nào hit nhất",h:"60 ngày. Đây là báo cáo công khai.",f:"Post milestone",d:"—",g:"20:00"},
+
+ {n:49,p:"P3",t:"Case study #2: Anh A mua Masteri vì wellness cho bố mẹ",h:"Anh không mua cho mình. Đây là câu chuyện mà tôi nghĩ về mãi.",f:"Post dài + ảnh",d:"Masteri",g:"19:00"},
+ {n:50,p:"P3",t:"5 objection phổ biến nhất tôi gặp — và cách tôi xử lý từng cái",h:"Data thật từ 60 ngày inbox. Đây là playbook.",f:"Carousel 8 slide",d:"Cả 2",g:"11:00"},
+ {n:51,p:"P1",t:"Cầu Tứ Liên & cầu Ngọc Hồi — 2 cây cầu đổi vận phía Đông",h:"1 cây cầu = 1 cơ hội. Đây là cách hạ tầng viết lại giá trị vùng đất.",f:"Post phân tích",d:"—",g:"08:00"},
+ {n:52,p:"P3",t:"Q&A từ inbox: 10 câu hỏi hot nhất tuần này",h:"Tôi nhận 80+ câu hỏi/tuần. Đây là 10 câu phổ biến nhất.",f:"Carousel FAQ",d:"Cả 2",g:"15:00"},
+ {n:53,p:"P2",t:"Cộng đồng cư dân Ocean City cuối tuần làm gì?",h:"Tôi đến dự 1 sự kiện cư dân. Đây là cảm nhận.",f:"Reels 60s",d:"Ocean City",g:"20:00"},
+ {n:54,p:"P4",t:"Bản tin tuần — cơ hội & rủi ro tuần tới",h:"1 chính sách mới có thể ảnh hưởng cả MIK lẫn Masterise. Bạn cần biết.",f:"Carousel 6 slide",d:"Cả 2",g:"19:00"},
+
+ {n:55,p:"P5",t:"Sai lầm đắt giá: 3 năm trước tôi bỏ qua 1 căn ở phía Đông",h:"Bây giờ căn đó tăng hơn 2 lần. Đây là bài học tôi viết lên tường.",f:"Post dài + ảnh",d:"—",g:"19:00"},
+ {n:56,p:"P3",t:"Vlog: dẫn 1 khách thực địa Ocean City (xin phép quay)",h:"Tôi không cắt ghép. Đây là 60 phút thật.",f:"Vlog 8p",d:"Cả 2",g:"08:00"},
+ {n:57,p:"P4",t:"Tháng nào trong năm đẹp để chốt deal? (Tôi tính 5 năm số liệu)",h:"Tháng đẹp ≠ tháng giá thấp. Tháng đẹp = tháng đàm phán có lợi.",f:"Carousel 7 slide",d:"—",g:"11:00"},
+ {n:58,p:"P1",t:"Ban mai trên biển hồ — tôi đứng đó một buổi sáng",h:"Sương sớm, mặt nước, tiếng chim. Tôi không quay sản phẩm. Tôi quay cảm xúc.",f:"Reels 90s",d:"Ocean City",g:"15:00"},
+ {n:59,p:"P3",t:"Top 3 sai lầm mà khách mới mua hay mắc phải",h:"Tôi đã thấy 100+ deal. Đây là 3 lỗi lặp lại nhiều nhất.",f:"Carousel 6 slide",d:"Cả 2",g:"20:00"},
+ {n:60,p:"P2",t:"Lễ hội & chợ phiên cuối tuần ở phía Đông — vlog ngày thường",h:"Tôi không quay quảng cáo. Tôi quay vì tôi thật sự thích.",f:"Reels 60s",d:"—",g:"08:00"},
+
+ {n:61,p:"P3",t:"Case study deal đã chốt (ẩn danh) — toàn bộ quá trình 47 ngày",h:"Từ inbox đầu tiên đến ký HĐ. Đây là timeline thực tế.",f:"Post dài + ảnh",d:"Imperia · MIK",g:"19:00"},
+ {n:62,p:"P2",t:"Khách của tôi đang sống thế nào ở Masteri? — visit 3 tháng sau",h:"Tôi xin phép đến thăm. Tôi quay. Họ vui vẻ. Đây là kết quả.",f:"Video 4p",d:"Masteri",g:"11:00"},
+ {n:63,p:"P5",t:"Live FB #3: 'Hành trình 90 ngày làm kênh — số liệu thật'",h:"Followers, lead, deal, content nào hit, content nào flop. Tất cả công khai.",f:"Facebook Live",d:"—",g:"20:00"},
+ {n:64,p:"P1",t:"Phía Đông qua 4 mùa — tôi đã quay trong 3 tháng để có bộ ảnh này",h:"Cùng 1 khúc sông. 4 mùa khác nhau. Đây là tình yêu.",f:"Carousel ảnh 8 slide",d:"—",g:"15:00"},
+ {n:65,p:"P4",t:"Bản tin tuần — recap tháng 3 và dự báo Q4",h:"3 chỉ số · 2 cơ hội · 1 cảnh báo. Đọc trước khi sang quý mới.",f:"Carousel 6 slide",d:"Cả 2",g:"08:00"},
+ {n:66,p:"P3",t:"Referral: gửi khách cho tôi, tôi tặng gì?",h:"Tôi không tặng tiền. Tôi tặng 1 thứ giá trị hơn. Đây là chi tiết.",f:"Post ngắn",d:"—",g:"19:00"},
+
+ {n:67,p:"P5",t:"VIDEO TỔNG KẾT 90 NGÀY — số liệu thật, bài học thật",h:"1.500 followers · 30+ lead · 1–3 deal · 0 marketing fake. Đây là báo cáo.",f:"Video 8p",d:"—",g:"20:00"},
+ {n:68,p:"P1",t:"5 câu chuyện hay nhất tôi kể trong 90 ngày — recap",h:"Phố Hiến, sông Hồng, cửa ngõ Đông qua 4 thế hệ… bạn thích chuyện nào nhất?",f:"Carousel 8 slide",d:"—",g:"11:00"},
+ {n:69,p:"P3",t:"5 case study đã chia sẻ — bạn rút ra được gì?",h:"Tôi tổng hợp pattern chung. Đây là 3 insight giá trị nhất.",f:"Post dài",d:"Cả 2",g:"15:00"},
+ {n:70,p:"P4",t:"Phía Đông Hà Nội Q4/2026 — dự báo của tôi (kèm lý do)",h:"3 dự đoán cụ thể. Tôi sẽ check lại vào cuối quý.",f:"Post phân tích dài",d:"Cả 2",g:"19:00"},
+ {n:71,p:"P5",t:"Plan 90 ngày tiếp theo — và mời bạn đồng hành tiếp",h:"Tôi đặt 3 KPI mới. Tôi nói trước để các bạn check.",f:"Post text + ảnh",d:"—",g:"08:00"},
+ {n:72,p:"P2",t:"1 ngày cuối của 90 ngày — tôi đi đâu, làm gì, cảm thấy thế nào",h:"Không phải bài tổng kết kiểu chính trị. Đây là 1 vlog rất cá nhân.",f:"Reels 90s",d:"—",g:"20:00"}
+];
+
+/* =================== STORY BANK =================== */
+const STORY=[
+ ["P1","Lịch sử địa danh","Phố Hiến — thương cảng chỉ sau Hội An mà ít người Hà Nội biết","Tôi từng nghĩ Hưng Yên = quê…","Carousel 6 slide",3],
+ ["P1","Lịch sử địa danh","Sông Hồng — tuyến giao thương lớn nhất Bắc Bộ đang hồi sinh","Nó từng nuôi cả Phố Hiến và Thăng Long.","Reels 90s",3],
+ ["P1","Tư liệu lịch sử","Bản đồ cửa ngõ Đông xưa đối chiếu quy hoạch Ocean City 2026","Đặt 2 bản đồ cạnh nhau. Bạn sẽ thấy 1 điều thú vị.","Carousel ảnh 6 slide",3],
+ ["P1","Tư liệu lịch sử","5 thương cảng cổ đã hồi sinh thành đô thị mới ở châu Á","Phố Hiến không phải case duy nhất — bài học từ Malacca, Quảng Châu…","Post dài + ảnh",2],
+ ["P1","Interview địa phương","4 thế hệ cửa ngõ Đông kể về quê hương — phim ngắn","Bác Hùng 78 tuổi: 'Cháu là người đầu tiên hỏi bác chuyện này'.","Video 5p",3],
+ ["P1","Interview địa phương","Người dân ven sông nghĩ gì khi đô thị mới mọc lên?","Tôi đến 3 hộ dân. Tôi xin phép. Tôi quay. Đây là câu trả lời thật.","Video 4p",3],
+ ["P1","Tour thực địa","Sông Hồng — đi cùng tôi một buổi sáng Chủ Nhật","Không kịch bản. Không CDT. Chỉ có dòng sông.","Reels 90s",3],
+ ["P1","Tour thực địa","Phố cổ Hưng Yên còn lại gì sau 100 năm?","Tôi đi bộ 3 tiếng. Tôi đếm 27 ngôi nhà cổ.","Vlog 6p",2],
+ ["P1","Phong thủy / Văn hóa","Sông Hồng — một mạch tài lộc, không chỉ là dòng nước","Phong thủy không mê tín nếu bạn hiểu nó là logic về dòng chảy.","Post dài",3],
+ ["P1","Kết nối xưa–nay","Imperia — 'phố cổ mới' giữa lòng đô thị hiện đại","Vì sao MIK chọn xây một 'phố cổ' ngay giữa Ocean City?","Reels 60s",3],
+ ["P1","Kết nối xưa–nay","Phía Đông qua 4 mùa — bộ ảnh 3 tháng quay","Cùng 1 khúc sông. 4 mùa khác nhau. Đây là tình yêu.","Carousel ảnh 8 slide",3],
+ ["P2","Day in life","Sáng biển hồ, chiều xem nhà, tối nội đô — một ngày của tôi","Trong 1 ngày tôi đi qua 400 năm.","Reels 90s",3],
+ ["P2","Day in life","Một ngày ở Ocean City vs một ngày ở Cầu Giấy","Tôi cố tình chọn 2 ngày giống nhau. Khác biệt làm tôi ngạc nhiên.","Reels 90s",3],
+ ["P2","Trải nghiệm sống","Sống ven sông Hồng khác gì sống ven hồ nội đô?","Tôi đã thử cả 2. Đây là 4 cảm nhận không có trong brochure.","Reels 60s",3],
+ ["P2","Trải nghiệm sống","5 điều bất ngờ sau 3 tháng chuyển ra phía Đông","Số 3 sẽ làm bạn nghĩ lại định nghĩa 'tiện nghi'.","Carousel 7 slide",3],
+ ["P2","Cộng đồng","Cộng đồng cư dân Ocean City cuối tuần làm gì?","Tôi đến dự 1 sự kiện. Đây là cảm nhận.","Reels 60s",2],
+ ["P2","Cộng đồng","3 gia đình đã rời nội đô ra phía Đông — sau 2 năm họ thế nào?","3 câu chuyện. 3 quyết định. 0 hối hận.","Video 4p",3],
+ ["P2","Tiện ích","Smart home cứu được mấy phút mỗi ngày? Tôi tính thử.","Tôi không tin marketing. Tôi đếm phút.","Carousel 6 slide",2],
+ ["P2","Tiện ích","Trường liên cấp & Vinschool trong Ocean City — tôi xem hộ bạn","Tôi đi 3 trường ở phía Đông trong 1 ngày.","Reels 90s",3],
+ ["P2","Wellness","Biển hồ nước mặn — tôi bơi thử buổi sáng","Tôi không quay quảng cáo. Tôi quay vì tôi thích.","Reels 60s",3],
+ ["P2","Wellness","Resort-living ở Masteri Grand Coast thật vs marketing","Mật độ 15,8%. Tôi đi bộ đo thử. Đây là kết quả.","Reels 90s",3],
+ ["P2","Wellness","Wellness ở đô thị mới — 5 yếu tố bạn cần check","Không phải spa = wellness. Đây là framework đầy đủ.","Carousel 6 slide",2],
+ ["P3","Định vị","Vì sao tôi bán cả MIK lẫn Masterise mà không chỉ 1?","Vì agent của 1 dự án chỉ có thể khen dự án đó.","Post text + ảnh",3],
+ ["P3","Compare","MIK & Masterise — 2 câu chuyện, 2 kiểu khách. Bạn thuộc kiểu nào?","Framework match đúng người với đúng nhà.","Carousel 8 slide",3],
+ ["P3","Compare","Imperia kể chuyện 'phố cổ mới' · Masteri kể chuyện biển hồ","Cùng 1 đại đô thị, 2 triết lý khác nhau.","Carousel 8 slide",3],
+ ["P3","Compare","Tôi đi thực địa Imperia & Masteri trong 1 ngày — nhận xét thật","Sáng Imperia. Trưa Grand Coast. Tối tôi viết bài này.","Reels 90s",3],
+ ["P3","Hot take","Tôi KHÔNG thích chung cư nội đô — đây là lý do","Quan điểm này sẽ làm một số bạn không đồng ý.","Post dài",3],
+ ["P3","Hot take","Tôi tin phía Đông hơn phía Tây — 3 lý do","Môi giới phía Tây sẽ không đồng ý. Tôi vẫn nói.","Post dài",3],
+ ["P3","Hot take","Bạn không nên mua nhà mới ngay — 5 lý do bất ngờ","Tôi bán nhà nhưng vẫn nói câu này. Vì có lúc đúng.","Carousel 6 slide",2],
+ ["P3","Từ chối khách","Tuần này tôi từ chối 2 khách — đây là lý do","Không phải tôi không cần tiền.","Post dài",3],
+ ["P3","Từ chối khách","5 dấu hiệu cho thấy bạn CHƯA nên mua nhà","Tôi đã từ chối ~30% khách năm đầu. Đây là pattern.","Carousel 6 slide",2],
+ ["P3","Quy trình","Behind the scenes: 2 tiếng tư vấn 1 khách","Tôi xin phép quay (giấu mặt). Đây là cách tôi làm việc.","Reels 90s",3],
+ ["P3","Quy trình","Vlog: dẫn 1 khách thực địa Ocean City","Không cắt ghép. 60 phút thật.","Vlog 8p",3],
+ ["P3","Framework","Framework chọn dự án trong 5 phút — dùng được ngay","3 thông số. 1 đáp án.","Carousel 6 slide",3],
+ ["P3","Objection","5 objection phổ biến nhất — cách tôi xử lý từng cái","Data thật từ inbox 90 ngày.","Carousel 8 slide",3],
+ ["P3","Q&A","10 câu hỏi hot nhất tuần — Q&A","Tôi nhận 80+ câu hỏi/tuần.","Carousel FAQ",3],
+ ["P4","Quy hoạch","Quy hoạch phía Đông 2026–2030 — giải thích bằng tiếng Việt","1 file PDF 80 trang → 1 bài 8 slide.","Carousel 8 slide",3],
+ ["P4","Hạ tầng","Cầu Trần Hưng Đạo & Vành đai 4 — vì sao phía Đông đổi vận","Hạ tầng đi trước, giá đi sau.","Post phân tích",3],
+ ["P4","Hạ tầng","Cầu Tứ Liên & cầu Ngọc Hồi — 2 cây cầu đổi vận","1 cây cầu = 1 cơ hội.","Post phân tích",2],
+ ["P4","Số liệu","Chỉ số yield phía Đông Q2/2026 — số liệu mới nhất","Yield trung bình · top 3 phân khu · 1 dự án bị đánh giá thấp.","Carousel 7 slide",3],
+ ["P4","Số liệu","Mật độ xây dựng 16% nghĩa là gì? Tôi vẽ giúp bạn.","1 con số khô khan → 1 không gian sống cụ thể.","Carousel 6 slide",2],
+ ["P4","Bản tin","Bản tin tuần — 5 tin & 1 cơ hội ít người để ý","Mỗi tuần tôi đọc 15 báo cáo.","Carousel 6 slide",3],
+ ["P4","Lãi suất","Lãi suất & chính sách 0–6% — tác động THẬT đến quyết định mua","Tôi tính cho bạn 1 case cụ thể.","Carousel 6 slide",3],
+ ["P4","Dự báo","Phía Đông Q4/2026 — dự báo của tôi (kèm lý do)","3 dự đoán cụ thể. Cuối quý check lại.","Post phân tích dài",3],
+ ["P4","Phân tích sâu","Tháng nào trong năm đẹp để chốt deal? (5 năm số liệu)","Tháng đẹp ≠ tháng giá thấp.","Carousel 7 slide",2],
+ ["P5","Bài học","Sai lầm đắt giá: 3 năm trước tôi bỏ qua 1 căn ở phía Đông","Bây giờ căn đó tăng hơn 2 lần.","Post dài + ảnh",3],
+ ["P5","Bài học","Bài học đắt giá năm đầu bán BĐS — tôi sai ở đâu?","1 giao dịch dạy tôi nhiều hơn 10 khoá học.","Story cá nhân",3],
+ ["P5","Triết lý nghề","Câu hỏi đắt nhất: 'Anh mua cho hiện tại hay 10 năm sau?'","Câu trả lời thay đổi toàn bộ tư vấn.","Post ngắn + sâu",3],
+ ["P5","Milestone","Tổng kết tháng 1 — số liệu thật, không marketing","Followers, lead, content nào hit. Tất cả công khai.","Post milestone",3],
+ ["P5","Milestone","Tổng kết 90 ngày — báo cáo công khai","1.500 followers · 30+ lead · 1–3 deal.","Video 8p",3],
+ ["P5","Câu chuyện cá nhân","Vì sao tôi rời nội đô — và không hối hận","3 năm trước tôi nghĩ ở trung tâm = thành công.","Post dài + ảnh",3]
+];
+
+/* =================== VISUAL =================== */
+const SWATCHES=[
+ ["Ocean Night","#0C1A21","Nền đêm mặt nước — cinematic","Background chính, chiều sâu"],
+ ["Heritage Gold","#CBA35A","Hoàng hôn Phố Hiến, đèn lồng","Heading, accent, số liệu nổi bật"],
+ ["Jade Water","#4FA89C","Sông Hồng ban mai, biển hồ","Tag lifestyle, link, điểm nhấn phụ"],
+ ["Clay Brown","#C07A45","Đất, gỗ cổ, ngói cũ","Pillar Heritage — dùng tiết chế"],
+ ["Cream Paper","#ECE4D4","Giấy cổ, tài liệu","Body text trên nền tối"],
+ ["Insight Blue","#5E93C4","Dữ liệu, hạ tầng, bản đồ","Pillar Insights, biểu đồ"]
+];
+const VCONCEPTS=[
+ ["P1","Phố Hiến vàng son","Hoàng hôn ấm · phố cổ · đèn lồng đỏ · thuyền gỗ trên sông · tông cam vàng",
+  "Cinematic golden hour, ancient Vietnamese trading port, French colonial shophouses, red lanterns, wooden boats on river, warm amber lighting, Hung Yen Vietnam, ultra-realistic, film grain","iPhone Pro · Gimbal · Drone · LUT cam vàng · grain nhẹ · 9:16"],
+ ["P1","Sông Hồng ban mai","Sương sớm · mặt nước phản chiếu · cầu vượt sông · tông xanh ngọc lạnh",
+  "Misty dawn on Red River, arch bridges in distance, calm jade water reflections, soft fog, peaceful, no people, cinematic wide angle","Drone + ND filter · iPhone slow-mo · tông lạnh xanh ngọc"],
+ ["P1","4 thế hệ phỏng vấn","Chân dung người lớn tuổi · phòng khách Việt cổ · ánh sáng cửa sổ · close-up bàn tay",
+  "Documentary portrait, elderly Vietnamese villager in traditional wooden living room, natural window light, soft shadows, weathered hands, 50mm lens look","Mic lavalier · LED nhẹ · iPhone 4K · subtitle Việt+Anh"],
+ ["P2","Day in life biển hồ","Tự nhiên · không pose · POV · ánh sáng tự nhiên · biển hồ",
+  "POV lifestyle vlog, vietnamese man casual clothes, morning by saltwater lagoon, modern apartment, golden hour, handheld feel, real not staged","iPhone + gimbal nhẹ · cut nhanh · nhạc indie · subtitle vàng"],
+ ["P2","Biển hồ hoàng hôn","Cảnh biển hồ · tháp căn hộ xa · tông cam–tím · silhouette",
+  "Golden hour saltwater lagoon in mega-township, modern residential towers in distance, water reflections, sophisticated lifestyle, no crowd","Drone · iPhone + ND · cinematic 16:9 · slow motion"],
+ ["P2","Smart home Việt hiện đại","Nội thất tối giản · đèn vàng · gỗ + đá · 1 chi tiết Việt",
+  "Modern minimalist Vietnamese apartment, warm wood and stone, smart home accent lighting, one traditional decoration (lantern or ceramic), evening warm glow","iPhone + gimbal · tông ấm · low light grade"],
+ ["P3","Behind the scenes tư vấn","Bàn cafe · laptop · tài liệu · ánh sáng tự nhiên · không thấy mặt khách",
+  "Real estate consultation in modern cafe, paperwork and laptop on wooden table, two coffee cups, natural window light, documentary style, no faces visible","iPhone + tripod nhỏ · mic · subtitle nhanh"],
+ ["P3","Hiệp talking head","Smart casual · background phòng làm việc/cafe · ánh sáng cửa sổ",
+  "Vietnamese real estate advisor in smart casual, looking to camera, modern minimalist office or cafe background, soft window light, professional but warm","iPhone + tripod · softbox nhỏ · mic lavalier · text overlay vàng IN HOA"],
+ ["P4","Data visualization","Bản đồ phía Đông · biểu đồ · số liệu · navy + vàng accent",
+  "(Không cần AI — design trên Canva/Figma) Bản đồ phía Đông + biểu đồ + số liệu, tông navy #0C1A21 + accent vàng #CBA35A","Canva Pro · Figma · animation chậm"],
+ ["P5","Câu chuyện cá nhân","Ảnh đời thường · không pose · tone phim film",
+  "Personal storytelling visual, candid Vietnamese man portrait, film photography aesthetic, real not staged, warm nostalgic tones","iPhone · film camera nếu có · grain nhiều · subtitle handwritten"]
+];
+
+/* =================== KPI =================== */
+const KPI_WEEKS=[
+ ["T1 · GĐ1",6,"ph1"],["T2 · GĐ1",6,"ph1"],["T3 · GĐ1",6,"ph1"],["T4 · GĐ1",6,"ph1"],
+ ["T5 · GĐ2",6,"ph2"],["T6 · GĐ2",6,"ph2"],["T7 · GĐ2",6,"ph2"],["T8 · GĐ2",6,"ph2"],
+ ["T9 · GĐ3",6,"ph3"],["T10 · GĐ3",6,"ph3"],["T11 · GĐ3",6,"ph3"],["T12 · GĐ3",6,"ph3"]
+];
+const KPI_COLS=["posted","reach","fol","eng","lead","deal"];
+const BRAND_HEALTH=[
+ ["Followers Facebook","Tăng đều đặn",1500],
+ ["Inbox / tuần","Tăng mạnh phase 2–3",30],
+ ["Mention / share organic","Khó nhất nhưng quan trọng",15],
+ ["Lead chất lượng (Hot)","Lọc qua qualify",10],
+ ["Referral / khách giới thiệu","Bằng chứng brand mạnh",3],
+ ["Deal chốt","Mục tiêu 1–3",2]
+];
+
+/* =================== STORAGE =================== */
+const KEY="hiep90:";
+const mem={};
+function save(k,v){try{localStorage.setItem(KEY+k,JSON.stringify(v))}catch(e){mem[k]=v}flash()}
+function load(k,def){try{const r=localStorage.getItem(KEY+k);return r!==null?JSON.parse(r):(mem[k]!==undefined?mem[k]:def)}catch(e){return mem[k]!==undefined?mem[k]:def}}
+let flashT;
+function flash(){const f=document.getElementById("flash");f.classList.add("show");clearTimeout(flashT);flashT=setTimeout(()=>f.classList.remove("show"),1100)}
+
+/* =================== HELPERS =================== */
+const DOW=["CN","T2","T3","T4","T5","T6","T7"];
+const PN={P1:"Heritage",P2:"Lifestyle",P3:"Advisor",P4:"Insights",P5:"Personal"};
+function getMonday(d){const x=new Date(d);const day=x.getDay();const diff=(day===0?-6:1-day);x.setDate(x.getDate()+diff);x.setHours(0,0,0,0);return x}
+function fmtDate(d){return String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")}
+function phaseOfWeek(w){return w<=4?1:(w<=8?2:3)}
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+
+/* =================== RENDER: NAV =================== */
+function renderNav(){
+ const nav=document.getElementById("nav"),mnav=document.getElementById("mnav");
+ NAV.forEach((it,i)=>{
+   const b=el("button",i===0?"on":"",`<span class="ix">${String(i).padStart(2,"0")}</span>${it[1]}`);
+   b.onclick=()=>go(it[0]);nav.appendChild(b);
+   const mb=el("button",i===0?"on":"",it[1]);mb.onclick=()=>go(it[0]);mnav.appendChild(mb);
+ });
+}
+function go(id){
+ document.querySelectorAll("section.pane").forEach(s=>s.classList.remove("on"));
+ document.getElementById("pane-"+id).classList.add("on");
+ const idx=NAV.findIndex(n=>n[0]===id);
+ document.querySelectorAll("#nav button").forEach((b,i)=>b.classList.toggle("on",i===idx));
+ document.querySelectorAll("#mnav button").forEach((b,i)=>b.classList.toggle("on",i===idx));
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* =================== RENDER: OVERVIEW =================== */
+function renderOverview(){
+ const r=document.getElementById("rules");
+ RULES.forEach((x,i)=>r.appendChild(el("div","rule",`<div class="rn">${i+1}</div><div><h4>${x[0]}</h4><p>${x[1]}</p></div>`)));
+ const rt=document.getElementById("routine");
+ ROUTINE.forEach(x=>{rt.appendChild(el("div",null,x[0]));rt.appendChild(el("div",null,x[1]));});
+}
+
+/* =================== RENDER: POSITIONING =================== */
+function renderPosition(){
+ const p4=document.getElementById("pillars4");
+ PILLARS4.forEach(x=>{
+   p4.appendChild(el("div","pillar-row",
+    `<div class="pn">${x[0]}</div>
+     <div class="pbody"><h4>${x[2]}</h4><div class="em">${x[1].toUpperCase()}</div>
+      <div class="dim" style="font-size:12.5px;margin-top:4px">${x[3]}</div>
+      <div style="font-size:11.5px;color:var(--jade);margin-top:3px">${x[4]}</div></div>
+     <div class="pw"><div class="pct">${x[5]}%</div><div class="bar"><i style="width:${x[5]*2.6}%"></i></div></div>`));
+ });
+ const pe=document.getElementById("personas");
+ PERSONAS.forEach(x=>{
+   let kv=x[2].map(k=>`<div class="kv"><b>${k[0]}</b><span>${k[1]}</span></div>`).join("");
+   pe.appendChild(el("div","persona",`<h4>${x[0]}</h4><div class="role">${x[1]}</div>${kv}`));
+ });
+ const t=document.getElementById("tone");
+ TONE.forEach(x=>{
+   t.appendChild(el("div",null,x[0]));
+   t.appendChild(el("div",null,
+    `<span class="${x[1]}">✔ ${x[2]}</span><br><span class="${x[3]}">✘ ${x[4]}</span>
+     <div style="font-size:12px;color:var(--muted2);margin-top:6px;font-style:italic">${x[5]}</div>`));
+ });
+}
+
+/* =================== RENDER: 90-DAY PLAN =================== */
+function renderPlan(){
+ // river svg
+ const svg=document.getElementById("riverSvg");
+ let path=`<defs>
+   <linearGradient id="rg" x1="0" y1="0" x2="1" y2="0">
+     <stop offset="0" stop-color="#C07A45"/><stop offset="0.5" stop-color="#5E93C4"/><stop offset="1" stop-color="#4FA89C"/>
+   </linearGradient></defs>`;
+ // wavy river path
+ const d="M 10 40 C 150 20, 200 100, 340 80 S 560 30, 690 70 S 850 110, 890 90";
+ path+=`<path d="${d}" fill="none" stroke="url(#rg)" stroke-width="10" stroke-linecap="round" opacity="0.9"/>`;
+ path+=`<path d="${d}" fill="none" stroke="#0C1A21" stroke-width="2" stroke-dasharray="2 10" opacity="0.5"/>`;
+ // phase markers
+ const marks=[[120,"01","AWARENESS","D1–30","#C07A45"],[430,"02","AUTHORITY","D31–60","#5E93C4"],[740,"03","CONVERSION","D61–90","#4FA89C"]];
+ marks.forEach(m=>{
+   const y = m[0]<200?55:(m[0]<600?92:78);
+   path+=`<circle cx="${m[0]}" cy="${y}" r="9" fill="${m[4]}" stroke="#0C1A21" stroke-width="3"/>`;
+   path+=`<text x="${m[0]}" y="25" fill="${m[4]}" font-family="Space Mono, monospace" font-size="13" font-weight="700" text-anchor="middle">${m[1]}</text>`;
+   path+=`<text x="${m[0]}" y="128" fill="#ECE4D4" font-family="Be Vietnam Pro, sans-serif" font-size="12" font-weight="700" text-anchor="middle">${m[2]}</text>`;
+   path+=`<text x="${m[0]}" y="143" fill="#8FA3AB" font-family="Space Mono, monospace" font-size="10" text-anchor="middle">${m[3]}</text>`;
+ });
+ // 12 week ticks
+ for(let i=0;i<12;i++){const x=40+i*70;path+=`<line x1="${x}" y1="102" x2="${x}" y2="108" stroke="#37596a" stroke-width="1.5"/>`;}
+ svg.innerHTML=path;
+
+ const pc=document.getElementById("phaseCards");
+ PHASES.forEach((x,i)=>{
+   const c=el("div","phase-card",
+    `<div class="pt">${x[2]} · ${x[0]}</div><h4 style="color:${x[4]}">${x[0]}</h4>
+     <div class="days">${x[1]}</div><div class="goal">${x[3]}</div>`);
+   c.style.borderTopColor=x[4];
+   c.onclick=()=>{go("plan");document.getElementById("wk-"+(i*4+1)).scrollIntoView({behavior:"smooth",block:"center"})};
+   pc.appendChild(c);
+ });
+
+ const ov=document.getElementById("kpiOv");
+ KPIOV.forEach(x=>ov.appendChild(el("div","box",`<div class="lab">${x[0]}</div><div class="val">${x[1]}</div><div class="dim" style="font-size:11px;margin-top:5px">${x[2]}</div>`)));
+
+ const wd=document.getElementById("weekDetail");
+ WEEKS.forEach(w=>{
+   const ph=phaseOfWeek(w[0]);
+   const li=w[4].map(x=>`<li>${x}</li>`).join("");
+   const row=el("div","week-row",
+    `<div class="wk" id="wk-${w[0]}">Tuần ${w[0]}<small>${w[1]}</small></div>
+     <div><h4>${w[2]}</h4><div class="focus">${w[3]}</div><ul>${li}</ul>
+      <div class="kpimini"><span class="chip">${w[5]}</span><span class="chip">${w[6]}</span></div></div>`);
+   wd.appendChild(row);
+ });
+}
+
+/* =================== RENDER: PILLARS FULL =================== */
+function renderPillarsFull(){
+ const c=document.getElementById("pillarsFull");
+ PILLARS_FULL.forEach(p=>{
+   const is=p.is.map(x=>`<li>${x}</li>`).join("");
+   const isnot=p.isnot.map(x=>`<li style="color:#c77e86">${x}</li>`).join("");
+   const b=el("div","pill-block",
+    `<div class="head"><span class="icn">${p.icn}</span><h3>${p.nm}</h3><span class="freq">${p.freq}</span></div>
+     <div class="core" style="color:${p.col}">${p.core}</div>
+     <div class="two">
+       <div><h5>Trông như thế này</h5><ul style="color:${p.col}">${is}</ul></div>
+       <div><h5>Không phải thế này</h5><ul>${isnot}</ul></div>
+     </div>
+     <div class="hookq"><b>Hook mẫu:</b> ${p.hook}</div>`);
+   b.style.borderLeftColor=p.col;
+   c.appendChild(b);
+ });
+}
+
+/* =================== RENDER: SCHEDULE =================== */
+let schedState={start:null,fp:"all",fph:"all",status:"all"};
+function defaultStart(){const m=getMonday(new Date());if(new Date()>m)m.setDate(m.getDate()+7);return m}
+function renderSchedule(){
+ const done=load("posts",{});
+ const sd=document.getElementById("startDate");
+ let saved=load("start",null);
+ if(!saved){const d=defaultStart();saved=d.toISOString().slice(0,10);save("start",saved)}
+ sd.value=saved;schedState.start=getMonday(new Date(saved));
+ sd.onchange=()=>{schedState.start=getMonday(new Date(sd.value));save("start",sd.value);drawPosts()};
+ document.getElementById("fPillar").onchange=e=>{schedState.fp=e.target.value;drawPosts()};
+ document.getElementById("fPhase").onchange=e=>{schedState.fph=e.target.value;drawPosts()};
+ // quick status filters
+ const qf=document.getElementById("quickFilters");
+ [["all","Tất cả"],["todo","Chưa đăng"],["done","Đã đăng"]].forEach((x,i)=>{
+   const b=el("button",i===0?"on":"",x[1]);
+   b.onclick=()=>{schedState.status=x[0];qf.querySelectorAll("button").forEach(z=>z.classList.remove("on"));b.classList.add("on");drawPosts()};
+   qf.appendChild(b);
+ });
+ drawPosts();
+}
+function drawPosts(){
+ const done=load("posts",{});
+ const list=document.getElementById("postList");list.innerHTML="";
+ let shown=0;
+ POSTS.forEach(po=>{
+   const week=Math.ceil(po.n/6),ph=phaseOfWeek(week),dayInWeek=(po.n-1)%6;
+   if(schedState.fp!=="all"&&po.p!==schedState.fp)return;
+   if(schedState.fph!=="all"&&ph!==+schedState.fph)return;
+   const isDone=!!done[po.n];
+   if(schedState.status==="done"&&!isDone)return;
+   if(schedState.status==="todo"&&isDone)return;
+   shown++;
+   const dt=new Date(schedState.start);dt.setDate(dt.getDate()+(week-1)*7+dayInWeek);
+   const dow=DOW[dt.getDay()];
+   const prj=po.d!=="—"?`<span class="prj">${po.d}</span>`:"";
+   const post=el("div","post"+(isDone?" done":""),
+    `<div class="p-day"><span class="dow">${dow}</span><br>${fmtDate(dt)}<span class="dt">Tuần ${week}</span></div>
+     <div class="p-main">
+       <div class="p-topline"><span class="tag-p p-${po.p}">${po.p}</span><span class="dim mono" style="font-size:10px">#${po.n}</span></div>
+       <div class="p-t">${po.t}</div>
+       <div class="p-h">${po.h}</div>
+       <div class="p-meta"><span class="fmt">${po.f}</span>${prj}<span>${po.g}</span></div>
+     </div>
+     <div class="chk${isDone?" on":""}" data-n="${po.n}"></div>`);
+   post.style.borderLeftColor=`var(--${po.p.toLowerCase()})`;
+   post.querySelector(".chk").onclick=function(){
+     const d=load("posts",{});d[po.n]=!d[po.n];save("posts",d);drawPosts();
+   };
+   list.appendChild(post);
+ });
+ if(shown===0)list.appendChild(el("div","dim","Không có bài nào khớp bộ lọc."));
+ // progress
+ const total=Object.values(done).filter(Boolean).length;
+ document.getElementById("progNum").textContent=total;
+ document.getElementById("progBar").style.width=(total/72*100)+"%";
+}
+
+/* =================== RENDER: STORY BANK =================== */
+let storyFilter="all";
+function renderStory(){
+ const sf=document.getElementById("storyFilters");
+ [["all","Tất cả"],["P1","P1 Heritage"],["P2","P2 Lifestyle"],["P3","P3 Advisor"],["P4","P4 Insights"],["P5","P5 Personal"]].forEach((x,i)=>{
+   const b=el("button",i===0?"on":"",x[1]);
+   b.onclick=()=>{storyFilter=x[0];sf.querySelectorAll("button").forEach(z=>z.classList.remove("on"));b.classList.add("on");drawStory()};
+   sf.appendChild(b);
+ });
+ drawStory();
+}
+function drawStory(){
+ const list=document.getElementById("storyList");list.innerHTML="";
+ STORY.forEach(s=>{
+   if(storyFilter!=="all"&&s[0]!==storyFilter)return;
+   const stars="★".repeat(s[5])+"☆".repeat(3-s[5]);
+   const st=el("div","story",
+    `<div class="st-top"><span class="tag-p p-${s[0]}">${s[0]}</span><span class="st-type">${s[1]}</span><span class="stars" style="margin-left:auto">${stars}</span></div>
+     <h4>${s[2]}</h4><div class="st-hook">${s[3]}</div>
+     <div class="st-foot"><span class="st-fmt">${s[4]}</span></div>`);
+   st.style.borderLeftColor=`var(--${s[0].toLowerCase()})`;
+   list.appendChild(st);
+ });
+}
+
+/* =================== RENDER: VISUAL =================== */
+function renderVisual(){
+ const sw=document.getElementById("swatches");
+ SWATCHES.forEach(x=>sw.appendChild(el("div","swatch",
+   `<div class="sw" style="background:${x[1]}"></div>
+    <div class="sw-i"><h4>${x[0]} <span class="hex">${x[1]}</span></h4>
+     <div style="font-size:12px;color:var(--off)">${x[2]}</div><div class="use">Dùng cho: ${x[3]}</div></div>`)));
+ const vc=document.getElementById("visualConcepts");
+ VCONCEPTS.forEach(x=>{
+   const b=el("div","vconcept",
+    `<div class="vc-top"><span class="tag-p p-${x[0]}">${x[0]}</span><h4>${x[1]}</h4></div>
+     <div class="desc">${x[2]}</div>
+     <div class="prompt"><button class="copy">Copy</button>${x[3]}</div>
+     <div class="kit">🎬 ${x[4]}</div>`);
+   b.querySelector(".copy").onclick=function(){
+     navigator.clipboard&&navigator.clipboard.writeText(x[3]);this.textContent="Đã copy ✓";setTimeout(()=>this.textContent="Copy",1200);
+   };
+   vc.appendChild(b);
+ });
+}
+
+/* =================== RENDER: KPI =================== */
+function renderKpi(){
+ const t=document.getElementById("kpiTable");
+ const data=load("kpi",{});
+ let head=`<thead><tr><th>Tuần</th><th>Bài (KH)</th><th>Đã đăng</th><th>Reach TB</th><th>Follower +</th><th>Engage TB</th><th>Leads</th><th>Deal</th></tr></thead>`;
+ let body="<tbody>";
+ KPI_WEEKS.forEach((w,wi)=>{
+   body+=`<tr class="${w[2]}"><td>${w[0]}</td><td class="dim">${w[1]}</td>`;
+   KPI_COLS.forEach(c=>{
+     const v=(data[wi]&&data[wi][c])||"";
+     body+=`<td><input type="number" min="0" data-w="${wi}" data-c="${c}" value="${v}"></td>`;
+   });
+   body+="</tr>";
+ });
+ body+=`<tr class="tot"><td>TỔNG</td><td>72</td><td id="t-posted">0</td><td id="t-reach">–</td><td id="t-fol">0</td><td id="t-eng">–</td><td id="t-lead">0</td><td id="t-deal">0</td></tr>`;
+ body+="</tbody>";
+ t.innerHTML=head+body;
+ t.querySelectorAll("input").forEach(inp=>{
+   inp.oninput=function(){
+     const d=load("kpi",{});const w=this.dataset.w;if(!d[w])d[w]={};d[w][this.dataset.c]=this.value;save("kpi",d);kpiTotals();
+   };
+ });
+ kpiTotals();
+ document.getElementById("resetKpi").onclick=()=>{save("kpi",{});save("bh",{});renderKpi();renderBrandHealth();};
+}
+function kpiTotals(){
+ const d=load("kpi",{});
+ let sum={posted:0,fol:0,lead:0,deal:0},reach=[],eng=[];
+ KPI_WEEKS.forEach((w,wi)=>{
+   const r=d[wi]||{};
+   sum.posted+=+r.posted||0;sum.fol+=+r.fol||0;sum.lead+=+r.lead||0;sum.deal+=+r.deal||0;
+   if(+r.reach)reach.push(+r.reach);if(+r.eng)eng.push(+r.eng);
+ });
+ const avg=a=>a.length?Math.round(a.reduce((x,y)=>x+y,0)/a.length):"–";
+ document.getElementById("t-posted").textContent=sum.posted;
+ document.getElementById("t-fol").textContent=sum.fol;
+ document.getElementById("t-lead").textContent=sum.lead;
+ document.getElementById("t-deal").textContent=sum.deal;
+ document.getElementById("t-reach").textContent=avg(reach);
+ document.getElementById("t-eng").textContent=avg(eng);
+}
+function renderBrandHealth(){
+ const bh=document.getElementById("brandHealth");bh.innerHTML="";
+ const data=load("bh",{});
+ BRAND_HEALTH.forEach((x,i)=>{
+   const v=data[i]||0;
+   const pct=Math.min(100,Math.round(v/x[2]*100));
+   const row=el("div","bh-row",
+    `<div class="bh-name">${x[0]}<small>${x[1]}</small><div class="bh-bar"><i style="width:${pct}%"></i></div></div>
+     <div class="bh-val"><input type="number" min="0" data-i="${i}" value="${v||''}"></div>
+     <div class="bh-tgt">Mục tiêu: <b style="color:var(--gold)">${x[2]}</b> · <span style="color:var(--jade)">${pct}%</span></div>`);
+   row.querySelector("input").oninput=function(){
+     const d=load("bh",{});d[this.dataset.i]=+this.value||0;save("bh",d);renderBrandHealth();
+   };
+   bh.appendChild(row);
+ });
+}
+
+/* =================== INIT =================== */
+renderNav();renderOverview();renderPosition();renderPlan();renderPillarsFull();
+renderSchedule();renderStory();renderVisual();renderKpi();renderBrandHealth();
+</script>
