@@ -1055,9 +1055,13 @@ table.kpi tr.tot td{background:var(--ink3);font-family:var(--mono);color:var(--g
           <label>Ngày bắt đầu (Tuần 1)
             <input type="date" id="startDate">
           </label>
-          <label style="flex:1;min-width:260px">Google Sheet kịch bản
-            <input type="url" id="scriptSheet" placeholder="Dán link Google Sheet vào đây..."
-              style="width:100%;background:var(--ink);border:1px solid var(--line);border-radius:7px;color:var(--cream);padding:7px 10px;font-size:13px">
+          <label style="flex:1;min-width:280px">Google Sheet kịch bản
+            <span style="display:flex;gap:6px">
+              <input type="url" id="scriptSheet" placeholder="Để trống = dùng Sheet mặc định của đội"
+                style="flex:1;min-width:0;background:var(--ink);border:1px solid var(--line);border-radius:7px;color:var(--cream);padding:7px 10px;font-size:13px">
+              <button type="button" id="openScriptSheet" title="Mở Google Sheet kịch bản"
+                style="flex-shrink:0;background:var(--jade);border:none;border-radius:7px;padding:7px 12px;color:var(--ink);font-weight:700;font-size:12px;cursor:pointer">Mở</button>
+            </span>
           </label>
           <label>Lọc theo pillar
             <select id="fPillar">
@@ -1850,7 +1854,15 @@ function defaultStart(){ return mondayOnOrAfter(new Date(CAMPAIGN_START+"T00:00:
    Dán 1 link Sheet duy nhất. Mỗi bài #n mở thẳng dòng tương ứng trong Sheet
    (dòng 1 là tiêu đề nên bài #n nằm ở dòng n+1). Google Sheet hỗ trợ nhảy
    tới ô cụ thể qua #gid=<id>&range=A<dòng>. */
-function scriptSheetBase(){ return (load("scriptSheet","")||"").trim() }
+/* Link Sheet kịch bản mặc định của đội — gắn sẵn trong code nên mọi thành viên
+   mở lên là có ngay, không ai phải dán lại. Vẫn cho phép ghi đè ở ô nhập nếu
+   sau này đổi file; để trống ô đó thì tự quay về link mặc định này. */
+const SCRIPT_SHEET_DEFAULT = "https://docs.google.com/spreadsheets/d/1AJ-2qwhRz037BF4kWfOP3v4JsPKIIURK5QMTUwWh73E/edit?gid=0#gid=0";
+
+function scriptSheetBase(){
+  const saved = (load("scriptSheet","") || "").trim();
+  return saved || SCRIPT_SHEET_DEFAULT;
+}
 
 function scriptLinkFor(n){
   const base=scriptSheetBase();
@@ -1872,7 +1884,13 @@ function initScriptSheet(){
   const inp=document.getElementById("scriptSheet");
   if(!inp) return;
   inp.value=scriptSheetBase();
-  inp.onchange=()=>{ save("scriptSheet",inp.value.trim()); drawPosts() };
+  inp.onchange=()=>{
+    save("scriptSheet",inp.value.trim());
+    inp.value=scriptSheetBase();   // để trống thì hiện lại link mặc định
+    drawPosts();
+  };
+  const open=document.getElementById("openScriptSheet");
+  if(open) open.onclick=()=>window.open(scriptSheetBase(),"_blank","noopener");
 }
 
 function updateProgressUI(total) {
