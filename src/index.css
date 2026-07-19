@@ -586,3 +586,45 @@ textarea::placeholder { color: rgba(148,163,184,0.55) !important; }
   background: rgba(255, 255, 255, 0.2);
 }
 
+
+/* ── ACCESSIBILITY & TOUCH ── */
+
+/* Bỏ độ trễ 300ms khi chạm trên di động */
+button, a, input, select, textarea, [role="button"] {
+  touch-action: manipulation;
+}
+
+/* Viền focus cho người dùng bàn phím. Chỉ hiện khi điều hướng bằng phím,
+   không hiện khi bấm chuột — nên không ảnh hưởng thẩm mỹ. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Vùng chạm tối thiểu 44px trên di động (WCAG 2.5.5) */
+@media (max-width: 767px) {
+  button, a[role="button"], select {
+    min-height: 44px;
+  }
+  /* Trừ các nút icon nhỏ đã có vùng chạm riêng và nút trong bảng dày đặc */
+  button.icon-btn, table button {
+    min-height: 0;
+  }
+}
+
+/* Tôn trọng thiết lập giảm chuyển động của hệ điều hành.
+   Người bị rối loạn tiền đình có thể chóng mặt vì animation. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

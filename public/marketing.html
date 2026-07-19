@@ -453,6 +453,44 @@ table.kpi tr.tot td{background:var(--ink3);font-family:var(--mono);color:var(--g
   section.pane{display:block!important}
   .card,.pill-block,.post,.story{break-inside:avoid}
 }
+
+/* ---------- ACCESSIBILITY & TOUCH ---------- */
+
+/* Bỏ độ trễ 300ms khi chạm trên di động */
+button,a,input,select,textarea,.chk{touch-action:manipulation}
+
+/* Viền focus cho người dùng bàn phím. Chỉ hiện khi điều hướng bằng phím,
+   không hiện khi bấm chuột — nên không ảnh hưởng thẩm mỹ. */
+a:focus-visible,button:focus-visible,input:focus-visible,
+select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
+  outline:2px solid var(--gold);
+  outline-offset:2px;
+  border-radius:4px;
+}
+
+/* Vùng chạm tối thiểu 44×44px trên di động (WCAG 2.5.5).
+   Danh sách link dự án trước đây chỉ cao 22px — chạm rất dễ trượt. */
+@media(max-width:860px){
+  .project-links a{
+    min-height:44px;
+    padding:4px 0;
+    align-items:center;
+  }
+  .project-links li{margin:2px 0!important}
+  .mnav button,.nav button{min-height:44px}
+  .filters button,.sched-ctrl button,.btn{min-height:44px}
+  .chk{min-width:32px;min-height:32px}
+}
+
+/* Tôn trọng thiết lập giảm chuyển động của hệ điều hành */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+    scroll-behavior:auto!important;
+  }
+}
 </style>
 </head>
 <body>
