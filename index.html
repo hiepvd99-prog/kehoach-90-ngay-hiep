@@ -1532,6 +1532,10 @@ function initServerSync(){
       if(data.posts && Object.keys(data.posts).length>0){
         localStorage.setItem(KEY+"posts",JSON.stringify(data.posts));
       }
+      if(data.posts_list && data.posts_list.length>0){
+        POSTS = data.posts_list;
+        localStorage.setItem(KEY+"posts_list",JSON.stringify(data.posts_list));
+      }
       // Re-render
       renderKpi();
       renderBrandHealth();
@@ -1553,7 +1557,10 @@ function pollServerData(){
     .then(data=>{
       if(data.posts){
         localStorage.setItem(KEY+"posts",JSON.stringify(data.posts));
-        drawPosts();
+      }
+      if(data.posts_list && data.posts_list.length>0){
+        POSTS = data.posts_list;
+        localStorage.setItem(KEY+"posts_list",JSON.stringify(data.posts_list));
       }
       if(data.kpi){
         localStorage.setItem(KEY+"kpi",JSON.stringify(data.kpi));
@@ -1563,6 +1570,7 @@ function pollServerData(){
         localStorage.setItem(KEY+"bh",JSON.stringify(data.bh));
         renderBrandHealth();
       }
+      drawPosts();
       if(data.notes) drawNotes(data.notes);
     })
     .catch(e=>console.error("Polling error:",e));

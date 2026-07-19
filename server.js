@@ -11,13 +11,13 @@ app.use(express.static(__dirname));
 // helper to load/save file data
 function loadData() {
   if (!fs.existsSync(DATA_FILE)) {
-    return { notes: [], kpi: {}, bh: {}, posts: {} };
+    return { notes: [], kpi: {}, bh: {}, posts: {}, posts_list: [] };
   }
   try {
     const content = fs.readFileSync(DATA_FILE, 'utf8');
     return JSON.parse(content);
   } catch (e) {
-    return { notes: [], kpi: {}, bh: {}, posts: {} };
+    return { notes: [], kpi: {}, bh: {}, posts: {}, posts_list: [] };
   }
 }
 
@@ -55,11 +55,12 @@ app.post('/api/notes', (req, res) => {
 });
 
 app.post('/api/sync', (req, res) => {
-  const { kpi, bh, posts } = req.body;
+  const { kpi, bh, posts, posts_list } = req.body;
   const data = loadData();
   if (kpi) data.kpi = kpi;
   if (bh) data.bh = bh;
   if (posts) data.posts = posts;
+  if (posts_list) data.posts_list = posts_list;
   saveData(data);
   res.json({ success: true });
 });
