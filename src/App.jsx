@@ -4989,6 +4989,27 @@ Ví dụ:
           </div>
         </div>
 
+        
+        {/* ===== MODULE SWITCHER: KINH DOANH / MARKETING ===== */}
+        <div className="px-4 pt-3 pb-2 bg-slate-950/40 border-b border-slate-800/40">
+          <div className="flex bg-slate-950/80 rounded-xl p-1 border border-slate-800">
+            <button
+              onClick={() => { setMainSection('sales'); setActiveTab('soTayCaNhan'); }}
+              className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-black transition-all flex items-center justify-center gap-1.5 ${mainSection === 'sales' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'text-slate-400 hover:text-white'}`}
+            >
+              <Briefcase style={{ width: 13, height: 13 }} />
+              KINH DOANH
+            </button>
+            <button
+              onClick={() => { setMainSection('marketing'); setActiveTab('tongQuan'); }}
+              className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-black transition-all flex items-center justify-center gap-1.5 ${mainSection === 'marketing' ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/20' : 'text-slate-400 hover:text-white'}`}
+            >
+              <Megaphone style={{ width: 13, height: 13 }} />
+              MARKETING
+            </button>
+          </div>
+        </div>
+
         <nav className="flex-1 overflow-y-auto py-3" style={{display:'flex',flexDirection:'column'}}>
           {/* Tab buttons — iOS glass pill + cursor spotlight */}
           <div style={{position:'relative', padding:'0 0'}}>
