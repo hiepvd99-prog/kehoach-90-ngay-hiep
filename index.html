@@ -674,8 +674,17 @@ table.kpi tr.tot td{background:var(--ink3);font-family:var(--mono);color:var(--g
           </div>
         </div>
 
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:10px">
+          <div class="view-toggle">
+            <button class="toggle-btn on" id="viewModeCards">Chế độ Thẻ (Cards)</button>
+            <button class="toggle-btn" id="viewModeTable">Chế độ Excel (CRM Sheet)</button>
+          </div>
+          <button class="crm-btn crm-btn-add" id="addPostBtn" style="display:none">➕ Thêm bài viết mới</button>
+        </div>
+
         <div class="filters" id="quickFilters"></div>
         <div id="postList"></div>
+        <div id="postTableContainer" class="crm-table-container" style="display:none"></div>
       </section>
 
       <!-- ============ 5. STORY BANK ============ -->
@@ -1278,60 +1287,369 @@ function renderPillarsFull(){
 
 /* =================== RENDER: SCHEDULE =================== */
 let schedState={start:null,fp:"all",fph:"all",status:"all"};
+let currentViewMode="cards";
+
 function defaultStart(){const m=getMonday(new Date());if(new Date()>m)m.setDate(m.getDate()+7);return m}
-function renderSchedule(){
- const done=load("posts",{});
- const sd=document.getElementById("startDate");
- let saved=load("start",null);
- if(!saved){const d=defaultStart();saved=d.toISOString().slice(0,10);save("start",saved)}
- sd.value=saved;schedState.start=getMonday(new Date(saved));
- sd.onchange=()=>{schedState.start=getMonday(new Date(sd.value));save("start",sd.value);drawPosts()};
- document.getElementById("fPillar").onchange=e=>{schedState.fp=e.target.value;drawPosts()};
- document.getElementById("fPhase").onchange=e=>{schedState.fph=e.target.value;drawPosts()};
- // quick status filters
- const qf=document.getElementById("quickFilters");
- [["all","Tất cả"],["todo","Chưa đăng"],["done","Đã đăng"]].forEach((x,i)=>{
-   const b=el("button",i===0?"on":"",x[1]);
-   b.onclick=()=>{schedState.status=x[0];qf.querySelectorAll("button").forEach(z=>z.classList.remove("on"));b.classList.add("on");drawPosts()};
-   qf.appendChild(b);
- });
- drawPosts();
+
+function updateProgressUI(total) {
+  const numEl = document.getElementById("progNum");
+  if (numEl) {
+    numEl.textContent = total;
+    const parent = numEl.parentNode;
+    if (parent) {
+      parent.innerHTML = `<span class="pnum" id="progNum">${total}</span><span class="dim" style="font-size:14px">/${POSTS.length}</span>`;
+    }
+  }
+  const barEl = document.getElementById("progBar");
+  if (barEl) {
+    barEl.style.width = (total / (POSTS.length || 1) * 100) + "%";
+  }
 }
+
+function savePostsState() {
+  save("posts_list", POSTS);
+  if (isServerMode) {
+    const kpi = load("kpi", {});
+    const bh = load("bh", {});
+    const posts = load("posts", {});
+    fetch('/api/sync', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ kpi, bh, posts, posts_list: POSTS })
+    }).catch(e => console.error("Sync error:", e));
+  }
+}
+
+function addPost() {
+  const nextNum = POSTS.length + 1;
+  const newPost = {
+    n: nextNum,
+    p: "P6",
+    t: "Tiêu đề bài viết mới #" + nextNum,
+    h: "Ý tưởng nội dung mới...",
+    f: "Reels 60s",
+    d: "—",
+    g: "09:00",
+    status: "todo",
+    notes: ""
+  };
+  POSTS.push(newPost);
+  savePostsState();
+  drawPosts();
+  setTimeout(() => {
+    const container = document.getElementById("postTableContainer");
+    container.scrollLeft = 0;
+    container.scrollTop = container.scrollHeight;
+  }, 100);
+}
+
+function renderSchedule(){
+  // Load custom posts from localstorage if any
+  const localPosts = load("posts_list", null);
+  if (localPosts && localPosts.length > 0) {
+    POSTS = localPosts;
+  }
+
+  const done=load("posts",{});
+  const sd=document.getElementById("startDate");
+  let saved=load("start",null);
+  if(!saved){const d=defaultStart();saved=d.toISOString().slice(0,10);save("start",saved)}
+  sd.value=saved;schedState.start=getMonday(new Date(saved));
+  sd.onchange=()=>{schedState.start=getMonday(new Date(sd.value));save("start",sd.value);drawPosts()};
+  document.getElementById("fPillar").onchange=e=>{schedState.fp=e.target.value;drawPosts()};
+  document.getElementById("fPhase").onchange=e=>{schedState.fph=e.target.value;drawPosts()};
+  
+  // quick status filters
+  const qf = document.getElementById("quickFilters");
+  qf.innerHTML = "";
+  [["all","Tất cả"],["todo","Chưa đăng"],["done","Đã đăng"]].forEach((x,i)=>{
+    const b=el("button",i===0?"on":"",x[1]);
+    b.onclick=()=>{schedState.status=x[0];qf.querySelectorAll("button").forEach(z=>z.classList.remove("on"));b.classList.add("on");drawPosts()};
+    qf.appendChild(b);
+  });
+
+  // View toggle buttons
+  const btnCards = document.getElementById("viewModeCards");
+  const btnTable = document.getElementById("viewModeTable");
+  const btnAddPost = document.getElementById("addPostBtn");
+  
+  currentViewMode = load("view_mode", "cards");
+  
+  function updateViewToggleUI() {
+    if (currentViewMode === "cards") {
+      btnCards.classList.add("on");
+      btnTable.classList.remove("on");
+      document.getElementById("postList").style.display = "block";
+      document.getElementById("postTableContainer").style.display = "none";
+      document.getElementById("quickFilters").style.display = "flex";
+      btnAddPost.style.display = "none";
+    } else {
+      btnCards.classList.remove("on");
+      btnTable.classList.add("on");
+      document.getElementById("postList").style.display = "none";
+      document.getElementById("postTableContainer").style.display = "block";
+      document.getElementById("quickFilters").style.display = "none";
+      btnAddPost.style.display = "block";
+    }
+  }
+  
+  btnCards.onclick = () => {
+    currentViewMode = "cards";
+    save("view_mode", "cards");
+    updateViewToggleUI();
+    drawPosts();
+  };
+  
+  btnTable.onclick = () => {
+    currentViewMode = "table";
+    save("view_mode", "table");
+    updateViewToggleUI();
+    drawPosts();
+  };
+
+  btnAddPost.onclick = addPost;
+  
+  updateViewToggleUI();
+  drawPosts();
+}
+
 function drawPosts(){
- const done=load("posts",{});
- const list=document.getElementById("postList");list.innerHTML="";
- let shown=0;
- POSTS.forEach(po=>{
-   const week=Math.ceil(po.n/6),ph=phaseOfWeek(week),dayInWeek=(po.n-1)%6;
-   if(schedState.fp!=="all"&&po.p!==schedState.fp)return;
-   if(schedState.fph!=="all"&&ph!==+schedState.fph)return;
-   const isDone=!!done[po.n];
-   if(schedState.status==="done"&&!isDone)return;
-   if(schedState.status==="todo"&&isDone)return;
-   shown++;
-   const dt=new Date(schedState.start);dt.setDate(dt.getDate()+(week-1)*7+dayInWeek);
-   const dow=DOW[dt.getDay()];
-   const prj=po.d!=="—"?`<span class="prj">${po.d}</span>`:"";
-   const post=el("div","post"+(isDone?" done":""),
-    `<div class="p-day"><span class="dow">${dow}</span><br>${fmtDate(dt)}<span class="dt">Tuần ${week}</span></div>
-     <div class="p-main">
-       <div class="p-topline"><span class="tag-p p-${po.p}">${po.p}</span><span class="dim mono" style="font-size:10px">#${po.n}</span></div>
-       <div class="p-t">${po.t}</div>
-       <div class="p-h">${po.h}</div>
-       <div class="p-meta"><span class="fmt">${po.f}</span>${prj}<span>${po.g}</span></div>
-     </div>
-     <div class="chk${isDone?" on":""}" data-n="${po.n}"></div>`);
-   post.style.borderLeftColor=`var(--${po.p.toLowerCase()})`;
-   post.querySelector(".chk").onclick=function(){
-     const d=load("posts",{});d[po.n]=!d[po.n];save("posts",d);drawPosts();
-   };
-   list.appendChild(post);
- });
- if(shown===0)list.appendChild(el("div","dim","Không có bài nào khớp bộ lọc."));
- // progress
- const total=Object.values(done).filter(Boolean).length;
- document.getElementById("progNum").textContent=total;
- document.getElementById("progBar").style.width=(total/72*100)+"%";
+  const done=load("posts",{});
+  const total=Object.values(done).filter(Boolean).length;
+  updateProgressUI(total);
+  
+  if (currentViewMode === "table") {
+    drawPostsTable();
+  } else {
+    drawPostsCards();
+  }
+}
+
+function drawPostsCards(){
+  const done=load("posts",{});
+  const list=document.getElementById("postList");list.innerHTML="";
+  let shown=0;
+  POSTS.forEach(po=>{
+    const week=Math.ceil(po.n/6),ph=phaseOfWeek(week),dayInWeek=(po.n-1)%6;
+    if(schedState.fp!=="all"&&po.p!==schedState.fp)return;
+    if(schedState.fph!=="all"&&ph!==+schedState.fph)return;
+    const isDone=!!done[po.n];
+    if(schedState.status==="done"&&!isDone)return;
+    if(schedState.status==="todo"&&isDone)return;
+    shown++;
+    const dt=new Date(schedState.start);dt.setDate(dt.getDate()+(week-1)*7+dayInWeek);
+    const dow=DOW[dt.getDay()];
+    const prj=po.d!=="—"?`<span class="prj">${po.d}</span>`:"";
+    const post=el("div","post"+(isDone?" done":""),
+     `<div class="p-day"><span class="dow">${dow}</span><br>${fmtDate(dt)}<span class="dt">Tuần ${week}</span></div>
+      <div class="p-main">
+        <div class="p-topline"><span class="tag-p p-${po.p}">${po.p}</span><span class="dim mono" style="font-size:10px">#${po.n}</span></div>
+        <div class="p-t">${po.t}</div>
+        <div class="p-h">${po.h}</div>
+        <div class="p-meta"><span class="fmt">${po.f}</span>${prj}<span>${po.g}</span></div>
+        ${po.notes ? `<div style="font-size:11.5px;color:var(--gold);margin-top:6px;font-style:italic">📝 ${po.notes}</div>` : ""}
+      </div>
+      <div class="chk${isDone?" on":""}" data-n="${po.n}"></div>`);
+    post.style.borderLeftColor=`var(--${po.p.toLowerCase()})`;
+    post.querySelector(".chk").onclick=function(){
+      const d=load("posts",{});d[po.n]=!d[po.n];
+      if (po.status) po.status = d[po.n] ? "done" : "todo";
+      save("posts",d);
+      savePostsState();
+      drawPosts();
+    };
+    list.appendChild(post);
+  });
+  if(shown===0)list.appendChild(el("div","dim","Không có bài nào khớp bộ lọc."));
+}
+
+function drawPostsTable() {
+  const container = document.getElementById("postTableContainer");
+  if (!container) return;
+  container.innerHTML = "";
+  
+  const table = el("table", "crm-table");
+  
+  // Header
+  const thead = el("thead", null, `
+    <tr>
+      <th style="width:40px">#</th>
+      <th style="width:120px">Ngày đăng</th>
+      <th style="width:140px">Trạng thái</th>
+      <th style="width:100px">Pillar</th>
+      <th>Tiêu đề bài đăng</th>
+      <th>Hook / Ý tưởng chính</th>
+      <th style="width:130px">Định dạng</th>
+      <th style="width:120px">Dự án</th>
+      <th style="width:80px">Giờ</th>
+      <th style="width:180px">Phụ trách / Ghi chú</th>
+      <th style="width:70px">Thao tác</th>
+    </tr>
+  `);
+  table.appendChild(thead);
+  
+  const tbody = el("tbody");
+  const done = load("posts", {});
+  
+  POSTS.forEach((po, index) => {
+    const week = Math.ceil(po.n / 6), dayInWeek = (po.n - 1) % 6;
+    
+    if (schedState.fp !== "all" && po.p !== schedState.fp) return;
+    const ph = phaseOfWeek(week);
+    if (schedState.fph !== "all" && ph !== +schedState.fph) return;
+    
+    const isDone = !!done[po.n];
+    let statusVal = isDone ? "done" : (po.status || "todo");
+    
+    const dt = new Date(schedState.start);
+    dt.setDate(dt.getDate() + (week - 1) * 7 + dayInWeek);
+    const dateStr = fmtDate(dt) + " (Tuần " + week + ")";
+    
+    const tr = el("tr");
+    if (isDone) tr.style.background = "rgba(79,168,156,0.04)";
+    
+    // 1. #
+    tr.appendChild(el("td", "dim mono", po.n));
+    
+    // 2. Date
+    tr.appendChild(el("td", "dim", dateStr));
+    
+    // 3. Status Select
+    const tdStatus = el("td");
+    const selStatus = el("select", "crm-select");
+    selStatus.innerHTML = `
+      <option value="todo" ${statusVal==="todo"?"selected":""}>🔴 Chưa đăng</option>
+      <option value="draft" ${statusVal==="draft"?"selected":""}>🟡 Đang nháp</option>
+      <option value="done" ${statusVal==="done"?"selected":""}>🟢 Đã đăng</option>
+    `;
+    selStatus.onchange = function() {
+      const newStatus = this.value;
+      const d = load("posts", {});
+      d[po.n] = (newStatus === "done");
+      save("posts", d);
+      
+      po.status = newStatus;
+      savePostsState();
+      drawPosts();
+    };
+    tdStatus.appendChild(selStatus);
+    tr.appendChild(tdStatus);
+    
+    // 4. Pillar Select
+    const tdPillar = el("td");
+    const selPillar = el("select", "crm-select");
+    selPillar.style.color = `var(--${po.p.toLowerCase()})`;
+    selPillar.style.fontWeight = "bold";
+    ["P1", "P2", "P3", "P4", "P5", "P6"].forEach(p => {
+      selPillar.innerHTML += `<option value="${p}" ${po.p===p?"selected":""} style="color:var(--${p.toLowerCase()});font-weight:bold">${p}</option>`;
+    });
+    selPillar.onchange = function() {
+      po.p = this.value;
+      savePostsState();
+      drawPosts();
+    };
+    tdPillar.appendChild(selPillar);
+    tr.appendChild(tdPillar);
+    
+    // 5. Title Input
+    const tdTitle = el("td");
+    const inpTitle = el("input", "crm-input");
+    inpTitle.value = po.t || "";
+    inpTitle.onblur = function() {
+      if (po.t !== this.value) {
+        po.t = this.value;
+        savePostsState();
+      }
+    };
+    tdTitle.appendChild(inpTitle);
+    tr.appendChild(tdTitle);
+    
+    // 6. Hook Input
+    const tdHook = el("td");
+    const inpHook = el("input", "crm-input");
+    inpHook.value = po.h || "";
+    inpHook.onblur = function() {
+      if (po.h !== this.value) {
+        po.h = this.value;
+        savePostsState();
+      }
+    };
+    tdHook.appendChild(inpHook);
+    tr.appendChild(tdHook);
+    
+    // 7. Format Input
+    const tdFmt = el("td");
+    const inpFmt = el("input", "crm-input");
+    inpFmt.value = po.f || "";
+    inpFmt.onblur = function() {
+      if (po.f !== this.value) {
+        po.f = this.value;
+        savePostsState();
+      }
+    };
+    tdFmt.appendChild(inpFmt);
+    tr.appendChild(tdFmt);
+    
+    // 8. Project Select
+    const tdProj = el("td");
+    const selProj = el("select", "crm-select");
+    ["—", "MIK", "Masterise", "Sunshine", "Cả 2"].forEach(p => {
+      selProj.innerHTML += `<option value="${p}" ${po.d===p?"selected":""}>${p}</option>`;
+    });
+    selProj.onchange = function() {
+      po.d = this.value;
+      savePostsState();
+    };
+    tdProj.appendChild(selProj);
+    tr.appendChild(tdProj);
+    
+    // 9. Time Input
+    const tdTime = el("td");
+    const inpTime = el("input", "crm-input");
+    inpTime.value = po.g || "08:00";
+    inpTime.style.fontFamily = "var(--mono)";
+    inpTime.onblur = function() {
+      if (po.g !== this.value) {
+        po.g = this.value;
+        savePostsState();
+      }
+    };
+    tdTime.appendChild(inpTime);
+    tr.appendChild(tdTime);
+    
+    // 10. Notes Input
+    const tdNotes = el("td");
+    const inpNotes = el("input", "crm-input");
+    inpNotes.value = po.notes || "";
+    inpNotes.placeholder = "Phụ trách/Ghi chú...";
+    inpNotes.onblur = function() {
+      if (po.notes !== this.value) {
+        po.notes = this.value;
+        savePostsState();
+      }
+    };
+    tdNotes.appendChild(inpNotes);
+    tr.appendChild(tdNotes);
+    
+    // 11. Delete Button
+    const tdDel = el("td");
+    const btnDel = el("button", "crm-btn crm-btn-del", "Xóa");
+    btnDel.onclick = function() {
+      if (confirm(`Bạn có chắc muốn xóa bài viết #${po.n}?`)) {
+        POSTS.splice(index, 1);
+        POSTS.forEach((p, idx) => p.n = idx + 1);
+        savePostsState();
+        drawPosts();
+      }
+    };
+    tdDel.appendChild(btnDel);
+    tr.appendChild(tdDel);
+    
+    tbody.appendChild(tr);
+  });
+  
+  table.appendChild(tbody);
+  container.appendChild(table);
 }
 
 /* =================== RENDER: STORY BANK =================== */
