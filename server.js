@@ -178,7 +178,43 @@ function saveUsers(users) {
 }
 
 // Active Sessions Store (Token -> User Profile)
-const sessions = new Map();
+// Ghi xuống đĩa: phiên để trong RAM sẽ mất mỗi lần server khởi động lại —
+// trên Render free tier service ngủ sau 15 phút không dùng, nên người dùng
+// bị đăng xuất liên tục và mọi lời gọi API kèm token cũ trả về 403.
+const SESSIONS_FILE = path.join(DATA_DIR, 'sessions.json');
+const SESSION_TTL_MS = 30 * 24 * 3600 * 1000; // 30 ngày
+
+class PersistentSessions extends Map {
+  constructor() {
+    super();
+    try {
+      if (fs.existsSync(SESSIONS_FILE)) {
+        const raw = JSON.parse(fs.readFileSync(SESSIONS_FILE, 'utf8'));
+        const now = Date.now();
+        for (const [token, rec] of Object.entries(raw)) {
+          if (rec && rec.expiresAt > now) super.set(token, rec.user);
+        }
+      }
+    } catch (err) {
+      console.error('Không đọc được sessions.json:', err.message);
+    }
+  }
+  _persist() {
+    try {
+      if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+      const out = {};
+      const expiresAt = Date.now() + SESSION_TTL_MS;
+      for (const [token, user] of super.entries()) out[token] = { user, expiresAt };
+      fs.writeFileSync(SESSIONS_FILE, JSON.stringify(out), 'utf8');
+    } catch (err) {
+      console.error('Không ghi được sessions.json:', err.message);
+    }
+  }
+  set(token, user) { const r = super.set(token, user); this._persist(); return r; }
+  delete(token) { const r = super.delete(token); this._persist(); return r; }
+}
+
+const sessions = new PersistentSessions();
 
 // Authentication Middleware
 function authenticateToken(req, res, next) {
@@ -821,15 +857,17 @@ function writeJsonFile(file, value) {
   }
 }
 
-app.get('/api/data', (req, res) => {
+app.get('/api/data', authenticateToken, (req, res) => {
   res.json({
     users: readJsonFile(SHEETS_FILE, { default: {} }),
     notes: readJsonFile(NOTES_FILE, [])
   });
 });
 
-app.post('/api/sync', (req, res) => {
+app.post('/api/sync', authenticateToken, (req, res) => {
   const { username, kpi, bh, posts, posts_list, postlog } = req.body || {};
+  // Sheet là dữ liệu dùng chung của đội — mọi thành viên đã đăng nhập đều xem/sửa
+  // được. Khác với token mạng xã hội bên dưới: cái đó buộc theo đúng tài khoản.
   const key = (username || 'default').toString().slice(0, 60);
   const sheets = readJsonFile(SHEETS_FILE, { default: {} });
   const prev = sheets[key] || {};
@@ -850,14 +888,15 @@ app.post('/api/sync', (req, res) => {
   res.json({ ok: true, username: key });
 });
 
-app.post('/api/notes', (req, res) => {
-  const { user, text } = req.body || {};
+app.post('/api/notes', authenticateToken, (req, res) => {
+  const { text } = req.body || {};
   if (!text || !text.toString().trim()) {
     return res.status(400).json({ error: 'Nội dung ghi chú trống' });
   }
   const notes = readJsonFile(NOTES_FILE, []);
   notes.push({
-    user: (user || 'Ẩn danh').toString().slice(0, 60),
+    // Lấy tên từ phiên đăng nhập, không tin tên client tự khai.
+    user: req.user.username,
     text: text.toString().slice(0, 2000),
     at: new Date().toISOString()
   });
@@ -867,6 +906,201 @@ app.post('/api/notes', (req, res) => {
     return res.status(500).json({ error: 'Không lưu được ghi chú' });
   }
   res.json({ ok: true, notes: trimmed });
+});
+
+// ===== TikTok: kết nối kênh & lấy chỉ số video =====
+// Mỗi tài khoản đăng nhập kết nối kênh TikTok riêng. Token lưu theo username
+// lấy từ phiên đăng nhập, KHÔNG lấy theo tham số client gửi lên — nếu không
+// ai cũng có thể đọc token kênh của người khác.
+const TIKTOK_TOKENS_FILE = path.join(DATA_DIR, 'tiktok_tokens.json');
+const TIKTOK_SCOPES = 'user.info.basic,video.list';
+
+function tiktokConfig() {
+  return {
+    clientKey: process.env.TIKTOK_CLIENT_KEY || '',
+    clientSecret: process.env.TIKTOK_CLIENT_SECRET || '',
+    redirectUri: process.env.TIKTOK_REDIRECT_URI || ''
+  };
+}
+function tiktokConfigured() {
+  const c = tiktokConfig();
+  return !!(c.clientKey && c.clientSecret && c.redirectUri);
+}
+
+// state chống CSRF: ký bằng HMAC, không cần lưu server
+function signState(username) {
+  const payload = `${username}.${Date.now()}.${crypto.randomBytes(8).toString('hex')}`;
+  const secret = process.env.JWT_SECRET || 'fallback_state_secret';
+  const sig = crypto.createHmac('sha256', secret).update(payload).digest('hex').slice(0, 32);
+  return Buffer.from(`${payload}.${sig}`).toString('base64url');
+}
+function verifyState(state) {
+  try {
+    const raw = Buffer.from(state, 'base64url').toString('utf8');
+    const parts = raw.split('.');
+    if (parts.length !== 4) return null;
+    const [username, ts, nonce, sig] = parts;
+    const secret = process.env.JWT_SECRET || 'fallback_state_secret';
+    const expect = crypto.createHmac('sha256', secret)
+      .update(`${username}.${ts}.${nonce}`).digest('hex').slice(0, 32);
+    if (sig !== expect) return null;
+    if (Date.now() - Number(ts) > 10 * 60 * 1000) return null; // hết hạn sau 10 phút
+    return username;
+  } catch (_) { return null; }
+}
+
+async function tiktokExchangeToken(params) {
+  const c = tiktokConfig();
+  const body = new URLSearchParams({
+    client_key: c.clientKey,
+    client_secret: c.clientSecret,
+    ...params
+  });
+  const r = await fetch('https://open.tiktokapis.com/v2/oauth/token/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString()
+  });
+  const json = await r.json();
+  if (!r.ok || json.error) {
+    throw new Error(json.error_description || json.error || `TikTok token lỗi ${r.status}`);
+  }
+  return json;
+}
+
+// Trả access_token còn hạn, tự refresh nếu cần
+async function tiktokAccessToken(username) {
+  const store = readJsonFile(TIKTOK_TOKENS_FILE, {});
+  const rec = store[username];
+  if (!rec) return null;
+  if (rec.expires_at && Date.now() < rec.expires_at - 60000) return rec.access_token;
+  if (!rec.refresh_token) return null;
+
+  const fresh = await tiktokExchangeToken({
+    grant_type: 'refresh_token',
+    refresh_token: rec.refresh_token
+  });
+  store[username] = {
+    ...rec,
+    access_token: fresh.access_token,
+    refresh_token: fresh.refresh_token || rec.refresh_token,
+    expires_at: Date.now() + (fresh.expires_in || 86400) * 1000
+  };
+  writeJsonFile(TIKTOK_TOKENS_FILE, store);
+  return fresh.access_token;
+}
+
+app.get('/api/tiktok/status', authenticateToken, (req, res) => {
+  const store = readJsonFile(TIKTOK_TOKENS_FILE, {});
+  const rec = store[req.user.username];
+  res.json({
+    configured: tiktokConfigured(),
+    connected: !!rec,
+    displayName: rec ? rec.display_name || '' : '',
+    connectedAt: rec ? rec.connected_at || null : null
+  });
+});
+
+app.get('/api/tiktok/auth-url', authenticateToken, (req, res) => {
+  if (!tiktokConfigured()) {
+    return res.status(503).json({
+      error: 'Server chưa cấu hình TIKTOK_CLIENT_KEY / TIKTOK_CLIENT_SECRET / TIKTOK_REDIRECT_URI'
+    });
+  }
+  const c = tiktokConfig();
+  const url = 'https://www.tiktok.com/v2/auth/authorize/?' + new URLSearchParams({
+    client_key: c.clientKey,
+    scope: TIKTOK_SCOPES,
+    response_type: 'code',
+    redirect_uri: c.redirectUri,
+    state: signState(req.user.username)
+  }).toString();
+  res.json({ url });
+});
+
+// TikTok chuyển hướng về đây — không có header Authorization, danh tính nằm trong state đã ký.
+app.get('/api/tiktok/callback', async (req, res) => {
+  const { code, state, error } = req.query;
+  const done = (msg, ok) =>
+    res.send(`<!doctype html><meta charset="utf-8"><body style="font-family:system-ui;background:#0C1A21;color:#ECE4D4;padding:40px;text-align:center">
+      <h3>${ok ? '✅ Đã kết nối TikTok' : '❌ Kết nối thất bại'}</h3><p>${msg}</p>
+      <script>setTimeout(()=>{if(window.opener){window.opener.postMessage({tiktok:'${ok ? 'connected' : 'failed'}'},'*');window.close()}},1200)<\/script>
+      </body>`);
+
+  if (error) return done('TikTok trả về lỗi: ' + error, false);
+  const username = state ? verifyState(state) : null;
+  if (!username) return done('State không hợp lệ hoặc đã hết hạn. Hãy thử kết nối lại.', false);
+  if (!code) return done('Thiếu mã uỷ quyền.', false);
+
+  try {
+    const c = tiktokConfig();
+    const tok = await tiktokExchangeToken({
+      grant_type: 'authorization_code',
+      code: code.toString(),
+      redirect_uri: c.redirectUri
+    });
+
+    let displayName = '';
+    try {
+      const ur = await fetch('https://open.tiktokapis.com/v2/user/info/?fields=open_id,display_name', {
+        headers: { Authorization: `Bearer ${tok.access_token}` }
+      });
+      const uj = await ur.json();
+      displayName = uj?.data?.user?.display_name || '';
+    } catch (_) { /* không lấy được tên thì bỏ qua */ }
+
+    const store = readJsonFile(TIKTOK_TOKENS_FILE, {});
+    store[username] = {
+      access_token: tok.access_token,
+      refresh_token: tok.refresh_token,
+      expires_at: Date.now() + (tok.expires_in || 86400) * 1000,
+      open_id: tok.open_id || '',
+      display_name: displayName,
+      connected_at: new Date().toISOString()
+    };
+    writeJsonFile(TIKTOK_TOKENS_FILE, store);
+    done(`Kênh ${displayName || ''} đã liên kết với tài khoản ${username}. Cửa sổ này sẽ tự đóng.`, true);
+  } catch (err) {
+    done('Lỗi đổi mã: ' + err.message, false);
+  }
+});
+
+app.post('/api/tiktok/sync', authenticateToken, async (req, res) => {
+  try {
+    const accessToken = await tiktokAccessToken(req.user.username);
+    if (!accessToken) return res.status(400).json({ error: 'Chưa kết nối TikTok, hoặc kết nối đã hết hạn.' });
+
+    const fields = 'id,title,create_time,like_count,comment_count,share_count,view_count,share_url';
+    const r = await fetch(`https://open.tiktokapis.com/v2/video/list/?fields=${fields}`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ max_count: 20 })
+    });
+    const json = await r.json();
+    if (!r.ok || json.error?.code && json.error.code !== 'ok') {
+      throw new Error(json.error?.message || `TikTok trả về ${r.status}`);
+    }
+    const videos = (json.data?.videos || []).map(v => ({
+      id: v.id,
+      title: v.title || '',
+      url: v.share_url || '',
+      date: v.create_time ? new Date(v.create_time * 1000).toISOString().slice(0, 10) : '',
+      views: v.view_count || 0,
+      likes: v.like_count || 0,
+      comments: v.comment_count || 0,
+      shares: v.share_count || 0
+    }));
+    res.json({ videos, syncedAt: new Date().toISOString() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/tiktok/disconnect', authenticateToken, (req, res) => {
+  const store = readJsonFile(TIKTOK_TOKENS_FILE, {});
+  delete store[req.user.username];
+  writeJsonFile(TIKTOK_TOKENS_FILE, store);
+  res.json({ ok: true });
 });
 
 // Serve built frontend static files in Production
