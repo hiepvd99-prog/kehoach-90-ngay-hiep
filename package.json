@@ -1,0 +1,12 @@
+{
+  "name": "kehoach-90-ngay-hiep",
+  "version": "1.0.0",
+  "description": "Bản kế hoạch hành động 90 ngày đồng bộ thời gian thực",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

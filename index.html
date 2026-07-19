@@ -14,7 +14,7 @@
   --line:#2A4653; --line2:#37596a;
   --gold:#CBA35A; --gold-d:#a9853f; --jade:#4FA89C; --clay:#C07A45;
   --cream:#ECE4D4; --off:#cdd7d9; --muted:#8FA3AB; --muted2:#6d838c;
-  --p1:#C07A45; --p2:#4FA89C; --p3:#D8B15A; --p4:#5E93C4; --p5:#C77E86;
+  --p1:#C07A45; --p2:#4FA89C; --p3:#D8B15A; --p4:#5E93C4; --p5:#C77E86; --p6:#88A2B9;
   --ok:#4FA89C; --warn:#D8B15A;
   --serif:"Fraunces","Be Vietnam Pro",Georgia,serif;
   --sans:"Be Vietnam Pro",system-ui,-apple-system,sans-serif;
@@ -102,7 +102,7 @@ section.pane.on{display:block}
 @media(max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr}}
 .chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;padding:3px 9px;border-radius:20px;border:1px solid var(--line2);color:var(--off);background:var(--ink3)}
 .tag-p{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.05em;padding:3px 8px;border-radius:6px;color:#0C1A21}
-.p-P1{background:var(--p1)}.p-P2{background:var(--p2)}.p-P3{background:var(--p3)}.p-P4{background:var(--p4)}.p-P5{background:var(--p5)}
+.p-P1{background:var(--p1)}.p-P2{background:var(--p2)}.p-P3{background:var(--p3)}.p-P4{background:var(--p4)}.p-P5{background:var(--p5)}.p-P6{background:var(--p6)}
 .lead{color:var(--off)}
 .dim{color:var(--muted)}
 .hl{color:var(--gold)}
@@ -138,6 +138,14 @@ section.pane.on{display:block}
 .project-links a{color:var(--jade);transition:color 0.18s;display:inline-flex;align-items:center;gap:6px;font-weight:500}
 .project-links a:hover{color:var(--gold);text-decoration:underline}
 .project-group h5{font-family:var(--mono);font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px;border-bottom:1px dashed rgba(255,255,255,0.06);padding-bottom:3px;margin-top:10px}
+
+/* notes board styling */
+.notes-board{display:flex;flex-direction:column}
+.note-item{border-bottom:1px solid rgba(255,255,255,0.04);padding-bottom:10px;margin-bottom:8px}
+.note-item:last-child{border-bottom:none;padding-bottom:0;margin-bottom:0}
+.note-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px}
+.note-user{font-family:var(--mono);color:var(--gold);font-weight:700}
+.note-text{font-size:13.5px;color:var(--cream);line-height:1.5;word-break:break-word}
 
 /* ---------- POSITIONING PILLARS ---------- */
 .pillar-row{display:flex;gap:16px;align-items:flex-start;padding:18px 0;border-bottom:1px solid var(--line)}
@@ -331,15 +339,23 @@ table.kpi tr.tot td{background:var(--ink3);font-family:var(--mono);color:var(--g
   <aside class="side">
     <div class="brandmark">
       <span class="eyebrow">Master Plan Brand Name</span>
-      <span class="sub">Người kể chuyện vùng đất phía Đông Hà Nội — MIK × Masterise</span>
+      <span class="sub">Người kể chuyện vùng đất phía Đông Hà Nội — MIK × Masterise × Sunshine Group</span>
       <div class="dev-logos">
         <img src="https://mikgroup.vn/wp-content/uploads/2025/03/logo.png" alt="MIK Group Logo" class="dev-logo">
         <img src="https://revamp-ldp.masterisehomes.com/uploads/logo_90de357295.png" alt="Masterise Homes Logo" class="dev-logo">
+        <img src="https://sunshinegroup.vn/wp-content/uploads/2025/11/0-02-06-694d1ef355bd3942d4cf8b9f1d95d4d4e9ddf65633d80872633a4a44b9e9ef74_cd53170db29a3ad7.png" alt="Sunshine Group Logo" class="dev-logo">
+      </div>
+    </div>
+    <div class="user-selector" style="margin-bottom:16px;padding:0 6px">
+      <label style="font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;display:block;margin-bottom:6px">Người dùng hoạt động</label>
+      <div style="display:flex;gap:6px">
+        <input type="text" id="usernameInput" style="background:var(--ink3);border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:12.5px;color:var(--cream);width:100%;font-weight:500" placeholder="Tên của bạn...">
+        <button id="saveUserBtn" style="background:var(--gold);border:none;border-radius:6px;padding:6px 12px;font-family:var(--mono);font-size:11px;color:var(--ink);cursor:pointer;font-weight:700;transition:0.18s">Lưu</button>
       </div>
     </div>
     <nav class="nav" id="nav"></nav>
     <div class="sidefoot">
-      Dữ liệu bạn nhập (tick bài đã đăng · KPI) được lưu ngay trên trình duyệt này.
+      Dữ liệu bạn nhập (tick bài đã đăng · KPI) được lưu đồng bộ thời gian thực cho mọi thành viên.
       <br><br>Cập nhật thị trường: T7/2026.
     </div>
   </aside>
@@ -348,7 +364,7 @@ table.kpi tr.tot td{background:var(--ink3);font-family:var(--mono);color:var(--g
   <div class="topbar">
     <div class="tb-head">
       <div class="tb-nm">Master Plan Brand Name</div>
-      <div class="tb-tag">MIK × Masterise</div>
+      <div class="tb-tag">MIK × Masterise × Sunshine</div>
     </div>
     <div class="mnav" id="mnav"></div>
   </div>
@@ -363,7 +379,7 @@ table.kpi tr.tot td{background:var(--ink3);font-family:var(--mono);color:var(--g
           <div class="hero-glow"></div>
           <span class="eyebrow">Định vị · Heritage Storyteller × Modern Lifestyle</span>
           <h1>Tôi không bán căn hộ.<br>Tôi kể chuyện <em>một vùng đất</em> đang chuyển mình.</h1>
-          <p class="statement">Nơi cửa ngõ phía Đông Hà Nội, bên dòng sông Hồng, một thành phố biển–hồ đang mọc lên. Ở đó có <b class="hl">Imperia Ocean City của MIK</b> và <b class="hl">các toà Masteri · Lumière của Masterise</b> — hai thương hiệu, một vùng đất. Khi bạn hiểu vì sao nơi này đáng sống, bạn sẽ tự biết mình có thuộc về nó hay không.</p>
+          <p class="statement">Nơi cửa ngõ phía Đông Hà Nội, bên dòng sông Hồng, một thành phố biển–hồ đang mọc lên. Ở đó có <b class="hl">Imperia Ocean City của MIK</b>, <b class="hl">các toà Masteri · Lumière của Masterise</b> và <b class="hl">căn hộ cao cấp thông minh của Sunshine Group</b>. Khi bạn hiểu vì sao nơi này đáng sống, bạn sẽ tự biết mình có thuộc về nó hay không.</p>
           <div class="metaline">
             <span class="chip">90 ngày · 3 giai đoạn</span>
             <span class="chip">72 bài · 28 video</span>
@@ -374,6 +390,7 @@ table.kpi tr.tot td{background:var(--ink3);font-family:var(--mono);color:var(--g
             <span class="hero-logos-title">Chủ đầu tư liên kết:</span>
             <img src="https://mikgroup.vn/wp-content/uploads/2025/03/logo.png" alt="MIK Group Logo" class="hero-logo">
             <img src="https://revamp-ldp.masterisehomes.com/uploads/logo_90de357295.png" alt="Masterise Homes Logo" class="hero-logo">
+            <img src="https://sunshinegroup.vn/wp-content/uploads/2025/11/0-02-06-694d1ef355bd3942d4cf8b9f1d95d4d4e9ddf65633d80872633a4a44b9e9ef74_cd53170db29a3ad7.png" alt="Sunshine Group Logo" class="hero-logo">
           </div>
         </div>
 
@@ -393,7 +410,7 @@ table.kpi tr.tot td{background:var(--ink3);font-family:var(--mono);color:var(--g
         <div class="card" style="margin-bottom:22px">
           <span class="eyebrow">Danh mục sản phẩm & dự án toàn diện</span>
           <h3 style="font-size:19px;margin:8px 0 16px">Các sản phẩm đã và đang triển khai</h3>
-          <div class="grid g2">
+          <div class="grid g3">
             <div class="project-block">
               <div class="dev-header">
                 <img src="https://mikgroup.vn/wp-content/uploads/2025/03/logo.png" alt="MIK Group Logo" class="dev-logo-small">
@@ -468,6 +485,51 @@ table.kpi tr.tot td{background:var(--ink3);font-family:var(--mono);color:var(--g
                   <li><a href="https://masterisehomes.com/m-one-nam-sai-gon" target="_blank">🏢 M-One Nam Sài Gòn & Gia Định</a></li>
                 </ul>
               </div>
+            </div>
+
+            <div class="project-block">
+              <div class="dev-header">
+                <img src="https://sunshinegroup.vn/wp-content/uploads/2025/11/0-02-06-694d1ef355bd3942d4cf8b9f1d95d4d4e9ddf65633d80872633a4a44b9e9ef74_cd53170db29a3ad7.png" alt="Sunshine Group Logo" class="dev-logo-small">
+                <h4>Sunshine Group</h4>
+              </div>
+              <p class="dim" style="font-size:12px;margin-bottom:12px">Tiên phong phát triển các dòng sản phẩm căn hộ hạng sang, ứng dụng công nghệ thông minh và kiến trúc xanh.</p>
+              
+              <div class="project-group">
+                <h5>📍 Hà Nội (Căn hộ hạng sang)</h5>
+                <ul class="project-links">
+                  <li><a href="https://sunshinegroup.vn/" target="_blank">🌐 Website chính thức Sunshine Group</a></li>
+                  <li><a href="https://sunshinegroup.vn/san-pham/sunshine-city-ha-noi/" target="_blank">🏢 Sunshine City (Ciputra)</a></li>
+                  <li><a href="https://sunshinegroup.vn/san-pham/sunshine-golden-river/" target="_blank">🏢 Sunshine Golden River (Ciputra)</a></li>
+                  <li><a href="https://sunshinegroup.vn/san-pham/sunshine-riverside/" target="_blank">🏢 Sunshine Riverside (Ciputra)</a></li>
+                  <li><a href="https://sunshinegroup.vn/san-pham/sunshine-crystal-river/" target="_blank">🏢 Sunshine Crystal River (Ciputra)</a></li>
+                  <li><a href="https://sunshinegroup.vn/san-pham/sunshine-center/" target="_blank">🏢 Sunshine Center (Phạm Hùng)</a></li>
+                  <li><a href="https://sunshinegroup.vn/san-pham/sunshine-garden/" target="_blank">🏢 Sunshine Garden (Vĩnh Tuy)</a></li>
+                </ul>
+              </div>
+
+              <div class="project-group">
+                <h5>📍 TP. Hồ Chí Minh & Nghỉ dưỡng</h5>
+                <ul class="project-links">
+                  <li><a href="https://sunshinegroup.vn/san-pham/sunshine-city-sai-gon/" target="_blank">🏢 Sunshine City Sài Gòn (Quận 7)</a></li>
+                  <li><a href="https://sunshinegroup.vn/san-pham/sunshine-diamond-river/" target="_blank">🏢 Sunshine Diamond River (Quận 7)</a></li>
+                  <li><a href="https://sunshinegroup.vn/san-pham/sunshine-heritage-resort/" target="_blank">🏡 Sunshine Heritage Resort (Sơn Tây)</a></li>
+                  <li><a href="https://sunshinegroup.vn/san-pham/sunshine-marina-nha-trang-bay/" target="_blank">🏖️ Sunshine Marina Nha Trang Bay</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:22px">
+          <span class="eyebrow">Bảng thảo luận chung (Thời gian thực)</span>
+          <h3 style="font-size:19px;margin:8px 0 14px">Ghi chú & cập nhật từ các thành viên</h3>
+          <div class="notes-board">
+            <div style="display:flex;gap:8px;margin-bottom:14px">
+              <input type="text" id="noteInput" style="background:var(--ink3);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:13.5px;color:var(--cream);width:100%" placeholder="Viết ghi chú hoặc cập nhật của bạn vào đây...">
+              <button id="sendNoteBtn" style="background:var(--jade);border:none;border-radius:8px;padding:10px 20px;font-family:var(--sans);font-size:13.5px;color:var(--ink);cursor:pointer;font-weight:600;transition:0.18s">Gửi tin</button>
+            </div>
+            <div id="notesList" style="display:flex;flex-direction:column;gap:10px;max-height:300px;overflow-y:auto;background:rgba(255,255,255,0.01);border:1px solid var(--line);border-radius:8px;padding:14px">
+              <div class="dim" style="font-size:13px;text-align:center">Đang tải ghi chú...</div>
             </div>
           </div>
         </div>
@@ -547,6 +609,31 @@ table.kpi tr.tot td{background:var(--ink3);font-family:var(--mono);color:var(--g
           <p>Reference mỗi lần viết bài: bài này thuộc pillar nào, và nó nên trông như thế nào — không nên như thế nào.</p>
         </div>
         <div id="pillarsFull"></div>
+
+        <div class="card" style="margin-top:26px">
+          <span class="eyebrow">Quy trình viết Blog dài định kỳ (Pillar P6)</span>
+          <h3 style="font-size:18px;margin:8px 0 12px">Tần suất đề xuất: 2 bài/tuần (Thứ 3 & Thứ 5)</h3>
+          <p class="dim" style="font-size:13.5px;margin-bottom:14px">Dạng bài phân tích sâu (Blog dài + hình ảnh thực tế) giúp định vị bạn như một chuyên gia có kiến thức vĩ vĩ mô thực sự thay vì chỉ là môi giới thông thường.</p>
+          <div class="grid g2" style="gap:14px">
+            <div style="background:rgba(255,255,255,0.02);border:1px solid var(--line);border-radius:10px;padding:16px">
+              <h5 style="color:var(--gold);font-size:13.5px;margin-bottom:8px">💡 4 Bước tạo bài viết</h5>
+              <ul style="font-size:12.5px;padding-left:16px;line-height:1.6;margin:0">
+                <li><b>Bước 1: Chọn tin vĩ mô nổi bật:</b> Lấy tin từ CafeF/VnEconomy (Luật mới, quy hoạch cầu mới, lãi suất chạm đáy).</li>
+                <li><b>Bước 2: Phản biện & Suy diễn ảnh hưởng:</b> Trả lời: "Tin này ảnh hưởng gì đến ví tiền khách hàng mua căn hộ MIK / Masterise / Sunshine?".</li>
+                <li><b>Bước 3: Lồng ghép thực địa cá nhân:</b> Kể câu chuyện thực tế bạn dẫn khách đi xem dự án hoặc kinh nghiệm đầu tư của bản thân.</li>
+                <li><b>Bước 4: Kêu gọi hành động (Call-to-action):</b> Đọc giả inbox nhận bảng tính dòng tiền hoặc tư vấn so sánh chi tiết.</li>
+              </ul>
+            </div>
+            <div style="background:rgba(255,255,255,0.02);border:1px solid var(--line);border-radius:10px;padding:16px">
+              <h5 style="color:var(--jade);font-size:13.5px;margin-bottom:8px">📝 Công thức viết (Pillar P6)</h5>
+              <p style="font-size:12px;color:var(--off);line-height:1.5;margin:0">
+                <b>Tiêu đề (Hook):</b> Đánh trực diện vào sự tò mò/nỗi sợ (ví dụ: "Lãi suất chạm đáy — Bẫy tài chính hay cơ hội sở hữu căn hộ Lumière?").<br>
+                <b>Thân bài:</b> Chia làm 3 phần logic (1. Thực trạng vĩ mô, 2. Ảnh hưởng cụ thể đến MIK/Masterise/Sunshine, 3. Bài học thực tế từ giỏ hàng).<br>
+                <b>Hình ảnh:</b> Luôn đi kèm 1 ảnh bản đồ quy hoạch/biểu đồ số liệu tự thiết kế và 2-3 ảnh chụp thực tế dự án (không dùng ảnh 3D quảng cáo).
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- ============ 4. LỊCH ĐĂNG ============ -->
@@ -569,6 +656,7 @@ table.kpi tr.tot td{background:var(--ink3);font-family:var(--mono);color:var(--g
               <option value="P3">P3 · Advisor</option>
               <option value="P4">P4 · Insights</option>
               <option value="P5">P5 · Personal</option>
+              <option value="P6">P6 · News & Impact</option>
             </select>
           </label>
           <label>Lọc theo giai đoạn
@@ -614,6 +702,53 @@ table.kpi tr.tot td{background:var(--ink3);font-family:var(--mono);color:var(--g
         </div>
         <span class="eyebrow" style="display:block;margin-bottom:12px">Concept chụp / quay theo pillar</span>
         <div id="visualConcepts"></div>
+
+        <div class="card" style="margin-top:26px">
+          <span class="eyebrow">Google Veo Video Prompts & Cảnh trám (B-roll)</span>
+          <h3 style="font-size:18px;margin:8px 0 12px">Hướng dẫn dựng Video kết hợp AI sinh video</h3>
+          <p class="dim" style="font-size:13.5px;margin-bottom:14px">Sử dụng Google Veo (mô hình sinh video chất lượng cao nhất của Google) để tạo ra các cảnh phim cinematic nghệ thuật làm cảnh trám (B-roll) cho video thuyết minh giọng nói (voiceover) của bạn.</p>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="background:rgba(255,255,255,0.02);border:1px solid var(--line);border-radius:10px;padding:16px">
+              <h5 style="color:var(--gold);font-size:13.5px;margin-bottom:6px">🎬 Tham số gợi ý cho Google Veo 1.0</h5>
+              <p style="font-size:12.5px;color:var(--off);line-height:1.6;margin:0">
+                <b>Resolution:</b> 1080x1920 (dọc - Shorts/Reels) hoặc 1920x1080 (ngang - YouTube).<br>
+                <b>Style:</b> Cinematic, photo-realistic, soft color grade, realistic light.<br>
+                <b>Frame Rate:</b> 24fps hoặc 30fps.
+              </p>
+            </div>
+            
+            <div class="grid g2" style="gap:14px">
+              <div style="background:rgba(255,255,255,0.02);border:1px solid var(--line);border-radius:10px;padding:16px">
+                <h5 style="color:var(--jade);font-size:13px;margin-bottom:8px;margin-top:0">🌅 Cảnh Sông nước & Di sản (P1)</h5>
+                <p style="font-size:12px;color:var(--muted);line-height:1.5;margin:0">
+                  <b>Veo Prompt:</b><br>
+                  <code style="display:block;background:var(--ink3);padding:6px;border-radius:4px;color:var(--cream);font-size:11px;margin-top:4px;word-break:break-word">Cinematic wide shot of misty sunrise on Red River Vietnam, calm jade water reflection, slow moving wooden fishing boat, soft fog, photorealistic, 4k, 35mm lens --ar 9:16</code>
+                </p>
+              </div>
+              <div style="background:rgba(255,255,255,0.02);border:1px solid var(--line);border-radius:10px;padding:16px">
+                <h5 style="color:var(--jade);font-size:13px;margin-bottom:8px;margin-top:0">🏡 Lối sống Biển hồ & Wellness (P2)</h5>
+                <p style="font-size:12px;color:var(--muted);line-height:1.5;margin:0">
+                  <b>Veo Prompt:</b><br>
+                  <code style="display:block;background:var(--ink3);padding:6px;border-radius:4px;color:var(--cream);font-size:11px;margin-top:4px;word-break:break-word">Drone view of luxury saltwater lagoon in a modern residential area during golden hour sunset, reflection of luxury apartment towers, calm turquoise water, cinematic color grading, photorealistic --ar 9:16</code>
+                </p>
+              </div>
+              <div style="background:rgba(255,255,255,0.02);border:1px solid var(--line);border-radius:10px;padding:16px">
+                <h5 style="color:var(--jade);font-size:13px;margin-bottom:8px;margin-top:0">📊 Phân tích & Dữ liệu (P4 & P6)</h5>
+                <p style="font-size:12px;color:var(--muted);line-height:1.5;margin:0">
+                  <b>Veo Prompt:</b><br>
+                  <code style="display:block;background:var(--ink3);padding:6px;border-radius:4px;color:var(--cream);font-size:11px;margin-top:4px;word-break:break-word">Candid close up of hands typing on laptop on wooden cafe desk, soft window light, steam rising from coffee cup nearby, shallow depth of field, warm cinematic LUT --ar 9:16</code>
+                </p>
+              </div>
+              <div style="background:rgba(255,255,255,0.02);border:1px solid var(--line);border-radius:10px;padding:16px">
+                <h5 style="color:var(--jade);font-size:13px;margin-bottom:8px;margin-top:0">🌲 Kiến trúc Xanh & Sunshine</h5>
+                <p style="font-size:12px;color:var(--muted);line-height:1.5;margin:0">
+                  <b>Veo Prompt:</b><br>
+                  <code style="display:block;background:var(--ink3);padding:6px;border-radius:4px;color:var(--cream);font-size:11px;margin-top:4px;word-break:break-word">Low angle shot looking up at green glass skyscraper with vertical gardens, sunshine breaking through green leaves, modern smart home architecture, daylight, hyper-realistic --ar 9:16</code>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- ============ 7. KPI TRACKER ============ -->
@@ -675,10 +810,11 @@ const ROUTINE=[
 ];
 
 const PILLARS4=[
- ["1","Heritage","Người kể chuyện vùng đất","Sông Hồng · Phố Hiến · cửa ngõ Đông HN · Văn Giang · Gia Lâm","Hoài niệm · Tự hào · Bản sắc",30],
- ["2","Lifestyle","Người dẫn lối sống biển–hồ","Ocean City · biển hồ nước mặn · wellness · resort-living · cộng đồng","Khát vọng · Cảm hứng · Đẳng cấp",30],
- ["3","Advisor","Cố vấn 2 thương hiệu trung thực","So sánh thật MIK ↔ Masterise · từ chối khách · match đúng dự án","Tin cậy · An tâm · Tôn trọng",25],
- ["4","Insights","Người đọc thị trường phía Đông","Cầu Trần Hưng Đạo · Tứ Liên · Ngọc Hồi · Vành đai 4 · yield · giá/m²","Sáng suốt · Cập nhật · Đi trước",15]
+ ["1","Heritage","Người kể chuyện vùng đất","Sông Hồng · Phố Hiến · cửa ngõ Đông HN · Văn Giang · Gia Lâm","Hoài niệm · Tự hào · Bản sắc",25],
+ ["2","Lifestyle","Người dẫn lối sống biển–hồ","Ocean City · biển hồ nước mặn · wellness · resort-living · cộng đồng","Khát vọng · Cảm hứng · Đẳng cấp",25],
+ ["3","Advisor","Cố vấn 2 thương hiệu trung thực","So sánh thật MIK ↔ Masterise · từ chối khách · match đúng dự án","Tin cậy · An tâm · Tôn trọng",20],
+ ["4","Insights","Người đọc thị trường phía Đông","Cầu Trần Hưng Đạo · Tứ Liên · Ngọc Hồi · Vành đai 4 · yield · giá/m²","Sáng suốt · Cập nhật · Đi trước",15],
+ ["5","News","Người giải mã tin tức thị trường","Luật Đất Đai mới · hạ tầng kết nối · lãi suất · chính sách tài chính","Nhạy bén · Phân tích ảnh hưởng · Khách quan",15]
 ];
 
 const PERSONAS=[
@@ -776,7 +912,12 @@ const PILLARS_FULL=[
   core:`"Tôi từng là một người mua sai — đó là lý do bây giờ tôi giúp người khác mua đúng."`,
   is:["Câu chuyện cá nhân (không cường điệu)","Bài học từ deal cũ","Milestone kênh (1.000 followers, deal đầu)","Quan điểm sống, triết lý nghề"],
   isnot:["Không kể chuyện cá nhân không liên quan","Không 'flex' kết quả"],
-  hook:`3 năm trước, tôi mua hụt một căn ở phía Đông vì sợ. Bây giờ căn đó tăng hơn 2 lần. Đây là bài học đắt nhất đời tôi.`}
+  hook:`3 năm trước, tôi mua hụt một căn ở phía Đông vì sợ. Bây giờ căn đó tăng hơn 2 lần. Đây là bài học đắt nhất đời tôi.`},
+ {id:"P6",icn:"📰",nm:"NEWS — Tin tức & Phân tích ảnh hưởng",col:"var(--p6)",freq:"~15% · 1 bài/tuần",
+  core:`"Tin tức vĩ mô và hạ tầng không chỉ để đọc — nó là chiếc la bàn dự báo dòng tiền sẽ chảy vào đâu."`,
+  is:["Đọc vị Luật Đất đai mới & tác động đến pháp lý/giá bán MIK & Masterise","Phân tích xu hướng lãi suất ngân hàng và chính sách hỗ trợ tài chính","Cập nhật tiến độ hạ tầng kết nối (Cầu Tứ Liên, Trần Hưng Đạo, Vành đai 4)","Dự báo tác động của biến động kinh tế vĩ mô tới quyết định đầu tư"],
+  isnot:["Không sao chép báo chí khô khan không có phân tích riêng","Không đưa tin giật gân, thiếu kiểm chứng"],
+  hook:`Báo chí đang đưa tin rầm rộ về tiến độ mới của Cầu Tứ Liên. Nhưng dưới góc nhìn đầu tư, đây là lý do vì sao dự án của Masterise và MIK ở phía Đông sẽ đón nhận làn sóng tăng giá lớn nhất...`}
 ];
 
 /* =================== 72 POSTS =================== */
@@ -918,7 +1059,10 @@ const STORY=[
  ["P5","Triết lý nghề","Câu hỏi đắt nhất: 'Anh mua cho hiện tại hay 10 năm sau?'","Câu trả lời thay đổi toàn bộ tư vấn.","Post ngắn + sâu",3],
  ["P5","Milestone","Tổng kết tháng 1 — số liệu thật, không marketing","Followers, lead, content nào hit. Tất cả công khai.","Post milestone",3],
  ["P5","Milestone","Tổng kết 90 ngày — báo cáo công khai","1.500 followers · 30+ lead · 1–3 deal.","Video 8p",3],
- ["P5","Câu chuyện cá nhân","Vì sao tôi rời nội đô — và không hối hận","3 năm trước tôi nghĩ ở trung tâm = thành công.","Post dài + ảnh",3]
+ ["P5","Câu chuyện cá nhân","Vì sao tôi rời nội đô — và không hối hận","3 năm trước tôi nghĩ ở trung tâm = thành công.","Post dài + ảnh",3],
+ ["P6","Đọc vị luật mới","Luật Đất đai mới tác động thế nào đến MIK & Masterise?","Luật siết phân lô và định giá đất theo thị trường thúc đẩy nguồn cầu tập trung vào các dự án pháp lý vững chắc như Imperia và Masteri.","Post phân tích",3],
+ ["P6","Phân tích hạ tầng","Cú hích Cầu Tứ Liên & Vành đai 4 đến BĐS phía Đông","Cầu Tứ Liên kết nối trực tiếp Hoàn Kiếm giúp các dự án phía Đông như Masteri Waterfront & Imperia Ocean City gia tăng mạnh trị giá chuyển nhượng và yield cho thuê ổn định.","Video 3p thực địa",3],
+ ["P6","Chính sách lãi suất","Lãi suất ngân hàng chạm đáy: Giải pháp tài chính tối ưu","So sánh chính sách hỗ trợ lãi suất 0% dài hạn của MIK (Imperia) và Masterise (Lumière) để tính toán dòng tiền đầu tư tối ưu.","Carousel 6 slide",3]
 ];
 
 /* =================== VISUAL =================== */
@@ -961,25 +1105,52 @@ const KPI_WEEKS=[
 ];
 const KPI_COLS=["posted","reach","fol","eng","lead","deal"];
 const BRAND_HEALTH=[
- ["Followers Facebook","Tăng đều đặn",1500],
- ["Inbox / tuần","Tăng mạnh phase 2–3",30],
- ["Mention / share organic","Khó nhất nhưng quan trọng",15],
- ["Lead chất lượng (Hot)","Lọc qua qualify",10],
- ["Referral / khách giới thiệu","Bằng chứng brand mạnh",3],
- ["Deal chốt","Mục tiêu 1–3",2]
+ ["Followers đa nền tảng","Tăng mạnh đa kênh",5000],
+ ["Inbox / tuần","Tương tác khách hàng",50],
+ ["Mention / share organic","Độ nhận diện tự nhiên",30],
+ ["Lead chất lượng (Hot)","Qualified leads",20],
+ ["Referral / khách giới thiệu","Giới thiệu tự nhiên",5],
+ ["Deal chốt","Doanh số 90 ngày",3]
 ];
 
 /* =================== STORAGE =================== */
 const KEY="hiep90:";
 const mem={};
-function save(k,v){try{localStorage.setItem(KEY+k,JSON.stringify(v))}catch(e){mem[k]=v}flash()}
-function load(k,def){try{const r=localStorage.getItem(KEY+k);return r!==null?JSON.parse(r):(mem[k]!==undefined?mem[k]:def)}catch(e){return mem[k]!==undefined?mem[k]:def}}
+let isServerMode=false;
+let currentUsername="";
+
+function save(k,v){
+  try{localStorage.setItem(KEY+k,JSON.stringify(v))}catch(e){mem[k]=v}
+  flash();
+  if(isServerMode && (k==="kpi" || k==="bh" || k==="posts")){
+    syncToServer();
+  }
+}
+function load(k,def){
+  try{
+    const r=localStorage.getItem(KEY+k);
+    return r!==null?JSON.parse(r):(mem[k]!==undefined?mem[k]:def);
+  }catch(e){
+    return mem[k]!==undefined?mem[k]:def;
+  }
+}
 let flashT;
 function flash(){const f=document.getElementById("flash");f.classList.add("show");clearTimeout(flashT);flashT=setTimeout(()=>f.classList.remove("show"),1100)}
 
+function syncToServer(){
+  const kpi=load("kpi",{});
+  const bh=load("bh",{});
+  const posts=load("posts",{});
+  fetch('/api/sync',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({kpi,bh,posts})
+  }).catch(e=>console.error("Sync error:",e));
+}
+
 /* =================== HELPERS =================== */
 const DOW=["CN","T2","T3","T4","T5","T6","T7"];
-const PN={P1:"Heritage",P2:"Lifestyle",P3:"Advisor",P4:"Insights",P5:"Personal"};
+const PN={P1:"Heritage",P2:"Lifestyle",P3:"Advisor",P4:"Insights",P5:"Personal",P6:"News"};
 function getMonday(d){const x=new Date(d);const day=x.getDay();const diff=(day===0?-6:1-day);x.setDate(x.getDate()+diff);x.setHours(0,0,0,0);return x}
 function fmtDate(d){return String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")}
 function phaseOfWeek(w){return w<=4?1:(w<=8?2:3)}
@@ -1167,7 +1338,7 @@ function drawPosts(){
 let storyFilter="all";
 function renderStory(){
  const sf=document.getElementById("storyFilters");
- [["all","Tất cả"],["P1","P1 Heritage"],["P2","P2 Lifestyle"],["P3","P3 Advisor"],["P4","P4 Insights"],["P5","P5 Personal"]].forEach((x,i)=>{
+ [["all","Tất cả"],["P1","P1 Heritage"],["P2","P2 Lifestyle"],["P3","P3 Advisor"],["P4","P4 Insights"],["P5","P5 Personal"],["P6","P6 News"]].forEach((x,i)=>{
    const b=el("button",i===0?"on":"",x[1]);
    b.onclick=()=>{storyFilter=x[0];sf.querySelectorAll("button").forEach(z=>z.classList.remove("on"));b.classList.add("on");drawStory()};
    sf.appendChild(b);
@@ -1267,7 +1438,138 @@ function renderBrandHealth(){
  });
 }
 
+function drawNotes(notes){
+  const list=document.getElementById("notesList");
+  if(!list)return;
+  list.innerHTML="";
+  if(notes.length===0){
+    list.innerHTML=`<div class="dim" style="font-size:13px;text-align:center">Chưa có ghi chú nào. Hãy viết ghi chú đầu tiên!</div>`;
+    return;
+  }
+  notes.forEach(n=>{
+    const timeStr=new Date(n.time).toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+" "+new Date(n.time).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit'});
+    const item=el("div","note-item",
+      `<div class="note-meta"><span class="note-user">👤 ${n.user}</span><span>${timeStr}</span></div>
+       <div class="note-text">${n.text}</div>`
+    );
+    list.appendChild(item);
+  });
+}
+
+function initNotesBoard(){
+  const btn=document.getElementById("sendNoteBtn");
+  const input=document.getElementById("noteInput");
+  if(!btn||!input)return;
+  
+  btn.onclick=()=>{
+    const text=input.value.trim();
+    if(!text)return;
+    if(!isServerMode){
+      const notes=load("notes_local",[]);
+      const newNote={
+        user:currentUsername||"Offline User",
+        text,
+        time:new Date().toISOString()
+      };
+      notes.unshift(newNote);
+      save("notes_local",notes.slice(0,50));
+      drawNotes(notes);
+      input.value="";
+      return;
+    }
+    fetch('/api/notes',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({user:currentUsername,text})
+    })
+    .then(res=>res.json())
+    .then(res=>{
+      if(res.success){
+        input.value="";
+        pollServerData();
+      }
+    })
+    .catch(e=>console.error("Error sending note:",e));
+  };
+  input.onkeydown=(e)=>{
+    if(e.key==='Enter') btn.click();
+  };
+}
+
+function initUserSelector(){
+  const input=document.getElementById("usernameInput");
+  const btn=document.getElementById("saveUserBtn");
+  if(!input||!btn)return;
+  let savedUser=load("username","");
+  if(!savedUser){
+    savedUser="User_"+Math.random().toString(36).substr(2,4);
+    save("username",savedUser);
+  }
+  input.value=savedUser;
+  currentUsername=savedUser;
+  btn.onclick=()=>{
+    const val=input.value.trim();
+    if(val){
+      save("username",val);
+      currentUsername=val;
+      alert("Đã lưu tên người dùng: "+val);
+    }
+  };
+}
+
+function initServerSync(){
+  fetch('/api/data')
+    .then(res=>res.json())
+    .then(data=>{
+      isServerMode=true;
+      console.log("Server sync initialized successfully!");
+      if(data.kpi && Object.keys(data.kpi).length>0){
+        localStorage.setItem(KEY+"kpi",JSON.stringify(data.kpi));
+      }
+      if(data.bh && Object.keys(data.bh).length>0){
+        localStorage.setItem(KEY+"bh",JSON.stringify(data.bh));
+      }
+      if(data.posts && Object.keys(data.posts).length>0){
+        localStorage.setItem(KEY+"posts",JSON.stringify(data.posts));
+      }
+      // Re-render
+      renderKpi();
+      renderBrandHealth();
+      drawPosts();
+      if(data.notes) drawNotes(data.notes);
+      
+      setInterval(pollServerData,5000);
+    })
+    .catch(e=>{
+      console.log("Running in offline/local-only mode:",e);
+      const localNotes=load("notes_local",[]);
+      drawNotes(localNotes);
+    });
+}
+
+function pollServerData(){
+  fetch('/api/data')
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.posts){
+        localStorage.setItem(KEY+"posts",JSON.stringify(data.posts));
+        drawPosts();
+      }
+      if(data.kpi){
+        localStorage.setItem(KEY+"kpi",JSON.stringify(data.kpi));
+        renderKpi();
+      }
+      if(data.bh){
+        localStorage.setItem(KEY+"bh",JSON.stringify(data.bh));
+        renderBrandHealth();
+      }
+      if(data.notes) drawNotes(data.notes);
+    })
+    .catch(e=>console.error("Polling error:",e));
+}
+
 /* =================== INIT =================== */
 renderNav();renderOverview();renderPosition();renderPlan();renderPillarsFull();
 renderSchedule();renderStory();renderVisual();renderKpi();renderBrandHealth();
+initUserSelector();initNotesBoard();initServerSync();
 </script>
