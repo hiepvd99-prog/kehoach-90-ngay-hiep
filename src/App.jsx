@@ -4951,9 +4951,12 @@ Ví dụ:
       )}
 
       {/* Sidebar — ẩn trên mobile, slide-in khi mobileMenuOpen */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-slate-300 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out
-        md:relative md:w-64 md:flex md:flex-shrink-0 md:translate-x-0
+      <div className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-slate-300 flex flex-col shadow-2xl transition-all duration-300 ease-in-out
+        md:relative md:flex md:flex-shrink-0 md:translate-x-0 ${mainSection === 'marketing' ? 'md:w-[76px]' : 'md:w-64'}
         ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+
+        {/* Nội dung sidebar đầy đủ — desktop ẩn khi ở Marketing (thay bằng thanh icon gọn bên dưới) */}
+        <div className={`flex flex-col flex-1 min-h-0 ${mainSection === 'marketing' ? 'md:hidden' : ''}`}>
 
         <div className="p-5 bg-slate-950 border-b border-slate-800/60">
           <div className="flex items-start justify-between">
@@ -5195,6 +5198,35 @@ Ví dụ:
             <div style={{width:16,height:1,background:'linear-gradient(90deg,rgba(245,158,11,.4),transparent)'}}/>
           </div>
         </div>
+        </div>
+
+        {/* Thanh icon gọn — chỉ hiện trên desktop khi ở Marketing (marketing đã có sidebar riêng) */}
+        {mainSection === 'marketing' && (
+          <div className="hidden md:flex flex-col items-center py-4 gap-2.5 flex-1 bg-slate-950">
+            <div className="vdh-monogram vdh-glow w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" title="Vương Đắc Hiệp">
+              <Building2 style={{width:20,height:20,color:'#1e1b4b'}}/>
+            </div>
+            <div className="w-8 h-px bg-slate-800 my-1.5"/>
+            <button
+              onClick={() => { setMainSection('sales'); setActiveTab('soTayCaNhan'); }}
+              title="Chuyển sang KINH DOANH"
+              className="w-11 h-11 rounded-xl flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+              <Briefcase style={{width:18,height:18}}/>
+            </button>
+            <button
+              title="Đang ở phân hệ MARKETING"
+              className="w-11 h-11 rounded-xl flex items-center justify-center bg-amber-600 text-white shadow-lg shadow-amber-600/25 cursor-default">
+              <Megaphone style={{width:18,height:18}}/>
+            </button>
+            <div className="flex-1"/>
+            <button
+              onClick={handleLogout}
+              title="Đăng xuất"
+              className="w-11 h-11 rounded-xl flex items-center justify-center text-red-400 hover:text-red-300 hover:bg-red-950/40 transition-all border border-red-950/60">
+              <UserMinus style={{width:18,height:18}}/>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Vùng nội dung chính */}
@@ -5594,23 +5626,23 @@ Ví dụ:
         style={{
           position:'fixed', bottom: 80, right:24, zIndex:1500,
           width:56, height:56, borderRadius:'50%', border:'none', cursor:'pointer',
-          background:'linear-gradient(135deg,#6366f1,#8b5cf6)',
-          boxShadow:'0 8px 32px rgba(99,102,241,0.45)',
+          background: mainSection === 'marketing' ? 'linear-gradient(135deg,#b8842f,#e0b15a)' : 'linear-gradient(135deg,#6366f1,#8b5cf6)',
+          boxShadow: mainSection === 'marketing' ? '0 8px 32px rgba(184,132,47,0.45)' : '0 8px 32px rgba(99,102,241,0.45)',
           display:'flex', alignItems:'center', justifyContent:'center',
           transition:'transform 0.2s, box-shadow 0.2s',
           animation: showAiSupport ? 'none' : 'fabPulse 2s ease-in-out infinite'
         }}
-        onMouseEnter={e => { e.currentTarget.style.transform='scale(1.1)'; e.currentTarget.style.boxShadow='0 12px 40px rgba(99,102,241,0.6)'; }}
-        onMouseLeave={e => { e.currentTarget.style.transform='scale(1)'; e.currentTarget.style.boxShadow='0 8px 32px rgba(99,102,241,0.45)'; }}
+        onMouseEnter={e => { e.currentTarget.style.transform='scale(1.1)'; e.currentTarget.style.boxShadow = mainSection === 'marketing' ? '0 12px 40px rgba(184,132,47,0.6)' : '0 12px 40px rgba(99,102,241,0.6)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform='scale(1)'; e.currentTarget.style.boxShadow = mainSection === 'marketing' ? '0 8px 32px rgba(184,132,47,0.45)' : '0 8px 32px rgba(99,102,241,0.45)'; }}
         title="Hỗ trợ AI 24/7">
         {showAiSupport ? <X style={{width:24,height:24,color:'#fff'}}/> : <Bot style={{width:24,height:24,color:'#fff'}}/>}
       </button>
       {!showAiSupport && (
         <div style={{
           position:'fixed', bottom:146, right:20, zIndex:1499,
-          background:'linear-gradient(135deg,#6366f1,#8b5cf6)', color:'#fff',
+          background: mainSection === 'marketing' ? 'linear-gradient(135deg,#b8842f,#e0b15a)' : 'linear-gradient(135deg,#6366f1,#8b5cf6)', color:'#fff',
           padding:'6px 14px', borderRadius:20, fontSize:12, fontWeight:700,
-          boxShadow:'0 4px 16px rgba(99,102,241,0.4)', pointerEvents:'none',
+          boxShadow: mainSection === 'marketing' ? '0 4px 16px rgba(184,132,47,0.4)' : '0 4px 16px rgba(99,102,241,0.4)', pointerEvents:'none',
           whiteSpace:'nowrap'
         }}>
           💬 Hỗ trợ AI 24/7
