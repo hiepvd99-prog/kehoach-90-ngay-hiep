@@ -5200,8 +5200,8 @@ Ví dụ:
       {/* Vùng nội dung chính */}
       <div className="flex-1 flex flex-col overflow-hidden relative min-w-0">
 
-        {/* Header */}
-        <header className="bg-white border-b border-gray-200 py-3 px-4 md:py-5 md:px-8 flex items-center justify-between z-20 gap-2" style={{position:'relative'}}>
+        {/* Header — ẩn trên desktop khi ở Marketing để tránh header lặp; vẫn giữ trên mobile để có nút menu */}
+        <header className={`bg-white border-b border-gray-200 py-3 px-4 md:py-5 md:px-8 flex items-center justify-between z-20 gap-2 ${mainSection === 'marketing' ? 'md:hidden' : ''}`} style={{position:'relative'}}>
           <div className="flex items-center gap-2 min-w-0">
             {/* Hamburger chỉ hiện trên mobile */}
             <button
@@ -5210,7 +5210,7 @@ Ví dụ:
               <Menu style={{width:22,height:22}}/>
             </button>
             <h2 className="text-base sm:text-lg md:text-2xl font-bold text-gray-800 truncate leading-tight">
-              {data[activeTab]?.title || (activeTab === 'goiDichVu' ? "Đặc Quyền Gói Plus, Pro & Ultra" : activeTab === 'referralPro' ? "Hệ thống giới thiệu & Hoa hồng" : activeTab === 'admin' ? "Bảng Quản Trị Hệ Thống" : "Thực chiến & Huấn luyện AI")}
+              {mainSection === 'marketing' ? "Kế hoạch Marketing 90 Ngày" : (data[activeTab]?.title || (activeTab === 'goiDichVu' ? "Đặc Quyền Gói Plus, Pro & Ultra" : activeTab === 'referralPro' ? "Hệ thống giới thiệu & Hoa hồng" : activeTab === 'admin' ? "Bảng Quản Trị Hệ Thống" : "Thực chiến & Huấn luyện AI"))}
             </h2>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
