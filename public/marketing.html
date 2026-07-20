@@ -2875,9 +2875,93 @@ function initTiktok(){
   refresh();
 }
 
+/* =================== TIẾP CẬN (A11Y) =================== */
+/* Ô nhập trong bảng không có nhãn đi kèm — người dùng trình đọc màn hình nghe
+   thấy "edit text" trống rỗng, không biết đang điền cột nào của dòng nào.
+   Hàm này suy ra nhãn từ tiêu đề cột + nhãn dòng, chạy lại sau mỗi lần vẽ bảng. */
+function labelTableInputs(){
+  document.querySelectorAll('table').forEach(function(tb){
+    var heads=[].map.call(tb.querySelectorAll('thead th'),function(th){return (th.innerText||'').trim()});
+    if(!heads.length) return;
+    tb.querySelectorAll('tbody tr').forEach(function(tr){
+      var cells=tr.children;
+      // Ô đầu thường chỉ là số thứ tự — lấy ô đầu tiên có nội dung đủ nghĩa
+      // (ngày đăng, tên tuần) để nhãn nghe ra được đang ở dòng nào.
+      var rowLabel='';
+      for(var c=0;c<Math.min(cells.length,3);c++){
+        var txt=(cells[c].innerText||'').trim().split('\n')[0];
+        if(txt.length>2 && !cells[c].querySelector('input,select,textarea')){ rowLabel=txt; break }
+      }
+      if(!rowLabel) rowLabel=(cells[0]&&cells[0].innerText||'').trim().split('\n')[0];
+      rowLabel=rowLabel.slice(0,40);
+      [].forEach.call(cells,function(td,i){
+        td.querySelectorAll('input,select,textarea').forEach(function(f){
+          if(f.getAttribute('aria-label')||f.closest('label')) return;
+          var col=heads[i]||('Cột '+(i+1));
+          f.setAttribute('aria-label',(col+(rowLabel?' — '+rowLabel:'')).trim());
+        });
+      });
+    });
+  });
+}
+
+/* Vùng thông báo động: trình đọc màn hình chỉ đọc nội dung thay đổi nếu vùng
+   đó được đánh dấu aria-live. Trước đây trang không có vùng nào. */
+function markLiveRegions(){
+  [['notesList','polite'],['huntingLog','polite'],['flash','polite']].forEach(function(x){
+    var e=document.getElementById(x[0]);
+    if(e&&!e.getAttribute('aria-live')){e.setAttribute('aria-live',x[1]);e.setAttribute('aria-atomic','false')}
+  });
+  // Nhãn cho các ô nhập đứng riêng chưa gắn được với thẻ <label>
+  [['usernameInput','Tên người dùng hoạt động'],['noteInput','Nội dung ghi chú gửi cho cả đội'],
+   ['scriptSheet','Link Google Sheet kịch bản'],['startDate','Ngày bắt đầu tuần 1']
+  ].forEach(function(x){
+    var e=document.getElementById(x[0]);
+    if(e&&!e.getAttribute('aria-label')) e.setAttribute('aria-label',x[1]);
+  });
+  document.querySelectorAll('.bh-val input').forEach(function(inp,i){
+    if(inp.getAttribute('aria-label')) return;
+    var row=inp.closest('.bh-row')||inp.parentElement.parentElement;
+    var nm=row?(row.innerText||'').trim().split('\n')[0]:'Chỉ số '+(i+1);
+    inp.setAttribute('aria-label','Giá trị hiện tại — '+nm.slice(0,40));
+  });
+}
+
+/* Emoji ở đầu tiêu đề/link chỉ để trang trí, nhưng trình đọc màn hình vẫn đọc
+   tên chúng ("biểu tượng toà nhà Imperia Signature"). Ẩn khỏi trình đọc mà
+   vẫn giữ nguyên hiển thị. */
+var EMOJI_DAU = /^([\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}]+)\s*/u;
+function hideDecorativeEmoji(){
+  document.querySelectorAll('.project-links a, .project-group h5, .eyebrow, .card h4, .card h5').forEach(function(el){
+    if(el.dataset.emojiDone) return;
+    var n=el.firstChild;
+    if(!n || n.nodeType!==3) { el.dataset.emojiDone='1'; return }
+    var m=n.nodeValue.match(EMOJI_DAU);
+    if(!m){ el.dataset.emojiDone='1'; return }
+    n.nodeValue=n.nodeValue.slice(m[0].length);
+    var s=document.createElement('span');
+    s.setAttribute('aria-hidden','true');
+    s.textContent=m[1]+' ';
+    el.insertBefore(s,n);
+    el.dataset.emojiDone='1';
+  });
+}
+
+function applyA11y(){ labelTableInputs(); markLiveRegions(); hideDecorativeEmoji(); }
+
 /* =================== INIT =================== */
 renderNav();renderOverview();renderPosition();renderPlan();renderPillarsFull();
 renderSchedule();renderStory();renderVisual();renderKpi();renderBrandHealth();
 initUserSelector();initNotesBoard();initServerSync();
 renderPostLog();initPostLog();initTiktok();initScriptSheet();
+
+/* Bảng được vẽ lại nhiều lần (lọc, đổi tuần, đồng bộ) nên phải gán nhãn lại
+   sau mỗi lần vẽ, không chỉ lúc khởi động. */
+["drawPosts","drawPostsTable","renderKpi","renderPostLog","renderBrandHealth"].forEach(function(fn){
+  var orig=window[fn];
+  if(typeof orig==="function"){
+    window[fn]=function(){ var r=orig.apply(this,arguments); try{applyA11y()}catch(e){} return r };
+  }
+});
+applyA11y();
 </script>
